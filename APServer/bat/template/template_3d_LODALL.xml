@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<featureLayer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.virtualcitysystems.de/schemas/citygml2tms" xmlns:db="http://www.3dcitydb.org/importer-exporter/config" xmlns:grp="http://www.opengis.net/citygml/cityobjectgroup/2.0" xmlns:wtr="http://www.opengis.net/citygml/waterbody/2.0" xmlns:frn="http://www.opengis.net/citygml/cityfurniture/2.0" xmlns:bldg="http://www.opengis.net/citygml/building/2.0" xmlns:core="http://www.opengis.net/citygml/2.0" xmlns:brid="http://www.opengis.net/citygml/bridge/2.0" xmlns:gen="http://www.opengis.net/citygml/generics/2.0" xmlns:tun="http://www.opengis.net/citygml/tunnel/2.0" xmlns:gml="http://www.opengis.net/gml" xsi:schemaLocation="http://www.virtualcitysystems.de/schemas/citygml2tms schema/config.xsd" xmlns:urg="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urg/1.4" xmlns:urf="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urf/1.4" xmlns:urt="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urt/1.4">
+  <metadata>
+    <dataSource>
+      <cityGMLSource>
+<srsWKT>GEOGCS["JGD2011", DATUM["Japanese Geodetic Datum 2011", SPHEROID["GRS 1980", 6378137.0, 298.257222101, AUTHORITY["EPSG","7019"]], AUTHORITY["EPSG","1128"]], PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], UNIT["degree", 0.017453292519943295], AXIS["Geodetic latitude", NORTH], AXIS["Geodetic longitude", EAST], AUTHORITY["EPSG","6668"]]</srsWKT>
+        <input>
+          <fileSet dir="C:\*****">
+            <fileName name="12345678_bldg_6697.zip"/>
+          </fileSet>
+        </input>
+      </cityGMLSource>
+    </dataSource>
+    <gltfVersion>2.0</gltfVersion>
+    <b3dmVersion>0.6</b3dmVersion>
+    <addressSchema>Google</addressSchema>
+    <transformMode>full</transformMode>
+    <selectionDepthLevel>cityObjectPart</selectionDepthLevel>
+    <attributeMergeMode>overrideChild</attributeMergeMode>
+    <attributes process="true"/>
+    <layerJson>
+      <maxChildren>16</maxChildren>
+      <maxLevelsInTileset>3</maxLevelsInTileset>
+      <prettyPrint>true</prettyPrint>
+    </layerJson>
+    <heightMode type="absolute">
+      <offset>0</offset>
+    </heightMode>
+    <rendering>
+      <shading>gouraud</shading>
+      <shininess>0</shininess>
+      <ambientFactor>0.3</ambientFactor>
+      <diffuseFactor>1</diffuseFactor>
+      <specularFactor>0</specularFactor>
+      <transparencyMode>combined</transparencyMode>
+      <alphaFilterThreshold>0.8</alphaFilterThreshold>
+      <backFaceCulling>true</backFaceCulling>
+      <colorMergeMode>prefer_texture</colorMergeMode>
+      <renderSilhouettes>false</renderSilhouettes>
+      <creaseAngle>0.4</creaseAngle>
+    </rendering>
+  </metadata>
+  <!-- LOD1 -->
+  <tileOptions level="13">
+    <featureTypes>
+      <type>bldg:Building</type>
+      <type>brid:Bridge</type>
+      <type>gen:GenericCityObject</type>
+      <type>tun:Tunnel</type>
+      <type>frn:CityFurniture</type>
+      <type>wtr:WaterBody</type>
+    </featureTypes>
+    <lod>
+      <level>1</level>
+      <lodSelection>allow_lower</lodSelection>
+    </lod>
+    <geometry>
+      <generalizationTolerance>0</generalizationTolerance>
+      <clampToGroundForPolygonsOfLod1OrHigher>false</clampToGroundForPolygonsOfLod1OrHigher>
+    </geometry>
+    <cityGMLClassStyle wellKnownStyle="DEFAULT_CITYGML_CLASS_COLORS">
+      <classColor className="bldg:Building" color="#d5d5d5ff"/>
+      <classColor className="bldg:BuildingPart" color="#888888FF"/>
+      <classColor className="bldg:BuildingInstallation" color="#ae825aff"/>
+      <classColor className="bldg:IntBuildingInstallation" color="#ae825aff"/>
+      <classColor className="bldg:RoofSurface" color="#9c4444ff"/>
+      <classColor className="bldg:WallSurface" color="#dbdbdbff"/>
+      <classColor className="bldg:GroundSurface" color="#747474ff"/>
+      <classColor className="bldg:ClosureSurface" color="#ffffffff"/>
+      <classColor className="bldg:FloorSurface" color="#ffffffff"/>
+      <classColor className="bldg:OuterFloorSurface" color="#854c7bff"/>
+      <classColor className="bldg:InteriorWallSurface" color="#ffffffff"/>
+      <classColor className="bldg:CeilingSurface" color="#ffffffff"/>
+      <classColor className="bldg:OuterCeilingSurface" color="#7e7d54ff"/>
+      <classColor className="bldg:Door" color="#4d4de8ff"/>
+      <classColor className="bldg:Window" color="#80c7c8ff"/>
+      <classColor className="bldg:Room" color="#ffffffff"/>
+      <classColor className="bldg:BuildingFurniture" color="#ffffffff"/>
+      <classColor className="brid:Bridge" color="#a77600ff"/>
+      <classColor className="brid:BridgePart" color="#ffffffff"/>
+      <classColor className="brid:BridgeInstallation" color="#3753aeff"/>
+      <classColor className="brid:IntBridgeInstallation" color="#ffffffff"/>
+      <classColor className="brid:BridgeConstructionElement" color="#7737aeff"/>
+      <classColor className="brid:RoofSurface" color="#ffffffff"/>
+      <classColor className="brid:WallSurface" color="#ffffffff"/>
+      <classColor className="brid:GroundSurface" color="#ffffffff"/>
+      <classColor className="brid:ClosureSurface" color="#ffffffff"/>
+      <classColor className="brid:FloorSurface" color="#ffffffff"/>
+      <classColor className="brid:OuterFloorSurface" color="#ffffffff"/>
+      <classColor className="brid:InteriorWallSurface" color="#ffffffff"/>
+      <classColor className="brid:CeilingSurface" color="#ffffffff"/>
+      <classColor className="brid:OuterCeilingSurface" color="#ffffffff"/>
+      <classColor className="brid:Door" color="#ffffffff"/>
+      <classColor className="brid:Window" color="#ffffffff"/>
+      <classColor className="brid:BridgeRoom" color="#ffffffff"/>
+      <classColor className="brid:BridgeFurniture" color="#ffffffff"/>
+      <classColor className="frn:CityFurniture" color="#8a3737ff"/>
+      <classColor className="grp:CityObjectGroup" color="#d0545dff"/>
+      <classColor className="gen:GenericCityObject" color="#ffffffff"/>
+      <classColor className="tun:Tunnel" color="#532e32ff"/>
+      <classColor className="tun:TunnelPart" color="#ffffffff"/>
+      <classColor className="tun:TunnelInstallation" color="#775621ff"/>
+      <classColor className="tun:IntTunnelInstallation" color="#ffffffff"/>
+      <classColor className="tun:RoofSurface" color="#6a363bff"/>
+      <classColor className="tun:WallSurface" color="#ffffffff"/>
+      <classColor className="tun:GroundSurface" color="#747474ff"/>
+      <classColor className="tun:ClosureSurface" color="#ffffffff"/>
+      <classColor className="tun:FloorSurface" color="#ffffffff"/>
+      <classColor className="tun:OuterFloorSurface" color="#ffffffff"/>
+      <classColor className="tun:InteriorWallSurface" color="#636363ff"/>
+      <classColor className="tun:CeilingSurface" color="#ffffffff"/>
+      <classColor className="tun:OuterCeilingSurface" color="#ffffffff"/>
+      <classColor className="tun:Door" color="#ffffffff"/>
+      <classColor className="tun:Window" color="#ffffffff"/>
+      <classColor className="tun:HollowSpace" color="#ffffffff"/>
+      <classColor className="tun:TunnelFurniture" color="#ffffffff"/>
+      <classColor className="wtr:WaterBody" color="#29376088"/>
+      <classColor className="wtr:WaterSurface" color="#29376088"/>
+      <classColor className="wtr:WaterGroundSurface" color="#44383888"/>
+      <classColor className="wtr:WaterClosureSurface" color="#ffffff88"/>
+      <classColor className="urg:Population" color="#a70000ff"/>
+      <classColor className="urg:PublicTransitAccessibility" color="#a70000ff"/>
+      <classColor className="urg:LandPrice" color="#a70000ff"/>
+      <classColor className="urg:LandUseDiversion" color="#a70000ff"/>
+      <classColor className="urg:Households" color="#a70000ff"/>
+      <classColor className="urg:OfficesAndEmployees" color="#a70000ff"/>
+      <classColor className="urg:GenericGridCell" color="#a70000ff"/>
+      <classColor className="urf:Administration" color="#a70000ff"/>
+      <classColor className="urf:LandUsePlan" color="#a70000ff"/>
+      <classColor className="urf:UrbanPlan" color="#a70000ff"/>
+      <classColor className="urf:Agreement" color="#a70000ff"/>
+      <classColor className="urf:Regulation" color="#a70000ff"/>
+      <classColor className="urf:AreaClassification" color="#a70000ff"/>
+      <classColor className="urf:DistrictsAndZones" color="#a70000ff"/>
+      <classColor className="urf:DevelopmentProject" color="#a70000ff"/>
+      <classColor className="urf:CensusBlock" color="#a70000ff"/>
+      <classColor className="urf:DisasterDamage" color="#a70000ff"/>
+      <classColor className="urf:Pollution" color="#a70000ff"/>
+      <classColor className="urf:DisasterPreventionBase" color="#a70000ff"/>
+      <classColor className="urf:Recreations" color="#a70000ff"/>
+      <classColor className="urf:HubCity" color="#a70000ff"/>
+      <classColor className="urf:LandUseDiversion" color="#a70000ff"/>
+      <classColor className="urf:Urbanization" color="#a70000ff"/>
+      <classColor className="urf:PublicTransportationFacility" color="#a70000ff"/>
+      <classColor className="urt:Route" color="#a70000ff"/>
+      <classColor className="urt:Agency" color="#a70000ff"/>
+      <classColor className="urt:Stop" color="#a70000ff"/>
+      <classColor className="urt:Level" color="#a70000ff"/>
+      <classColor className="urt:Trip" color="#a70000ff"/>
+      <classColor className="urt:Calendar" color="#a70000ff"/>
+      <classColor className="urt:CalendarDate" color="#a70000ff"/>
+      <classColor className="urt:Office" color="#a70000ff"/>
+      <classColor className="urt:Shape" color="#a70000ff"/>
+      <classColor className="urt:FareAttribute" color="#a70000ff"/>
+      <classColor className="urt:Pathway" color="#a70000ff"/>
+      <classColor className="urt:TranslationJP" color="#a70000ff"/>
+      <classColor className="urt:Attribution" color="#a70000ff"/>
+    </cityGMLClassStyle>
+    <refineMode>replace</refineMode>
+  </tileOptions>
+  <!-- LOD2 -->
+  <tileOptions level="14">
+    <featureTypes>
+      <type>bldg:Building</type>
+      <type>brid:Bridge</type>
+      <type>gen:GenericCityObject</type>
+      <type>tun:Tunnel</type>
+      <type>frn:CityFurniture</type>
+      <type>wtr:WaterBody</type>
+    </featureTypes>
+    <lod>
+      <level>2</level>
+      <lodSelection>allow_lower</lodSelection>
+    </lod>
+    <geometry>
+      <generalizationTolerance>0</generalizationTolerance>
+      <clampToGroundForPolygonsOfLod1OrHigher>false</clampToGroundForPolygonsOfLod1OrHigher>
+    </geometry>
+    <appearance>
+      <defaultColor value="#ddccccff"/>
+      <theme>rgbTexture</theme>
+      <imageProcessing>
+        <maxImageSize>1024</maxImageSize>
+        <jpegCompressionQuality>1</jpegCompressionQuality>
+        <targetTexelSize>0</targetTexelSize>
+        <generateTextureAtlas>true</generateTextureAtlas>
+        <alignUsedRegions>true</alignUsedRegions>
+        <allowExpandTextures>true</allowExpandTextures>
+      </imageProcessing>
+    </appearance>
+    <refineMode>replace</refineMode>
+  </tileOptions>
+  <!-- LOD3 -->
+  <tileOptions level="15">
+    <featureTypes>
+      <type>bldg:Building</type>
+      <type>brid:Bridge</type>
+      <type>gen:GenericCityObject</type>
+      <type>tun:Tunnel</type>
+      <type>frn:CityFurniture</type>
+      <type>wtr:WaterBody</type>
+    </featureTypes>
+    <lod>
+      <level>3</level>
+      <lodSelection>allow_lower</lodSelection>
+    </lod>
+    <geometry>
+      <generalizationTolerance>0</generalizationTolerance>
+      <clampToGroundForPolygonsOfLod1OrHigher>false</clampToGroundForPolygonsOfLod1OrHigher>
+    </geometry>
+    <appearance>
+      <defaultColor value="#ddccccff"/>
+      <theme>rgbTexture</theme>
+      <imageProcessing>
+        <maxImageSize>1024</maxImageSize>
+        <jpegCompressionQuality>1</jpegCompressionQuality>
+        <targetTexelSize>0</targetTexelSize>
+        <generateTextureAtlas>true</generateTextureAtlas>
+        <alignUsedRegions>true</alignUsedRegions>
+        <allowExpandTextures>true</allowExpandTextures>
+      </imageProcessing>
+    </appearance>
+    <refineMode>replace</refineMode>
+  </tileOptions>
+  <!-- LOD4 -->
+  <tileOptions level="16">
+    <featureTypes>
+      <type>bldg:Building</type>
+      <type>brid:Bridge</type>
+      <type>gen:GenericCityObject</type>
+      <type>tun:Tunnel</type>
+      <type>frn:CityFurniture</type>
+      <type>wtr:WaterBody</type>
+    </featureTypes>
+    <lod>
+      <level>4</level>
+      <lodSelection>allow_lower</lodSelection>
+    </lod>
+    <geometry>
+      <generalizationTolerance>0</generalizationTolerance>
+      <clampToGroundForPolygonsOfLod1OrHigher>false</clampToGroundForPolygonsOfLod1OrHigher>
+    </geometry>
+    <appearance>
+      <defaultColor value="#ddccccaa"/>
+      <theme>rgbTexture</theme>
+      <imageProcessing>
+        <maxImageSize>1024</maxImageSize>
+        <jpegCompressionQuality>1</jpegCompressionQuality>
+        <targetTexelSize>0</targetTexelSize>
+        <generateTextureAtlas>true</generateTextureAtlas>
+        <alignUsedRegions>true</alignUsedRegions>
+        <allowExpandTextures>true</allowExpandTextures>
+      </imageProcessing>
+    </appearance>
+    <refineMode>replace</refineMode>
+  </tileOptions>
+</featureLayer>

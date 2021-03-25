@@ -1,0 +1,21 @@
+
+# BEGIN WordPress
+# "BEGIN WordPress" から "END WordPress" までのディレクティブ (行) は
+# 動的に生成され、WordPress フィルターによってのみ修正が可能です。
+# これらのマーカー間にあるディレクティブへのいかなる変更も上書きされてしまいます。
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /udx/
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /udx/index.php [L]
+</IfModule>
+
+# END WordPress
+
+SetEnvIf User-Agent "Googlebot" ng_ua
+SetEnvIf User-Agent "bingbot" ng_ua
+order Allow,Deny
+Allow from all
+Deny from env=ng_ua

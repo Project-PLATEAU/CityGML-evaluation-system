@@ -1,0 +1,1891 @@
+{
+  "mapcontainer": "vcs_map_container",
+  "locale": "jp",
+  "availableLocales": [
+    "en",
+    {
+      "locale": "jp",
+      "translation": "./i18n/jp.json"
+    }
+  ],
+  "startViewPoint": "初期視点",
+  "projection": {
+    "epsg": "6668",
+    "proj4": "+proj=longlat +ellps=GRS80 +no_defs"
+  },
+  "ui": {
+    "startRoute": null,
+    "content": {
+      "show": true,
+      "iframe": {
+        "contentPosition": "center",
+        "contentPositionFixed": false,
+        "show": true
+      },
+      "legend": {
+        "contentPosition": "left",
+        "contentPositionFixed": false,
+        "show": true
+      }
+    },
+    "search": {
+      "activeOnStartup": false
+    },
+    "toolbox": {
+      "show": true,
+      "homeButton": {
+        "show": true
+      },
+      "mapButtons": {
+        "show": true
+      },
+      "widgetButtons": {
+        "show": true
+      },
+      "overviewMap": {
+        "show": false
+      }
+    },
+    "metaLinks": {
+      "links": [
+        {
+          "url": {
+            "de": "templates/de/impressum.html",
+            "en": "templates/en/impressum.html"
+          },
+          "title": {
+            "de": "Impressum",
+            "en": "Imprint"
+          },
+          "target": "iframe"
+        },
+        {
+          "url": {
+            "de": "templates/de/datenschutzhinweise.html",
+            "en": "templates/en/datenschutzhinweise.html"
+          },
+          "title": {
+            "de": "Datenschutz",
+            "en": "Privacy"
+          },
+          "target": "iframe"
+        }
+      ]
+    },
+    "mapControls": {
+      "show": true,
+      "Navigation": {
+        "show": true
+      },
+      "Shadow": {
+        "show": true
+      }
+    },
+    "footer": {
+      "logoBox": {
+        "show": false,
+        "text": null
+      },
+      "show": true
+    },
+    "header": {
+      "headerButtons": {
+        "show": true,
+        "help": null
+      },
+      "show": true,
+      "logoBox": "<p></p>",
+      "title": "Tokyo"
+    }
+  },
+  "selectBehavior": {
+    "highlightStyle": {
+      "selectionset": {
+        "color": "rgb(63, 81, 181)"
+      },
+      "currentItem": {
+        "color": "rgb(244, 67, 54)",
+        "pointStyle": {
+          "icon": {
+            "scale": 1,
+            "src": "{layerIcon}"
+          }
+        },
+        "lineStyle": {
+          "color": "rgb(131, 245, 44)",
+          "width": 1.25
+        },
+        "polygonStyle": {
+          "fill": {
+            "color": "rgba(255, 255, 255, 0.4)"
+          },
+          "stroke": {
+            "color": "rgb(131, 245, 44)",
+            "width": "1"
+          }
+        }
+      }
+    }
+  },
+  "maps": [
+    {
+      "name": "Cesium Map",
+      "startingmap": true,
+      "type": "vcs.vcm.maps.Cesium",
+      "webGLaa": false
+    }
+  ],
+  "widgets": [
+    {
+      "type": "vcs.vcm.widgets.AdvancedWalkMode",
+      "name": "Advanced walkmode"
+    },
+    {
+      "type": "vcs.vcm.widgets.BalloonInfo",
+      "name": "Balloon Info",
+      "balloonTypes": [
+        {
+          "template": [
+            "<div class='balloon' id='myBalloon'>",
+            "   <h1 class='balloon-title'><%= obj.title %></h1>",
+            "   <div class='balloon-content'>",
+            "       <%= obj.description %>",
+            "   </div>",
+            "   <div class='balloon-close-col'>",
+            "       <button class='close-balloon'><i class='fa fa-times fa-lg'></i></button>",
+            "   </div>",
+            "   <div class='dialog-image-balloon'></div>",
+            "   <div class='balloon-left-edge'></div>",
+            "</div>"
+          ],
+          "minTop": "balloonHeight + 70",
+          "minLeft": "70",
+          "layerNames": [],
+          "layerTypes": [
+            "vcs.vcm.layer.Vector"
+          ]
+        },
+        {
+          "template": [
+            "<div class='balloon' id='myBalloon'>",
+            "   <h1 class='balloon-title'><%= obj.name %></h1>",
+            "   <div class='balloon-content'>",
+            "       <%= obj.description %>",
+            "   </div>",
+            "   <div class='balloon-close-col'>",
+            "       <button class='close-balloon'><i class='fa fa-times fa-lg'></i></button>",
+            "   </div>",
+            "   <div class='dialog-image-balloon'></div>",
+            "   <div class='balloon-left-edge'></div>",
+            "</div>"
+          ],
+          "minTop": "balloonHeight + 70",
+          "minLeft": "70",
+          "layerNames": [],
+          "layerTypes": [
+            "vcs.vcm.layer.cesium.Gltf"
+          ]
+        },
+        {
+          "comment": "Default Balloon for Planning Vector Layers",
+          "template": [
+            "<div class='balloon' id='myBalloon'>",
+            "<div class='balloon-content'>",
+            "<h1 class='balloon-title'>Balloon header</h1>",
+            "</div>",
+            "<div class='balloon-close-col'><button class='close-balloon'><i class='fa fa-times fa-lg'></i></button>",
+            "</div><div class='dialog-image-balloon'></div><div class='balloon-left-edge'></div></div>"
+          ],
+          "minTop": "balloonHeight + 70",
+          "minLeft": "70",
+          "layerNames": [],
+          "layerTypes": [
+            "vcs.vcm.layer.FeatureStore"
+          ],
+          "allAvailable": false,
+          "properties": [],
+          "balloonHeader": "Balloon header"
+        },
+        {
+          "template": [
+            "<div class='balloon' id='myBalloon'>",
+            "<div class='balloon-content'>",
+            "<h1 class='balloon-title'>詳細情報</h1>",
+            "<% for (var key in obj) { %>",
+            "<% if (obj[key] instanceof Object){%>",
+            "<% for (var key2 in obj[key]) { %>",
+            "<p class='balloon-text'><span class='balloon-street'> <strong> <%=key%>.<%=key2%> </strong> : <%=obj[key][key2]%></span><br></p>",
+            "<% } %>",
+            "<% } else{ %>",
+            "<p class='balloon-text'>",
+            "<span class='balloon-street'> <strong> <%=key%> </strong> : <%=obj[key]%></span><br>",
+            "</p>",
+            "<% } %>",
+            "<% } %>",
+            "</div>",
+            "<div class='balloon-close-col'>",
+            "<button class='close-balloon'><i class='fa fa-times fa-lg'></i></button>",
+            "</div>",
+            "<div class='dialog-image-balloon'></div>",
+            "<div class='balloon-left-edge'></div>",
+            "</div>"
+          ],
+          "layerTypes": [
+            "vcs.vcm.layer.cesium.Buildings"
+          ],
+          "layerNames": [
+            null
+          ],
+          "minTop": "balloonHeight + 30",
+          "minLeft": "70",
+          "allAvailable": true,
+          "properties": [],
+          "balloonHeader": "詳細情報"
+        }
+      ],
+      "excludedLayerNames": []
+    },
+    {
+      "type": "vcs.vcm.widgets.Copyright"
+    },
+    {
+      "low": {
+        "sse": 4,
+        "fxaa": false,
+        "fog": {
+          "enabled": true
+        },
+        "resolutionScale": 0.9,
+        "layerSSEFactor": 2
+      },
+      "medium": {
+        "sse": 2.333,
+        "fxaa": false,
+        "fog": {
+          "enabled": true
+        },
+        "resolutionScale": 1,
+        "layerSSEFactor": 1.1
+      },
+      "high": {
+        "sse": 1.3333333333333333,
+        "fxaa": true,
+        "fog": {
+          "enabled": true
+        },
+        "resolutionScale": 1,
+        "layerSSEFactor": 0.5
+      },
+      "type": "vcs.vcm.widgets.DisplayQuality"
+    },
+    {
+      "type": "vcs.vcm.widgets.Measurement",
+      "name": "Measurements",
+      "style": {
+        "fill": {
+          "color": [
+            255,
+            255,
+            255,
+            0.4
+          ]
+        },
+        "stroke": {
+          "color": [
+            51,
+            153,
+            204,
+            1
+          ],
+          "width": 1.25,
+          "lineDash": null
+        },
+        "text": {
+          "font": "18px sans-serif",
+          "fill": {
+            "color": [
+              51,
+              51,
+              51,
+              1
+            ]
+          },
+          "textBaseline": "bottom",
+          "offsetY": -15,
+          "offsetX": 0
+        },
+        "image": {
+          "scale": 1,
+          "fill": {
+            "color": [
+              255,
+              255,
+              255,
+              0.4
+            ]
+          },
+          "radius": 5,
+          "stroke": {
+            "color": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "width": 1,
+            "lineDash": null
+          }
+        }
+      }
+    },
+    {
+      "type": "vcs.vcm.widgets.NavigationControls",
+      "name": "NavigationControls",
+      "rotationPerFrame": 0.5
+    },
+    {
+      "type": "vcs.vcm.widgets.PDFCreator",
+      "name": "PDF Creator"
+    },
+    {
+      "type": "vcs.vcm.widgets.PositionDisplay",
+      "name": "Position Display",
+      "positionDecimalPlaces": 15
+    },
+    {
+      "type": "vcs.vcm.widgets.search.Search",
+      "name": "Search",
+      "resultIcon": null,
+      "searchImplementations": [
+        {
+          "type": "vcs.vcm.widgets.search.Nominatim",
+          "name": "a62716d9-1453-4498-87ba-4c887ec49951",
+          "url": "https://nominatim.openstreetmap.org/search",
+          "city": null,
+          "state": null,
+          "countrycode": "jp",
+          "extent": null,
+          "limit": 20
+        }
+      ],
+      "extendedSearches": [],
+      "showSearchResultToolbar": false
+    },
+    {
+      "type": "vcs.vcm.widgets.Shadow",
+      "name": "Shadows"
+    },
+    {
+      "type": "vcs.vcm.widgets.legend.Legend",
+      "children": [
+        {
+          "title": "背景地図",
+          "type": "vcs.vcm.widgets.legend.ClusterItem",
+          "children": [
+            {
+              "type": "vcs.vcm.widgets.legend.LayerItem",
+              "layerName": "地理院タイル（標準地図）",
+              "title": "地理院タイル（標準地図）"
+            },
+            {
+              "type": "vcs.vcm.widgets.legend.LayerItem",
+              "layerName": "地理院タイル（淡色地図）",
+              "title": "地理院タイル（淡色地図）"
+            },
+            {
+              "type": "vcs.vcm.widgets.legend.LayerItem",
+              "layerName": "地理院タイル（写真）",
+              "title": "地理院タイル（写真）"
+            }
+          ]
+        },
+        {
+          "title": "標高データ",
+          "type": "vcs.vcm.widgets.legend.ClusterItem",
+          "children": [
+            {
+              "type": "vcs.vcm.widgets.legend.LayerItem",
+              "layerName": "国土地理院標高データ",
+              "title": "国土地理院標高データ"
+            }
+          ]
+        },
+        {
+          "title": "3D都市モデル",
+          "type": "vcs.vcm.widgets.legend.ClusterItem",
+          "children": [
+          ]
+        }
+      ]
+    },
+    {
+      "wfs": {
+          "url": "https://*****.com:8440/citydb-wfs90001/wfs",
+          "projection": {
+              "epsg": "6697",
+              "proj4": "+proj=longlat +ellps=GRS80 +no_defs"
+          },
+          "maxFeatures": 10000
+      },
+      "type": "vcs.vcm.widgets.Query"
+    },
+    {
+      "type": "vcs.vcm.widgets.ClippingTool"
+    }
+  ],
+  "layers": [
+    {
+      "name": "国土地理院標高データ",
+      "url": "./datasource-data/Terrain",
+      "type": "vcs.vcm.layer.cesium.Terrain",
+      "datasourceId": "RM5iYJys38WJAuTFJ",
+      "activeOnStartup": true,
+      "exclusive": false,
+      "requestVertexNormals": true,
+      "hiddenObjectIds": [],
+      "copyright": {
+        "provider": "Geospatial Information Authority of Japan",
+        "url": "https://maps.gsi.go.jp/development/ichiran.html",
+        "year": ""
+      }
+    },
+    {
+      "name": "地理院タイル（標準地図）",
+      "url": "https://maps.gsi.go.jp/xyz/std/{TileMatrix}/{TileCol}/{TileRow}.png",
+      "type": "vcs.vcm.layer.Wmts",
+      "datasourceId": "LjsmBiFxPxMz4",
+      "activeOnStartup": true,
+      "exclusive": "base",
+      "layer": "std",
+      "style": "default",
+      "format": "image/png",
+      "tileMatrixSetID": "z2to18",
+      "tileMatrixPrefix": "",
+      "maxLevel": 18,
+      "tilingSchema": "mercator",
+      "extent": {
+        "coordinates": [
+          113.28974384283933,
+          16.882650096879914,
+          158.553415716941,
+          49.20631735592224
+        ],
+        "epsg": "EPSG:4326",
+        "proj4": ""
+      },
+      "opacity": "1",
+      "hiddenObjectIds": [],
+      "copyright": {
+        "provider": "Geospatial Information Authority of Japan",
+        "url": "https://maps.gsi.go.jp/development/ichiran.html",
+        "year": ""
+      },
+      "numberOfLevelZeroTilesX": 1,
+      "numberOfLevelZeroTilesY": 1
+    },
+    {
+      "name": "地理院タイル（淡色地図）",
+      "url": "https://maps.gsi.go.jp/xyz/pale/{TileMatrix}/{TileCol}/{TileRow}.png",
+      "type": "vcs.vcm.layer.Wmts",
+      "datasourceId": "LjsmBiFxKC4",
+      "activeOnStartup": false,
+      "exclusive": "base",
+      "layer": "pale",
+      "style": "default",
+      "format": "image/png",
+      "tileMatrixSetID": "z2to18",
+      "tileMatrixPrefix": "",
+      "maxLevel": 18,
+      "tilingSchema": "mercator",
+      "extent": {
+        "coordinates": [
+          113.28974384283933,
+          16.882650096879914,
+          158.553415716941,
+          49.20631735592224
+        ],
+        "epsg": "EPSG:4326",
+        "proj4": ""
+      },
+      "opacity": "1",
+      "hiddenObjectIds": [],
+      "copyright": {
+        "provider": "Geospatial Information Authority of Japan",
+        "url": "https://maps.gsi.go.jp/development/ichiran.html",
+        "year": ""
+      },
+      "numberOfLevelZeroTilesX": 1,
+      "numberOfLevelZeroTilesY": 1
+    },
+    {
+      "name": "地理院タイル（写真）",
+      "url": "https://maps.gsi.go.jp/xyz/seamlessphoto/{TileMatrix}/{TileCol}/{TileRow}.jpg",
+      "type": "vcs.vcm.layer.Wmts",
+      "datasourceId": "LFxPxMzmqKC4",
+      "activeOnStartup": false,
+      "exclusive": "base",
+      "layer": "ort",
+      "style": "default",
+      "format": "image/jpeg",
+      "tileMatrixSetID": "z2to18",
+      "tileMatrixPrefix": "",
+      "maxLevel": 18,
+      "tilingSchema": "mercator",
+      "extent": {
+        "coordinates": [
+          113.28974384283933,
+          16.882650096879914,
+          158.553415716941,
+          49.20631735592224
+        ],
+        "epsg": "EPSG:4326",
+        "proj4": ""
+      },
+      "opacity": "1",
+      "hiddenObjectIds": [],
+      "copyright": {
+        "provider": "Geospatial Information Authority of Japan",
+        "url": "https://maps.gsi.go.jp/development/ichiran.html",
+        "year": ""
+      },
+      "numberOfLevelZeroTilesX": 1,
+      "numberOfLevelZeroTilesY": 1
+    }
+  ],
+  "viewpoints": [
+    {
+      "name": "初期視点",
+      "cameraPosition": [
+        139.74219,
+        35.65364,
+        6661.65345
+      ],
+      "groundPosition": [
+        139.74219,
+        35.68215,
+        26.66183656
+      ],
+      "distance": 7500,
+      "heading": 360,
+      "pitch": -65,
+      "roll": 0,
+      "animate": false
+    }
+  ],
+  "adePlugins": [
+    {
+      "schemas":[
+        {
+          "id":"urg",
+          "prefix":"urg",
+          "namespace":"http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urg/1.4"
+        },
+        {
+          "id":"uro",
+          "prefix":"urg",
+          "namespace":"http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/uro/1.4"
+        },
+        {
+          "id":"urf",
+          "prefix":"urf",
+          "namespace":"http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urf/1.4"
+        },
+        {
+          "id":"urt",
+          "prefix":"urt",
+          "namespace":"http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urt/1.4"
+        }
+      ],
+      "featureTypes":[
+        {
+          "id":"urg:_StatisticalGrid",
+          "classType":60000,
+          "schemaId":"urg",
+          "subTypeOf":"_CityObject",
+          "properties":[
+            {"dataType":"STRING","valueReference":"urg:class"},
+            {"dataType":"STRING","valueReference":"urg:value"},
+            {"dataType":"STRING","valueReference":"urg:urbanPlanType"},
+            {"dataType":"STRING","valueReference":"urg:areaClassificationType"},
+            {"dataType":"STRING","valueReference":"urg:prefecture"},
+            {"dataType":"STRING","valueReference":"urg:city"},
+            {"dataType":"DATE","valueReference":"urg:surveyyear"}
+          ]
+        },
+        {
+          "id":"urg:PublicTransitAccessibility",
+          "classType":60003,
+          "schemaId":"urg",
+          "subTypeOf":"urg:_StatisticalGrid",
+          "properties":[{"dataType":"BOOLEAN","valueReference":"urg:availability"}]
+        },
+        {
+          "id":"urg:LandPrice",
+          "classType":60004,
+          "schemaId":"urg",
+          "subTypeOf":"urg:_StatisticalGrid",
+          "properties":[
+            {
+              "dataType":"STRING",
+              "valueReference":"urg:landPrice/urg:LandPricePerLandUse/urg:landUse"
+            },
+            {
+              "dataType":"INTEGER",
+              "valueReference":"urg:landPrice/urg:LandPricePerLandUse/urg:landPrice"
+            },
+            {"dataType":"STRING","valueReference":"urg:currencyUnit"}
+          ]
+        },
+        {
+          "id":"urg:Population",
+          "classType":60004,
+          "schemaId":"urg",
+          "subTypeOf":"urg:_StatisticalGrid",
+          "properties":[
+            {"dataType":"INTEGER","valueReference":"urg:total"},
+            {"dataType":"INTEGER","valueReference":"urg:daytimePopulation"},
+            {"dataType":"DOUBLE","valueReference":"urg:daytimePopulationDensity"},
+            {"dataType":"INTEGER","valueReference":"urg:naturalIncrease"},
+            {"dataType":"INTEGER","valueReference":"urg:births"},
+            {"dataType":"INTEGER","valueReference":"urg:deaths"},
+            {"dataType":"INTEGER","valueReference":"urg:socialIncrease"},
+            {"dataType":"INTEGER","valueReference":"urg:moveFrom"},
+            {"dataType":"INTEGER","valueReference":"urg:moveTo"},
+            {"dataType":"INTEGER","valueReference":"urg:increasement"},
+            {"dataType":"INTEGER","valueReference":"urg:malePopulation"},
+            {"dataType":"INTEGER","valueReference":"urg:femalePopulation"}
+          ]
+        },
+        {
+          "id":"urg:LandUseDiversion",
+          "classType":60006,
+          "schemaId":"urg",
+          "subTypeOf":"urg:_StatisticalGrid",
+          "properties":[
+            {
+              "dataType":"DATE",
+              "valueReference":"urg:numberOfAnnualDiversion/urg:NumberOfAnnualDiversions/urg:year"
+            },
+            {
+              "dataType":"INTEGER",
+              "valueReference":"urg:numberOfAnnualDiversion/urg:NumberOfAnnualDiversions/urg:count"
+            },
+            {
+              "dataType":"DATE",
+              "valueReference":"urg:areaOfAnnualDiversion/urg:AreaOfAnnualDiversions/urg:year"
+            },
+            {
+              "dataType":"INTEGER",
+              "valueReference":"urg:areaOfAnnualDiversion/urg:AreaOfAnnualDiversions/urg:count"
+            }
+          ]
+        },
+        {
+          "id":"urg:Households",
+          "classType":60009,
+          "schemaId":"urg",
+          "subTypeOf":"urg:_StatisticalGrid",
+          "properties":[
+            {
+              "dataType":"INTEGER",
+              "valueReference":"urg:numberOfOrdinaryHouseholds"
+            },
+            {
+              "dataType":"STRING",
+              "valueReference":"urg:numberOfHouseholdsByOwnership/urg:NumberOfHouseholds/urg:class"
+            },
+            {
+              "dataType":"STRING",
+              "valueReference":"urg:numberOfHouseholdsByOwnership/urg:NumberOfHouseholds/urg:number"
+            },
+            {
+              "dataType":"STRING",
+              "valueReference":"urg:numberOfHouseholdsByStructure/urg:NumberOfHouseholds/urg:class"
+            },
+            {
+              "dataType":"STRING",
+              "valueReference":"urg:numberOfHouseholdsByStructure/urg:NumberOfHouseholds/urg:number"
+            },
+            {"dataType":"INTEGER","valueReference":"urg:numberOfMainHouseholds"}
+          ]
+        },
+        {
+          "id":"urg:OfficesAndEmployees",
+          "classType":60011,
+          "schemaId":"urg",
+          "subTypeOf":"urg:_StatisticalGrid",
+          "properties":[
+            {"dataType":"INTEGER","valueReference":"urg:numberOfOffices"},
+            {"dataType":"INTEGER","valueReference":"urg:numberOfEmployees"}
+          ]
+        },
+        {
+          "id":"urg:GenericGridCell",
+          "classType":60012,
+          "schemaId":"urg",
+          "subTypeOf":"urg:_StatisticalGrid",
+          "properties":[
+            {
+              "dataType":"STRING",
+              "valueReference":"urg:genericValue/urg:KeyValuePair/urg:key"
+            },
+            {
+              "dataType":"STRING",
+              "valueReference":"urg:genericValue/urg:KeyValuePair/urg:stringValue"
+            },
+            {
+              "dataType":"INTEGER",
+              "valueReference":"urg:genericValue/urg:KeyValuePair/urg:intValue"
+            },
+            {
+              "dataType":"DOUBLE",
+              "valueReference":"urg:genericValue/urg:doubleValue/urg:doubleValue"
+            },
+            {
+              "dataType":"STRING",
+              "valueReference":"urg:genericValue/urg:doubleValue/urg:codeValue"
+            },
+            {
+              "dataType":"DOUBLE",
+              "valueReference":"urg:genericValue/urg:doubleValue/urg:measuredValue"
+            },
+            {
+              "dataType":"DATE",
+              "valueReference":"urg:genericValue/urg:doubleValue/urg:dateValue"
+            },
+            {
+              "dataType":"STRING",
+              "valueReference":"urg:genericValue/urg:doubleValue/urg:uriValue"
+            }
+          ]
+        },
+        {
+          "id":"urf:_UrbanFunction",
+          "classType":60018,
+          "schemaId":"urf",
+          "subTypeOf":"_CityObject",
+          "properties":[
+            {"dataType":"STRING","valueReference":"urf:class"},
+            {"dataType":"STRING","valueReference":"urf:function"},
+            {"dataType":"DATE","valueReference":"urf:enactmentDate"},
+            {"dataType":"DATE","valueReference":"urf:enactmentFiscalYear"},
+            {"dataType":"DATE","valueReference":"urf:expirationDate"},
+            {"dataType":"DATE","valueReference":"urf:expirationFiscalYear"},
+            {
+              "dataType":"STRING",
+              "valueReference":"urf:legalGrounds/urf:LegalGrounds/urf:nameOfRegulation"
+            },
+            {
+              "dataType":"STRING",
+              "valueReference":"urf:legalGrounds/urf:LegalGrounds/urf:articlesOfRegulation"
+            },
+            {
+              "dataType":"DATE",
+              "valueReference":"urf:legalGrounds/urf:LegalGrounds/urf:date"
+            },
+            {"dataType":"STRING","valueReference":"urf:custodian"},
+            {"dataType":"DOUBLE","valueReference":"urf:nominalArea"},
+            {"dataType":"STRING","valueReference":"urf:abstract"},
+            {"dataType":"BOOLEAN","valueReference":"urf:validity"},
+            {"dataType":"STRING","valueReference":"urf:urbanPlanType"},
+            {"dataType":"STRING","valueReference":"urf:areaClassificationType"},
+            {"dataType":"STRING","valueReference":"urf:prefecture"},
+            {"dataType":"STRING","valueReference":"urf:city"},
+            {"dataType":"STRING","valueReference":"urf:reference"},
+            {"dataType":"STRING","valueReference":"urf:note"},
+            {"dataType":"DATE","valueReference":"urf:surveyYear"}
+          ]
+        },
+        {
+          "id":"urf:_Zone",
+          "classType":60021,
+          "schemaId":"urf",
+          "subTypeOf":"urf:_UrbanFunction",
+          "properties":[
+            {"dataType":"DATE","valueReference":"urf:finalPublicationDate"},
+            {"dataType":"STRING","valueReference":"urf:areaApplied"}
+          ]
+        },
+        {
+          "id":"urf:Administration",
+          "classType":60020,
+          "schemaId":"urf",
+          "subTypeOf":"urf:_UrbanFunction",
+          "properties":[]
+        },
+        {
+          "id":"urf:DisasterPreventionBase",
+          "classType":60033,
+          "schemaId":"urf",
+          "subTypeOf":"urf:_UrbanFunction",
+          "properties":[{"dataType":"INTEGER","valueReference":"urf:capacity"}]
+        },
+        {
+          "id":"urf:HubCity",
+          "classType":60035,
+          "schemaId":"urf",
+          "subTypeOf":"urf:_UrbanFunction",
+          "properties":[]
+        },
+        {
+          "id":"urf:LandUsePlan",
+          "classType":60022,
+          "schemaId":"urf",
+          "subTypeOf":"urf:_UrbanFunction",
+          "properties":[]
+        },
+        {
+          "id":"urf:UrbanPlan",
+          "classType":60023,
+          "schemaId":"urf",
+          "subTypeOf":"urf:_Zone",
+          "properties":[]
+        },
+        {
+          "id":"urf:Regulation",
+          "classType":60025,
+          "schemaId":"urf",
+          "subTypeOf":"urf:_Zone",
+          "properties":[]
+        },
+        {
+          "id":"urf:Agreement",
+          "classType":60024,
+          "schemaId":"urf",
+          "subTypeOf":"urf:_Zone",
+          "properties":[]
+        },
+        {
+          "id":"urf:DevelopmentProject",
+          "classType":60028,
+          "schemaId":"urf",
+          "subTypeOf":"urf:_Zone",
+          "properties":[
+            {"dataType":"STRING","valueReference":"urf:status"},
+            {"dataType":"STRING","valueReference":"urf:mainPurpose"},
+            {"dataType":"DOUBLE","valueReference":"urf:benefitArea"},
+            {"dataType":"STRING","valueReference":"urf:benefitPeriod"},
+            {"dataType":"INTEGER","valueReference":"urf:cost"},
+            {"dataType":"DOUBLE","valueReference":"urf:plannedArea"},
+            {"dataType":"DOUBLE","valueReference":"urf:ongoingArea"},
+            {"dataType":"DOUBLE","valueReference":"urf:completedArea"},
+            {"dataType":"DATE","valueReference":"urf:dateOfDecision"},
+            {
+              "dataType":"DATE",
+              "valueReference":"urf:dateOfDesignationForTemporaryReplotting"
+            }
+          ]
+        },
+        {
+          "id":"urf:DistrictsAndZones",
+          "classType":60027,
+          "schemaId":"urf",
+          "subTypeOf":"urf:_Zone",
+          "properties":[]
+        },
+        {
+          "id":"urf:AreaClassification",
+          "classType":60026,
+          "schemaId":"urf",
+          "subTypeOf":"urf:_Zone",
+          "properties":[]
+        },
+        {
+          "id":"urf:Recreations",
+          "classType":60034,
+          "schemaId":"urf",
+          "subTypeOf":"urf:_UrbanFunction",
+          "properties":[]
+        },
+        {
+          "id":"urf:LandUseDiversion",
+          "classType":60036,
+          "schemaId":"urf",
+          "subTypeOf":"urf:_UrbanFunction",
+          "properties":[]
+        },
+        {
+          "id":"urf:Pollution",
+          "classType":60032,
+          "schemaId":"urf",
+          "subTypeOf":"urf:_UrbanFunction",
+          "properties":[
+            {"dataType":"DOUBLE","valueReference":"urf:damagedArea"},
+            {"dataType":"STRING","valueReference":"urf:cause"}
+          ]
+        },
+        {
+          "id":"urf:Urbanization",
+          "classType":60037,
+          "schemaId":"urf",
+          "subTypeOf":"urf:_UrbanFunction",
+          "properties":[
+            {"dataType":"STRING","valueReference":"urf:period"},
+            {"dataType":"STRING","valueReference":"urf:resources"}
+          ]
+        },
+        {
+          "id":"urf:CensusBlock",
+          "classType":60029,
+          "schemaId":"urf",
+          "subTypeOf":"urf:_UrbanFunction",
+          "properties":[
+            {"dataType":"INTEGER","valueReference":"urf:daytimePopulation"},
+            {"dataType":"DOUBLE","valueReference":"urf:daytimePopulationDensity"},
+            {
+              "dataType":"INTEGER",
+              "valueReference":"urf:numberOfOrdinaryHouseholds"
+            },
+            {
+              "dataType":"STRING",
+              "valueReference":"urf:numberOfHouseholdsByOwnership/urf:NumberOfHouseholds/urf:class"
+            },
+            {
+              "dataType":"INTEGER",
+              "valueReference":"urf:numberOfHouseholdsByOwnership/urf:NumberOfHouseholds/urf:number"
+            },
+            {"dataType":"INTEGER","valueReference":"urf:numberOfMainHouseholds"},
+            {
+              "dataType":"STRING",
+              "valueReference":"urf:numberOfHouseholdsByStructure/urf:NumberOfHouseholds/urf:class"
+            },
+            {
+              "dataType":"INTEGER",
+              "valueReference":"urf:numberOfHouseholdsByStructure/urf:NumberOfHouseholds/urf:number"
+            }
+          ]
+        },
+        {
+          "id":"urf:DisasterDamage",
+          "classType":60031,
+          "schemaId":"urf",
+          "subTypeOf":"urf:_UrbanFunction",
+          "properties":[
+            {"dataType":"DOUBLE","valueReference":"urf:damagedArea"},
+            {"dataType":"INTEGER","valueReference":"urf:numberOfDamagedHouses"},
+            {
+              "dataType":"INTEGER",
+              "valueReference":"urf:numberOfHousesFloodedAboveFloorLevel"
+            },
+            {
+              "dataType":"INTEGER",
+              "valueReference":"urf:numberOfHousesFloodedBelowFloorLevel"
+            },
+            {"dataType":"INTEGER","valueReference":"urf:maximumRainfallPerHour"},
+            {"dataType":"INTEGER","valueReference":"urf:totalRainfall"}
+          ]
+        },
+        {
+          "id":"urf:PublicTransportationFacility",
+          "classType":60038,
+          "schemaId":"urf",
+          "subTypeOf":"urf:_Zone",
+          "properties":[
+            {"dataType":"STRING","valueReference":"urf:routeName"},
+            {"dataType":"STRING","valueReference":"urf:sectionName"},
+            {"dataType":"STRING","valueReference":"urf:companyName"},
+            {"dataType":"INTEGER","valueReference":"urf:frequencyOfService"},
+            {"dataType":"DOUBLE","valueReference":"urf:numberOfCustomers"}
+          ]
+        },
+        {
+          "id":"urt:_PublicTransit",
+          "classType":60039,
+          "schemaId":"urt",
+          "subTypeOf":"_CityObject",
+          "properties":[{"dataType":"STRING","valueReference":"urt:orgId"}]
+        },
+        {
+          "id":"urt:Agency",
+          "classType":60042,
+          "schemaId":"urt",
+          "subTypeOf":"urt:_PublicTransit",
+          "properties":[
+            {"dataType":"STRING","valueReference":"urt:name"},
+            {"dataType":"STRING","valueReference":"urt:url"},
+            {"dataType":"STRING","valueReference":"urt:timeZone"},
+            {"dataType":"STRING","valueReference":"urt:language"},
+            {"dataType":"STRING","valueReference":"urt:phone"},
+            {"dataType":"STRING","valueReference":"urt:fareUrl"},
+            {"dataType":"STRING","valueReference":"urt:email"},
+            {"dataType":"STRING","valueReference":"urt:officialName"},
+            {"dataType":"STRING","valueReference":"urt:zipNumber"},
+            {"dataType":"STRING","valueReference":"urt:address"},
+            {"dataType":"STRING","valueReference":"urt:presidentPosition"},
+            {"dataType":"STRING","valueReference":"urt:presidentName"}
+          ]
+        },
+        {
+          "id":"urt:Attribution",
+          "classType":60054,
+          "schemaId":"urt",
+          "subTypeOf":"urt:_PublicTransit",
+          "properties":[
+            {"dataType":"STRING","valueReference":"urt:organizationName"},
+            {"dataType":"BOOLEAN","valueReference":"urt:isProducer"},
+            {"dataType":"BOOLEAN","valueReference":"urt:isOperator"},
+            {"dataType":"BOOLEAN","valueReference":"urt:isAuthority"},
+            {"dataType":"STRING","valueReference":"urt:url"},
+            {"dataType":"STRING","valueReference":"urt:email"},
+            {"dataType":"STRING","valueReference":"urt:phoneNumber"}
+          ]
+        },
+        {
+          "id":"urt:Calendar",
+          "classType":60046,
+          "schemaId":"urt",
+          "subTypeOf":"urt:_PublicTransit",
+          "properties":[
+            {"dataType":"BOOLEAN","valueReference":"urt:monday"},
+            {"dataType":"BOOLEAN","valueReference":"urt:tuesday"},
+            {"dataType":"BOOLEAN","valueReference":"urt:wednesday"},
+            {"dataType":"BOOLEAN","valueReference":"urt:thursday"},
+            {"dataType":"BOOLEAN","valueReference":"urt:friday"},
+            {"dataType":"BOOLEAN","valueReference":"urt:saturday"},
+            {"dataType":"BOOLEAN","valueReference":"urt:sunday"},
+            {"dataType":"DATE","valueReference":"urt:startDate"},
+            {"dataType":"DATE","valueReference":"urt:endDate"}
+          ]
+        },
+        {
+          "id":"urt:CalendarDate",
+          "classType":60047,
+          "schemaId":"urt",
+          "subTypeOf":"urt:_PublicTransit",
+          "properties":[
+            {"dataType":"DATE","valueReference":"urt:date"},
+            {"dataType":"STRING","valueReference":"urt:exceptionType"}
+          ]
+        },
+        {
+          "id":"urt:FareAttribute",
+          "classType":60051,
+          "schemaId":"urt",
+          "subTypeOf":"urt:_PublicTransit",
+          "properties":[
+            {"dataType":"DOUBLE","valueReference":"urt:price"},
+            {"dataType":"STRING","valueReference":"urt:currencyType"},
+            {"dataType":"STRING","valueReference":"urt:paymentMethod"},
+            {"dataType":"STRING","valueReference":"urt:transfers"},
+            {"dataType":"INTEGER","valueReference":"urt:transferDuration"}
+          ]
+        },
+        {
+          "id":"urt:Level",
+          "classType":60044,
+          "schemaId":"urt",
+          "subTypeOf":"urt:_PublicTransit",
+          "properties":[{"dataType":"DOUBLE","valueReference":"urt:index"}]
+        },
+        {
+          "id":"urt:Office",
+          "classType":60048,
+          "schemaId":"urt",
+          "subTypeOf":"urt:_PublicTransit",
+          "properties":[
+            {"dataType":"STRING","valueReference":"urt:name"},
+            {"dataType":"STRING","valueReference":"urt:url"},
+            {"dataType":"STRING","valueReference":"urt:phone"}
+          ]
+        },
+        {
+          "id":"urt:Pathway",
+          "classType":60052,
+          "schemaId":"urt",
+          "subTypeOf":"urt:_PublicTransit",
+          "properties":[
+            {"dataType":"STRING","valueReference":"urt:mode"},
+            {"dataType":"STRING","valueReference":"urt:isBidirectional"},
+            {"dataType":"DOUBLE","valueReference":"urt:length"},
+            {"dataType":"INTEGER","valueReference":"urt:traversalTime"},
+            {"dataType":"INTEGER","valueReference":"urt:stairCount"},
+            {"dataType":"DOUBLE","valueReference":"urt:maxSlope"},
+            {"dataType":"DOUBLE","valueReference":"urt:minWidth"},
+            {"dataType":"STRING","valueReference":"urt:signpostedAs"},
+            {"dataType":"STRING","valueReference":"urt:reversedSignpostedAs"}
+          ]
+        },
+        {
+          "id":"urt:Route",
+          "classType":60040,
+          "schemaId":"urt",
+          "subTypeOf":"urt:_PublicTransit",
+          "properties":[
+            {"dataType":"STRING","valueReference":"urt:shortName"},
+            {"dataType":"STRING","valueReference":"urt:longName"},
+            {
+              "dataType":"STRING",
+              "valueReference":"urt:description/urt:Description/description"
+            },
+            {
+              "dataType":"INTEGER",
+              "valueReference":"urt:description/urt:Description/frequencyOfService"
+            },
+            {
+              "dataType":"INTEGER",
+              "valueReference":"urt:description/urt:Description/numberOfCustomers"
+            },
+            {"dataType":"STRING","valueReference":"urt:type"},
+            {"dataType":"STRING","valueReference":"urt:url"},
+            {"dataType":"STRING","valueReference":"urt:color"},
+            {"dataType":"STRING","valueReference":"urt:textColor"},
+            {"dataType":"DATE","valueReference":"urt:updateDate"},
+            {"dataType":"STRING","valueReference":"urt:originStop"},
+            {"dataType":"STRING","valueReference":"urt:viaStop"},
+            {"dataType":"STRING","valueReference":"urt:destinationStop"},
+            {"dataType":"INTEGER","valueReference":"urt:routeSortOrder"},
+            {"dataType":"STRING","valueReference":"urt:continuousPickup"},
+            {"dataType":"STRING","valueReference":"urt:continuousDropOff"}
+          ]
+        },
+        {
+          "id":"urt:Shape",
+          "classType":60049,
+          "schemaId":"urt",
+          "subTypeOf":"urt:_PublicTransit",
+          "properties":[
+            {
+              "dataType":"DOUBLE",
+              "valueReference":"urt:point/urt:Point/urt:latitude"
+            },
+            {
+              "dataType":"DOUBLE",
+              "valueReference":"urt:point/urt:Point/urt:longitude"
+            },
+            {
+              "dataType":"INTEGER",
+              "valueReference":"urt:point/urt:Point/urt:pointSequence"
+            },
+            {
+              "dataType":"DOUBLE",
+              "valueReference":"urt:point/urt:Point/urt:pointDistanceTraveled"
+            }
+          ]
+        },
+        {
+          "id":"urt:Stop",
+          "classType":60043,
+          "schemaId":"urt",
+          "subTypeOf":"urt:_PublicTransit",
+          "properties":[
+            {"dataType":"STRING","valueReference":"urt:code"},
+            {"dataType":"STRING","valueReference":"urt:ttsName"},
+            {"dataType":"DOUBLE","valueReference":"urt:latitude"},
+            {"dataType":"DOUBLE","valueReference":"urt:longitude"},
+            {"dataType":"STRING","valueReference":"urt:zoneId"},
+            {"dataType":"STRING","valueReference":"urt:url"},
+            {"dataType":"STRING","valueReference":"urt:locationType"},
+            {"dataType":"STRING","valueReference":"urt:timeZone"},
+            {"dataType":"STRING","valueReference":"urt:wheelchairBoarding"},
+            {"dataType":"STRING","valueReference":"urt:platformCode"}
+          ]
+        },
+        {
+          "id":"urt:TranslationJP",
+          "classType":60053,
+          "schemaId":"urt",
+          "subTypeOf":"urt:_PublicTransit",
+          "properties":[
+            {"dataType":"STRING","valueReference":"urt:language"},
+            {"dataType":"STRING","valueReference":"urt:translation"}
+          ]
+        },
+        {
+          "id":"urt:Trip",
+          "classType":60045,
+          "schemaId":"urt",
+          "subTypeOf":"urt:_PublicTransit",
+          "properties":[
+            {"dataType":"STRING","valueReference":"urt:headsign"},
+            {"dataType":"STRING","valueReference":"urt:shortName"},
+            {"dataType":"STRING","valueReference":"urt:directionId"},
+            {"dataType":"STRING","valueReference":"urt:blockId"},
+            {"dataType":"STRING","valueReference":"urt:wheelchairAccessible"},
+            {"dataType":"STRING","valueReference":"urt:bikeAllowed"},
+            {"dataType":"STRING","valueReference":"urt:symbol"}
+          ]
+        }
+      ],
+      "injectedProperties":[
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"STRING",
+          "valueReference":"uro:buildingDetails/uro:BuildingDetails/uro:serialNumberOfBuildingCertification"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"DOUBLE",
+          "valueReference":"uro:buildingDetails/uro:BuildingDetails/uro:siteArea"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"DOUBLE",
+          "valueReference":"uro:buildingDetails/uro:BuildingDetails/uro:buildingFootprintArea"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"DOUBLE",
+          "valueReference":"uro:buildingDetails/uro:BuildingDetails/uro:buildingRoofEdgeArea"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"DOUBLE",
+          "valueReference":"uro:buildingDetails/uro:BuildingDetails/uro:developmentArea"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"DOUBLE",
+          "valueReference":"uro:buildingDetails/uro:BuildingDetails/uro:totalFloorArea"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"STRING",
+          "valueReference":"uro:buildingDetails/uro:BuildingDetails/uro:buildingStructureType"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"STRING",
+          "valueReference":"uro:buildingDetails/uro:BuildingDetails/uro:fireproofStructureType"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"STRING",
+          "valueReference":"uro:buildingDetails/uro:BuildingDetails/uro:implementingBody"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"STRING",
+          "valueReference":"uro:buildingDetails/uro:BuildingDetails/uro:urbanPlanType"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"STRING",
+          "valueReference":"uro:buildingDetails/uro:BuildingDetails/uro:districtsAndZonesType"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"STRING",
+          "valueReference":"uro:buildingDetails/uro:BuildingDetails/uro:landUsePlanType"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"STRING",
+          "valueReference":"uro:buildingDetails/uro:BuildingDetails/uro:areaClassificationType"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"STRING",
+          "valueReference":"uro:buildingDetails/uro:BuildingDetails/uro:prefecture"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"STRING",
+          "valueReference":"uro:buildingDetails/uro:BuildingDetails/uro:city"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"STRING",
+          "valueReference":"uro:buildingDetails/uro:BuildingDetails/uro:reference"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"STRING",
+          "valueReference":"uro:buildingDetails/uro:BuildingDetails/uro:note"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"DATE",
+          "valueReference":"uro:buildingDetails/uro:BuildingDetails/uro:surveyYear"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"STRING",
+          "valueReference":"uro:largeCustomerFacilities/uro:LargeCustomerFacilities/uro:class"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"STRING",
+          "valueReference":"uro:largeCustomerFacilities/uro:LargeCustomerFacilities/uro:name"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"INTEGER",
+          "valueReference":"uro:largeCustomerFacilities/uro:LargeCustomerFacilities/uro:capacity"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"STRING",
+          "valueReference":"uro:largeCustomerFacilities/uro:LargeCustomerFacilities/uro:owner"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"DOUBLE",
+          "valueReference":"uro:largeCustomerFacilities/uro:LargeCustomerFacilities/uro:totalFloorArea"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"DOUBLE",
+          "valueReference":"uro:largeCustomerFacilities/uro:LargeCustomerFacilities/uro:totalStoreFloorArea"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"DATE",
+          "valueReference":"uro:largeCustomerFacilities/uro:LargeCustomerFacilities/uro:inauguralDate"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"STRING",
+          "valueReference":"uro:largeCustomerFacilities/uro:LargeCustomerFacilities/uro:keyTenants"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"BOOLEAN",
+          "valueReference":"uro:largeCustomerFacilities/uro:LargeCustomerFacilities/uro:availability"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"STRING",
+          "valueReference":"uro:largeCustomerFacilities/uro:LargeCustomerFacilities/uro:urbanPlanType"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"STRING",
+          "valueReference":"uro:largeCustomerFacilities/uro:LargeCustomerFacilities/uro:districtsAndZonesType"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"STRING",
+          "valueReference":"uro:largeCustomerFacilities/uro:LargeCustomerFacilities/uro:landUsePlanType"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"STRING",
+          "valueReference":"uro:largeCustomerFacilities/uro:LargeCustomerFacilities/uro:areaClassificationType"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"STRING",
+          "valueReference":"uro:largeCustomerFacilities/uro:LargeCustomerFacilities/uro:prefecture"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"STRING",
+          "valueReference":"uro:largeCustomerFacilities/uro:LargeCustomerFacilities/uro:city"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"STRING",
+          "valueReference":"uro:largeCustomerFacilities/uro:LargeCustomerFacilities/uro:reference"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"STRING",
+          "valueReference":"uro:largeCustomerFacilities/uro:LargeCustomerFacilities/uro:note"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"DATE",
+          "valueReference":"uro:largeCustomerFacilities/uro:LargeCustomerFacilities/uro:surveyYear"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"STRING",
+          "valueReference":"uro:extendedAttribute/uro:KeyValuePair/uro:key"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"STRING",
+          "valueReference":"uro:extendedAttribute/uro:KeyValuePair/uro:stringValue"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"INTEGER",
+          "valueReference":"uro:extendedAttribute/uro:KeyValuePair/uro:intValue"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"DOUBLE",
+          "valueReference":"uro:extendedAttribute/uro:KeyValuePair/uro:doubleValue"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"STRING",
+          "valueReference":"uro:extendedAttribute/uro:KeyValuePair/uro:codeValue"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"DOUBLE",
+          "valueReference":"uro:extendedAttribute/uro:KeyValuePair/uro:measuredValue"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"DATE",
+          "valueReference":"uro:extendedAttribute/uro:KeyValuePair/uro:dateValue"
+        },
+        {
+          "schemaId":"uro",
+          "target":"Building",
+          "dataType":"STRING",
+          "valueReference":"uro:extendedAttribute/uro:KeyValuePair/uro:uriValue"
+        },
+        {
+          "schemaId":"uro",
+          "target":"CityObjectGroup",
+          "dataType":"DATE",
+          "valueReference":"uro:fiscalYearOfPublication"
+        },
+        {
+          "schemaId":"uro",
+          "target":"CityObjectGroup",
+          "dataType":"STRING",
+          "valueReference":"uro:language"
+        },
+        {
+          "schemaId":"uro",
+          "target":"LandUse",
+          "dataType":"DOUBLE",
+          "valueReference":"uro:nominalArea"
+        },
+        {
+          "schemaId":"uro",
+          "target":"LandUse",
+          "dataType":"STRING",
+          "valueReference":"uro:ownerType"
+        },
+        {
+          "schemaId":"uro",
+          "target":"LandUse",
+          "dataType":"STRING",
+          "valueReference":"uro:owner"
+        },
+        {
+          "schemaId":"uro",
+          "target":"LandUse",
+          "dataType":"DOUBLE",
+          "valueReference":"uro:areaInHa"
+        },
+        {
+          "schemaId":"uro",
+          "target":"LandUse",
+          "dataType":"STRING",
+          "valueReference":"uro:urbanPlanType"
+        },
+        {
+          "schemaId":"uro",
+          "target":"LandUse",
+          "dataType":"STRING",
+          "valueReference":"uro:districtsAndZonesType"
+        },
+        {
+          "schemaId":"uro",
+          "target":"LandUse",
+          "dataType":"STRING",
+          "valueReference":"uro:landUsePlanType"
+        },
+        {
+          "schemaId":"uro",
+          "target":"LandUse",
+          "dataType":"STRING",
+          "valueReference":"uro:areaClassificationType"
+        },
+        {
+          "schemaId":"uro",
+          "target":"LandUse",
+          "dataType":"STRING",
+          "valueReference":"uro:prefecture"
+        },
+        {
+          "schemaId":"uro",
+          "target":"LandUse",
+          "dataType":"STRING",
+          "valueReference":"uro:city"
+        },
+        {
+          "schemaId":"uro",
+          "target":"LandUse",
+          "dataType":"STRING",
+          "valueReference":"uro:reference"
+        },
+        {
+          "schemaId":"uro",
+          "target":"LandUse",
+          "dataType":"STRING",
+          "valueReference":"uro:note"
+        },
+        {
+          "schemaId":"uro",
+          "target":"LandUse",
+          "dataType":"DATE",
+          "valueReference":"uro:surveyYear"
+        },
+        {
+          "schemaId":"uro",
+          "target":"TransportationComplex",
+          "dataType":"DOUBLE",
+          "valueReference":"uro:width"
+        },
+        {
+          "schemaId":"uro",
+          "target":"TransportationComplex",
+          "dataType":"STRING",
+          "valueReference":"uro:widthType"
+        },
+        {
+          "schemaId":"uro",
+          "target":"TransportationComplex",
+          "dataType":"INTEGER",
+          "valueReference":"uro:trafficVolume/uro:TrafficVolume/uro:weekday12hourTrafficVolume"
+        },
+        {
+          "schemaId":"uro",
+          "target":"TransportationComplex",
+          "dataType":"INTEGER",
+          "valueReference":"uro:trafficVolume/uro:TrafficVolume/uro:weekday24hourTrafficVolume"
+        },
+        {
+          "schemaId":"uro",
+          "target":"TransportationComplex",
+          "dataType":"DOUBLE",
+          "valueReference":"uro:trafficVolume/uro:TrafficVolume/uro:largeVehicleRate"
+        },
+        {
+          "schemaId":"uro",
+          "target":"TransportationComplex",
+          "dataType":"DOUBLE",
+          "valueReference":"uro:trafficVolume/uro:TrafficVolume/uro:congestionRate"
+        },
+        {
+          "schemaId":"uro",
+          "target":"TransportationComplex",
+          "dataType":"DOUBLE",
+          "valueReference":"uro:trafficVolume/uro:TrafficVolume/uro:averageTravelSpeedInCongestion"
+        },
+        {
+          "schemaId":"uro",
+          "target":"TransportationComplex",
+          "dataType":"STRING",
+          "valueReference":"uro:trafficVolume/uro:TrafficVolume/uro:observationPointName"
+        },
+        {
+          "schemaId":"uro",
+          "target":"TransportationComplex",
+          "dataType":"STRING",
+          "valueReference":"uro:trafficVolume/uro:TrafficVolume/uro:urbanPlanType"
+        },
+        {
+          "schemaId":"uro",
+          "target":"TransportationComplex",
+          "dataType":"STRING",
+          "valueReference":"uro:trafficVolume/uro:TrafficVolume/uro:areaClassificationType"
+        },
+        {
+          "schemaId":"uro",
+          "target":"TransportationComplex",
+          "dataType":"STRING",
+          "valueReference":"uro:trafficVolume/uro:TrafficVolume/uro:prefecture"
+        },
+        {
+          "schemaId":"uro",
+          "target":"TransportationComplex",
+          "dataType":"STRING",
+          "valueReference":"uro:trafficVolume/uro:TrafficVolume/uro:city"
+        },
+        {
+          "schemaId":"uro",
+          "target":"TransportationComplex",
+          "dataType":"STRING",
+          "valueReference":"uro:trafficVolume/uro:TrafficVolume/uro:reference"
+        },
+        {
+          "schemaId":"uro",
+          "target":"TransportationComplex",
+          "dataType":"STRING",
+          "valueReference":"uro:trafficVolume/uro:TrafficVolume/uro:note"
+        },
+        {
+          "schemaId":"uro",
+          "target":"TransportationComplex",
+          "dataType":"DATE",
+          "valueReference":"uro:trafficVolume/uro:TrafficVolume/uro:surveyYear"
+        },
+        {
+          "schemaId":"urf",
+          "target":"CityObjectGroup",
+          "dataType":"DATE",
+          "valueReference":"urf:fiscalYearOfPublication"
+        },
+        {
+          "schemaId":"urf",
+          "target":"CityObjectGroup",
+          "dataType":"STRING",
+          "valueReference":"urf:language"
+        },
+        {
+          "schemaId":"urg",
+          "target":"CityObjectGroup",
+          "dataType":"DATE",
+          "valueReference":"urg:fiscalYearOfPublication"
+        },
+        {
+          "schemaId":"urg",
+          "target":"CityObjectGroup",
+          "dataType":"STRING",
+          "valueReference":"urg:language"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"STRING",
+          "valueReference":"urt:dataType/urt:FareRule/urt:originId"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"STRING",
+          "valueReference":"urt:dataType/urt:FareRule/urt:destinationId"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"STRING",
+          "valueReference":"urt:dataType/urt:FareRule/urt:containsId"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"STRING",
+          "valueReference":"urt:dataType/urt:FeedInfo/urt:publisherName"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"STRING",
+          "valueReference":"urt:dataType/urt:FeedInfo/urt:publisherUrl"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"STRING",
+          "valueReference":"urt:dataType/urt:FeedInfo/urt:language"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"STRING",
+          "valueReference":"urt:dataType/urt:FeedInfo/urt:defaultLanguage"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"DATE",
+          "valueReference":"urt:dataType/urt:FeedInfo/urt:startDate"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"DATE",
+          "valueReference":"urt:dataType/urt:FeedInfo/urt:endDate"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"STRING",
+          "valueReference":"urt:dataType/urt:FeedInfo/urt:version"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"STRING",
+          "valueReference":"urt:dataType/urt:FeedInfo/urt:contactEmail"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"STRING",
+          "valueReference":"urt:dataType/urt:FeedInfo/urt:contactURL"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"STRING",
+          "valueReference":"urt:dataType/urt:FeedInfo/urt:detailedInfo"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"DATE",
+          "valueReference":"urt:dataType/urt:Frequency/urt:startTime"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"DATE",
+          "valueReference":"urt:dataType/urt:Frequency/urt:endTime"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"INTEGER",
+          "valueReference":"urt:dataType/urt:Frequency/urt:headwaySecs"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"STRING",
+          "valueReference":"urt:dataType/urt:Frequency/urt:exactTimes"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"DATE",
+          "valueReference":"urt:dataType/urt:StopTime/urt:arrivalTime"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"DATE",
+          "valueReference":"urt:dataType/urt:StopTime/urt:departureTime"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"INTEGER",
+          "valueReference":"urt:dataType/urt:StopTime/urt:stopSequence"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"STRING",
+          "valueReference":"urt:dataType/urt:StopTime/urt:headsign"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"STRING",
+          "valueReference":"urt:dataType/urt:StopTime/urt:pickupType"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"STRING",
+          "valueReference":"urt:dataType/urt:StopTime/urt:dropoffType"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"STRING",
+          "valueReference":"urt:dataType/urt:StopTime/urt:continuousPickupType"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"STRING",
+          "valueReference":"urt:dataType/urt:StopTime/urt:continuousDropoffType"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"DOUBLE",
+          "valueReference":"urt:dataType/urt:StopTime/urt:shapeDistanceTraveled"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"STRING",
+          "valueReference":"urt:dataType/urt:StopTime/urt:timePoint"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"STRING",
+          "valueReference":"urt:dataType/urt:Transfer/urt:transferType"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"INTEGER",
+          "valueReference":"urt:dataType/urt:Transfer/urt:minTransferTime"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"STRING",
+          "valueReference":"urt:dataType/urt:Translation/urt:tableName"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"STRING",
+          "valueReference":"urt:dataType/urt:Translation/urt:fieldName"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"STRING",
+          "valueReference":"urt:dataType/urt:Translation/urt:language"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"STRING",
+          "valueReference":"urt:dataType/urt:Translation/urt:translation"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"STRING",
+          "valueReference":"urt:dataType/urt:Translation/urt:fieldValue"
+        },
+        {
+          "schemaId":"urt",
+          "target":"CityObjectGroup",
+          "dataType":"STRING",
+          "valueReference":"urt:dataType/urt:Translation/urt:recordSubId"
+        }
+      ]
+    }
+  ]
+}
