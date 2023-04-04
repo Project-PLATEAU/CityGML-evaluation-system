@@ -12,12 +12,12 @@
             <connection id="UUID_f3e50064-27db-4e6b-b31b-72b70bb4ca21" loginTimeout="60" initialSize="0">
                 <description>ADE</description>
                 <type>PostGIS</type>
-                <server>192.168.0.6</server>
+                <server>localhost</server>
                 <port>5432</port>
-                <sid>*****</sid>
-                <schema>citydb</schema>
-                <user>*****</user>
-                <password>*****</password>
+                <sid>citydb_v4</sid>
+                <schema>citydb4</schema>
+                <user>postgres</user>
+                <password>uX7B(Q5C</password>
                 <savePassword>true</savePassword>
             </connection>
         </connections>
@@ -83,43 +83,43 @@
                 <typeName xmlns:ns5="http://www.opengis.net/citygml/vegetation/1.0">ns5:PlantCover</typeName>
                 <typeName xmlns:ns5="http://www.opengis.net/citygml/waterbody/2.0">ns5:WaterBody</typeName>
                 <typeName xmlns:ns5="http://www.opengis.net/citygml/waterbody/1.0">ns5:WaterBody</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urg/1.4">ns5:Population</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urg/1.4">ns5:PublicTransitAccessibility</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urg/1.4">ns5:LandPrice</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urg/1.4">ns5:LandUseDiversion</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urg/1.4">ns5:Households</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urg/1.4">ns5:OfficesAndEmployees</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urg/1.4">ns5:GenericGridCell</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urf/1.4">ns5:Administration</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urf/1.4">ns5:LandUsePlan</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urf/1.4">ns5:UrbanPlan</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urf/1.4">ns5:Agreement</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urf/1.4">ns5:Regulation</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urf/1.4">ns5:AreaClassification</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urf/1.4">ns5:DistrictsAndZones</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urf/1.4">ns5:DevelopmentProject</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urf/1.4">ns5:CensusBlock</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urf/1.4">ns5:DisasterDamage</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urf/1.4">ns5:Pollution</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urf/1.4">ns5:DisasterPreventionBase</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urf/1.4">ns5:Recreations</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urf/1.4">ns5:HubCity</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urf/1.4">ns5:LandUseDiversion</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urf/1.4">ns5:Urbanization</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urf/1.4">ns5:PublicTransportationFacility</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urt/1.4">ns5:Route</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urt/1.4">ns5:Agency</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urt/1.4">ns5:Stop</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urt/1.4">ns5:Level</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urt/1.4">ns5:Trip</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urt/1.4">ns5:Calendar</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urt/1.4">ns5:CalendarDate</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urt/1.4">ns5:Office</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urt/1.4">ns5:Shape</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urt/1.4">ns5:FareAttribute</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urt/1.4">ns5:Pathway</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urt/1.4">ns5:TranslationJP</typeName>
-                <typeName xmlns:ns5="http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urt/1.4">ns5:Attribution</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urg/2.0">ns5:Population</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urg/2.0">ns5:PublicTransitAccessibility</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urg/2.0">ns5:LandPrice</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urg/2.0">ns5:LandUseDiversion</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urg/2.0">ns5:Households</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urg/2.0">ns5:OfficesAndEmployees</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urg/2.0">ns5:GenericGridCell</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urf/2.0">ns5:Administration</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urf/2.0">ns5:LandUsePlan</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urf/2.0">ns5:UrbanPlan</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urf/2.0">ns5:Agreement</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urf/2.0">ns5:Regulation</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urf/2.0">ns5:AreaClassification</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urf/2.0">ns5:DistrictsAndZones</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urf/2.0">ns5:DevelopmentProject</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urf/2.0">ns5:CensusBlock</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urf/2.0">ns5:DisasterDamage</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urf/2.0">ns5:Pollution</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urf/2.0">ns5:DisasterPreventionBase</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urf/2.0">ns5:Recreations</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urf/2.0">ns5:HubCity</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urf/2.0">ns5:LandUseDiversion</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urf/2.0">ns5:Urbanization</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urf/2.0">ns5:PublicTransportationFacility</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urt/2.0">ns5:Route</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urt/2.0">ns5:Agency</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urt/2.0">ns5:Stop</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urt/2.0">ns5:Level</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urt/2.0">ns5:Trip</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urt/2.0">ns5:Calendar</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urt/2.0">ns5:CalendarDate</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urt/2.0">ns5:Office</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urt/2.0">ns5:Shape</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urt/2.0">ns5:FareAttribute</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urt/2.0">ns5:Pathway</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urt/2.0">ns5:TranslationJP</typeName>
+                <typeName xmlns:ns5="https://www.geospatial.jp/iur/urt/2.0">ns5:Attribution</typeName>
             </typeNames>
             <attributes>
                 <gmlIds/>
@@ -146,7 +146,7 @@
         <path>
             <mode>lastUsed</mode>
             <standardPath></standardPath>
-            <lastUsedPath>*****\13\3dx</lastUsedPath>
+            <lastUsedPath></lastUsedPath>
         </path>
         <gmlId>
             <uuidMode>complement</uuidMode>
@@ -177,7 +177,7 @@
         <xslTransformation isEnabled="false"/>
         <importLog>
             <logImportedFeatures>false</logImportedFeatures>
-            <logPath>*****\3dcitydb\importer-exporter\imported-features</logPath>
+            <logPath></logPath>
         </importLog>
         <resources>
             <gmlIdCache>
@@ -5910,7 +5910,7 @@
                 <adeVersion></adeVersion>
                 <adeDbPrefix></adeDbPrefix>
                 <initialObjectclassId>10000</initialObjectclassId>
-                <adeRegistryInputPath>*****\virtualcityDATABASE-Importer-Exporter-ADE\ade-extensions\iUR-ADE-Extension</adeRegistryInputPath>
+                <adeRegistryInputPath>C:\CityGML-validation-function\3DCityDB-Importer-Exporter\ade-extensions\iur-ade-1.4.0</adeRegistryInputPath>
             </config>
         </plugin>
         <plugin>

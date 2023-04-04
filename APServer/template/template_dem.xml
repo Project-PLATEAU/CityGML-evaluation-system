@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<featureLayer
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.virtualcitysystems.de/schemas/citygml2tms"
+  xmlns:db="http://www.3dcitydb.org/importer-exporter/config"
+  xmlns:grp="http://www.opengis.net/citygml/cityobjectgroup/2.0"
+  xmlns:wtr="http://www.opengis.net/citygml/waterbody/2.0"
+  xmlns:frn="http://www.opengis.net/citygml/cityfurniture/2.0"
+  xmlns:bldg="http://www.opengis.net/citygml/building/2.0"
+  xmlns:luse="http://www.opengis.net/citygml/landuse/2.0"
+  xmlns:core="http://www.opengis.net/citygml/2.0"
+  xmlns:veg="http://www.opengis.net/citygml/vegetation/2.0"
+  xmlns:dem="http://www.opengis.net/citygml/relief/2.0"
+  xmlns:tran="http://www.opengis.net/citygml/transportation/2.0"
+  xmlns:brid="http://www.opengis.net/citygml/bridge/2.0"
+  xmlns:gen="http://www.opengis.net/citygml/generics/2.0"
+  xmlns:tun="http://www.opengis.net/citygml/tunnel/2.0"
+  xmlns:gml="http://www.opengis.net/gml"
+  xsi:schemaLocation="http://www.virtualcitysystems.de/schemas/citygml2tms schema/config.xsd"
+  xmlns:urg="https://www.geospatial.jp/iur/urg/2.0"
+  xmlns:urf="https://www.geospatial.jp/iur/urf/2.0"
+  xmlns:urt="https://www.geospatial.jp/iur/urt/2.0">
+  <metadata>
+    <dataSource>
+      <cityGMLSource>
+        <srsWKT>GEOGCS["JGD2011", DATUM["Japanese Geodetic Datum 2011", SPHEROID["GRS 1980", 6378137.0, 298.257222101, AUTHORITY["EPSG","7019"]], AUTHORITY["EPSG","1128"]], PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], UNIT["degree", 0.017453292519943295], AXIS["Geodetic latitude", NORTH], AXIS["Geodetic longitude", EAST], AUTHORITY["EPSG","6668"]]</srsWKT>
+        <input>
+          <fileSet dir="C:\*****">
+            <fileName name="12345678_dem_6697.zip"/>
+          </fileSet>
+        </input>
+      </cityGMLSource>
+    </dataSource>
+    <gltfVersion>2.0</gltfVersion>
+    <b3dmVersion>0.6</b3dmVersion>
+    <addressSchema>Google</addressSchema>
+    <transformMode>full</transformMode>
+    <selectionDepthLevel>cityObject</selectionDepthLevel>
+    <attributeMergeMode>none</attributeMergeMode>
+    <attributes process="true"/>
+    <layerJson>
+      <maxChildren>16</maxChildren>
+      <maxLevelsInTileset>3</maxLevelsInTileset>
+      <prettyPrint>true</prettyPrint>
+    </layerJson>
+    <heightMode type="absolute">
+      <offset>0</offset>
+    </heightMode>
+    <rendering>
+      <shading>gouraud</shading>
+      <shininess>0</shininess>
+      <ambientFactor>0.3</ambientFactor>
+      <diffuseFactor>1</diffuseFactor>
+      <specularFactor>0</specularFactor>
+      <transparencyMode>combined</transparencyMode>
+      <alphaFilterThreshold>0.8</alphaFilterThreshold>
+      <backFaceCulling>true</backFaceCulling>
+      <colorMergeMode>prefer_texture</colorMergeMode>
+      <renderSilhouettes>false</renderSilhouettes>
+      <creaseAngle>0.4</creaseAngle>
+    </rendering>
+  </metadata>
+  <tileOptions level="15">
+    <featureTypes>
+      <type>dem:ReliefFeature</type>
+    </featureTypes>
+    <lod>
+      <level>2</level>
+      <lodSelection>allow_lower</lodSelection>
+    </lod>
+    <geometry>
+      <generalizationTolerance>0</generalizationTolerance>
+      <clampToGroundForPolygonsOfLod1OrHigher>false</clampToGroundForPolygonsOfLod1OrHigher>
+    </geometry>
+    <cityGMLClassStyle wellKnownStyle="DEFAULT_CITYGML_CLASS_COLORS">
+      <classColor className="dem:ReliefFeature" color="#e5dfdfff"/>
+      <classColor className="dem:TINRelief" color="#e5dfdfff"/>
+    </cityGMLClassStyle>
+    <refineMode>replace</refineMode>
+  </tileOptions>
+</featureLayer>

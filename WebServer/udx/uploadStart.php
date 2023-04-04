@@ -14,19 +14,33 @@
             $log->info('ステータス更新開始',$cityCode);
             
             foreach($uploadFileNameList as $uploadFileName){
-                db (" WITH upsert AS (
-                            UPDATE public.manage_regist_zip
+		//2022修正
+               $sql =" WITH upsert AS (
+                            UPDATE manage_regist_zip
                             SET status = '". $status ."' ,registdate = NOW()
                             WHERE userid = '". $_POST['cityCode'] .
                             "' AND zipname = '". $uploadFileName .
                             "' RETURNING * 
                            )
-                        INSERT INTO public.manage_regist_zip (userid, zipname,  status, registdate )
-                        SELECT '" . $_POST['cityCode'] . "','" . $uploadFileName ."', '". $status ."' , NOW() From public.manage_regist_zip
+                        INSERT INTO manage_regist_zip (userid, zipname,  status, registdate )
+                        SELECT '" . $_POST['cityCode'] . "','" . $uploadFileName ."', '". $status ."' , NOW()
+                        WHERE not exists (SELECT 1 FROM manage_regist_zip WHERE userid = '". $_POST['cityCode'] . "' and zipname = '". $uploadFileName ."' ) LIMIT 1";
+/*
+               $sql =" WITH upsert AS (
+                            UPDATE manage_regist_zip
+                            SET status = '". $status ."' ,registdate = NOW()
+                            WHERE userid = '". $_POST['cityCode'] .
+                            "' AND zipname = '". $uploadFileName .
+                            "' RETURNING * 
+                           )
+                        INSERT INTO manage_regist_zip (userid, zipname,  status, registdate )
+                        SELECT '" . $_POST['cityCode'] . "','" . $uploadFileName ."', '". $status ."' , NOW() From manage_regist_zip
                         WHERE not exists (SELECT userid, zipname, '" . $status . "', NOW()
-                        FROM public.manage_regist_zip WHERE userid = '". $_POST['cityCode'] . "' and zipname = '". $uploadFileName ."' ) LIMIT 1");//DBへの格納
-                        
-                        $log->info('['. $uploadFileName . ']の' .'ステータスを' . $status . 'に更新',$cityCode);
+                        FROM manage_regist_zip WHERE userid = '". $_POST['cityCode'] . "' and zipname = '". $uploadFileName ."' ) LIMIT 1";
+*/
+                db ($sql);//DBへの格納
+
+                $log->info('['. $uploadFileName . ']の' .'ステータスを' . $status . 'に更新',$cityCode);
             }
             echo json_encode('データベースのステータスを更新しました', JSON_UNESCAPED_UNICODE);
         } else {

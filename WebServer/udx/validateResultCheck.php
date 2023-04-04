@@ -11,13 +11,15 @@ function validateResultCheck($logFileName, $cityCode, $logType){
 
     //最大三回検証結果ファイルの読み込みを試みる
     for($i = 0; $i < 3; $i++){
-        $validateResults = file('F:\\Apache24\\htdocs\\iUR_Data\\' . $cityCode . '/' . $logType . '/' . $logFileName, FILE_IGNORE_NEW_LINES);
+        $validateResults = file('*****:/*****/htdocs/iUR_Data/' . $cityCode . '/' . $logType . '/' . $logFileName, FILE_IGNORE_NEW_LINES);
         if($validateResults !== false){
 	        foreach($validateResults as $result){
 	            if(preg_match('/^\[[0-2][0-9]:[0-5][0-9]:[0-5][0-9] ERROR\]/', $result) === 1 || preg_match('/^\[[0-2][0-9]:[0-5][0-9]:[0-5][0-9] WARN\]/', $result) === 1){
 	                //検証した結果XMLが妥当でない場合の処理
 	                return false;
-	            } else if (preg_match('/^\[[0-2][0-9]:[0-5][0-9]:[0-5][0-9] INFO\] Data validation finished./', $result) === 1){
+	            //2022 EMFの出力ログに対応
+				//} else if (preg_match('/^\[[0-2][0-9]:[0-5][0-9]:[0-5][0-9] INFO\] Data validation finished./', $result) === 1){
+				} else if (preg_match('/^\[[0-2][0-9]:[0-5][0-9]:[0-5][0-9] INFO\] Data validation successfully finished./', $result) === 1){
 	                //検証した結果XMLが妥当である場合の処理
 	                return true;
 	            }

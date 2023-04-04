@@ -7,11 +7,11 @@
     try{
         include_once("logger.php"); //ログ出力処理の読み込み
         include_once("config.php"); //ログ出力用のコンフィグ読み込み
-        
+
         if(isset($_POST["cityCode"]) == true && isset($_POST["releaseFileNames"]) == true){
             //自治体IDを確認
             $cityCode = (string) $_POST["cityCode"];
-            
+
             //ログ書き込み処理
             $log = Logger::getInstance();
             $log->info('データ配信処理開始',$cityCode);
@@ -24,10 +24,13 @@
             
             //CityGMLファイルのコピー
             foreach($releaseFileNames as $releaseFileName){
-                //ファイル元パス
-                $cityGMLPath = 'F:/DATA/' .$cityCode. '/OriginalData/3DBuildings/' . $releaseFileName;
-                //ファイルコピー先
+                //ファイル元パス //2022修正
+                $cityGMLPath = '*****:/*****/Data/' .$cityCode. '/OriginalData/3DBuildings/' . $releaseFileName;
+                //ファイルコピー先 //2022修正
                 $forCopyPath = '*****:/*****/htdocs/iUR_Data/' .$cityCode. '/OriginalData/3DBuildings/' . $releaseFileName;
+
+            $log->info($cityGMLPath,$cityCode);
+            $log->info($forCopyPath,$cityCode);
 
                 if (copy($cityGMLPath, $forCopyPath) === true) {
                     $log->info('CityGMLファイルのコピー成功 ファイル名[' . $releaseFileName . ']',$cityCode);

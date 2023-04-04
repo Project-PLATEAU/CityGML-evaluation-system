@@ -79,7 +79,7 @@ class Logger {
             if(Config::IS_LOGFILE && is_numeric( $cityCode)) {
 
             $pid = getmypid(); //プロセスID
-            $time = date('Y/m/d H:i:s', time() +32400); //時差9時間(32400秒)を調整
+            $time = date('Y/m/d H:i:s', time());
             $logMessage = "[{$time}][{$pid}][{$level}] " . rtrim($msg) . "\r\n";
             $logFilePath = Config::LOGDIR_PATH . $cityCode . '_' . Config::LOGFILE_NAME . '.log';
 

@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<featureLayer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.virtualcitysystems.de/schemas/citygml2tms" xmlns:db="http://www.3dcitydb.org/importer-exporter/config" xmlns:veg="http://www.opengis.net/citygml/vegetation/2.0" xmlns:grp="http://www.opengis.net/citygml/cityobjectgroup/2.0" xmlns:tran="http://www.opengis.net/citygml/transportation/2.0" xmlns:wtr="http://www.opengis.net/citygml/waterbody/2.0" xmlns:luse="http://www.opengis.net/citygml/landuse/2.0" xmlns:dem="http://www.opengis.net/citygml/relief/2.0" xmlns:frn="http://www.opengis.net/citygml/cityfurniture/2.0" xmlns:bldg="http://www.opengis.net/citygml/building/2.0" xmlns:core="http://www.opengis.net/citygml/2.0" xmlns:brid="http://www.opengis.net/citygml/bridge/2.0" xmlns:gen="http://www.opengis.net/citygml/generics/2.0" xmlns:tun="http://www.opengis.net/citygml/tunnel/2.0" xmlns:gml="http://www.opengis.net/gml" xsi:schemaLocation="http://www.virtualcitysystems.de/schemas/citygml2tms schema/config.xsd" xmlns:urg="https://www.geospatial.jp/iur/urg/2.0" xmlns:urf="https://www.geospatial.jp/iur/urf/2.0" xmlns:urt="https://www.geospatial.jp/iur/urt/2.0">
+  <metadata>
+    <dataSource>
+      <cityGMLSource>
+        <srsWKT>GEOGCS["JGD2011", DATUM["Japanese Geodetic Datum 2011", SPHEROID["GRS 1980", 6378137.0, 298.257222101, AUTHORITY["EPSG","7019"]], AUTHORITY["EPSG","1128"]], PRIMEM["Greenwich", 0.0, AUTHORITY["EPSG","8901"]], UNIT["degree", 0.017453292519943295], AXIS["Geodetic latitude", NORTH], AXIS["Geodetic longitude", EAST], AUTHORITY["EPSG","6668"]]</srsWKT>
+        <input>
+          <fileSet dir="C:\*****">
+            <fileName name="12345678_luse_6668.zip"/>
+          </fileSet>
+        </input>
+      </cityGMLSource>
+    </dataSource>
+    <gltfVersion>2.0</gltfVersion>
+    <b3dmVersion>0.6</b3dmVersion>
+    <addressSchema>Google</addressSchema>
+    <transformMode>full</transformMode>
+    <selectionDepthLevel>cityObject</selectionDepthLevel>
+    <attributeMergeMode>overrideChild</attributeMergeMode>
+    <attributes process="true"/>
+    <layerJson>
+      <maxChildren>16</maxChildren>
+      <maxLevelsInTileset>3</maxLevelsInTileset>
+      <prettyPrint>true</prettyPrint>
+    </layerJson>
+    <heightMode type="terrain">
+      <offset>0.01</offset>
+    </heightMode>
+    <rendering>
+      <shading>gouraud</shading>
+      <shininess>0</shininess>
+      <ambientFactor>0.3</ambientFactor>
+      <diffuseFactor>1</diffuseFactor>
+      <specularFactor>0</specularFactor>
+      <transparencyMode>combined</transparencyMode>
+      <alphaFilterThreshold>0.8</alphaFilterThreshold>
+      <backFaceCulling>true</backFaceCulling>
+      <colorMergeMode>prefer_texture</colorMergeMode>
+      <renderSilhouettes>false</renderSilhouettes>
+      <creaseAngle>0.4</creaseAngle>
+    </rendering>
+    <terrainDataSource>
+      <quantizedMeshTerrainSource>
+        <url>http://localhost/map/90001/private/datasource-data/Terrain</url>
+      </quantizedMeshTerrainSource>
+    </terrainDataSource>
+  </metadata>
+  <tileOptions level="14">
+    <featureTypes>
+      <type>gen:GenericCityObject</type>
+      <type>luse:LandUse</type>
+      <type>tran:Track</type>
+      <type>tran:Road</type>
+      <type>tran:Railway</type>
+      <type>tran:Square</type>
+      <type>urf:UrbanPlan</type>
+      <type>urf:DistrictsAndZones</type>
+      <type>urf:LandUsePlan</type>
+      <type>wtr:WaterBody</type>
+      <type>urf:AreaClassification</type>
+    </featureTypes>
+    <lod>
+      <level>1</level>
+      <lodSelection>allow_lower</lodSelection>
+    </lod>
+    <geometry>
+      <generalizationTolerance>0</generalizationTolerance>
+      <clampToGroundForPolygonsOfLod1OrHigher>true</clampToGroundForPolygonsOfLod1OrHigher>
+    </geometry>
+    <cityGMLClassStyle wellKnownStyle="DEFAULT_CITYGML_CLASS_COLORS">
+      <classColor className="grp:CityObjectGroup" color="#d0545dff"/>
+      <classColor className="gen:GenericCityObject" color="#ffffffff"/>
+      <classColor className="luse:LandUse" color="#817959ff"/>
+      <classColor className="tran:TransportationComplex" color="#e0b884ff"/>
+      <classColor className="tran:TrafficArea" color="#a7a7a7ff"/>
+      <classColor className="tran:AuxiliaryTrafficArea" color="#a7a7a7ff"/>
+      <classColor className="tran:Track" color="#a7a7a7ff"/>
+      <classColor className="tran:Road" color="#808080ff"/>
+      <classColor className="tran:Railway" color="#a7a7a7ff"/>
+      <classColor className="tran:Square" color="#e0b884ff"/>
+      <classColor className="veg:PlantCover" color="#284f23ff"/>
+      <classColor className="veg:SolitaryVegetationObject" color="#284f23ff"/>
+      <classColor className="wtr:WaterBody" color="#293760aa"/>
+      <classColor className="wtr:WaterSurface" color="#293760aa"/>
+      <classColor className="wtr:WaterGroundSurface" color="#443838aa"/>
+      <classColor className="wtr:WaterClosureSurface" color="#ffffffaa"/>
+      <classColor className="urg:Population" color="#a70000ff"/>
+      <classColor className="urg:PublicTransitAccessibility" color="#a70000ff"/>
+      <classColor className="urg:LandPrice" color="#a70000ff"/>
+      <classColor className="urg:LandUseDiversion" color="#a70000ff"/>
+      <classColor className="urg:Households" color="#a70000ff"/>
+      <classColor className="urg:OfficesAndEmployees" color="#a70000ff"/>
+      <classColor className="urg:GenericGridCell" color="#a70000ff"/>
+      <classColor className="urf:Administration" color="#a70000ff"/>
+      <classColor className="urf:LandUsePlan" color="#a70000ff"/>
+      <classColor className="urf:UrbanPlan" color="#6495EDff"/>
+      <classColor className="urf:Agreement" color="#a70000ff"/>
+      <classColor className="urf:Regulation" color="#a70000ff"/>
+      <classColor className="urf:AreaClassification" color="#800000ff"/>
+      <classColor className="urf:DistrictsAndZones" color="#228B22f"/>
+      <classColor className="urf:DevelopmentProject" color="#a70000ff"/>
+      <classColor className="urf:CensusBlock" color="#a70000ff"/>
+      <classColor className="urf:DisasterDamage" color="#a70000ff"/>
+      <classColor className="urf:Pollution" color="#a70000ff"/>
+      <classColor className="urf:DisasterPreventionBase" color="#a70000ff"/>
+      <classColor className="urf:Recreations" color="#a70000ff"/>
+      <classColor className="urf:HubCity" color="#a70000ff"/>
+      <classColor className="urf:LandUseDiversion" color="#a70000ff"/>
+      <classColor className="urf:Urbanization" color="#a70000ff"/>
+      <classColor className="urf:PublicTransportationFacility" color="#a70000ff"/>
+      <classColor className="urt:Route" color="#a70000ff"/>
+      <classColor className="urt:Agency" color="#a70000ff"/>
+      <classColor className="urt:Stop" color="#a70000ff"/>
+      <classColor className="urt:Level" color="#a70000ff"/>
+      <classColor className="urt:Trip" color="#a70000ff"/>
+      <classColor className="urt:Calendar" color="#a70000ff"/>
+      <classColor className="urt:CalendarDate" color="#a70000ff"/>
+      <classColor className="urt:Office" color="#a70000ff"/>
+      <classColor className="urt:Shape" color="#a70000ff"/>
+      <classColor className="urt:FareAttribute" color="#a70000ff"/>
+      <classColor className="urt:Pathway" color="#a70000ff"/>
+      <classColor className="urt:TranslationJP" color="#a70000ff"/>
+      <classColor className="urt:Attribution" color="#a70000ff"/>
+    </cityGMLClassStyle>
+    <refineMode>replace</refineMode>
+  </tileOptions>
+</featureLayer>

@@ -1,124 +1,123 @@
-ï»¿@echo off
-rem UTF-8
-rem ã‚«ãƒ¬ãƒ³ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’ç¾åœ¨ã®å ´æ‰€ã«ç§»å‹•
+rem ƒJƒŒƒ“ƒgƒfƒBƒŒƒNƒgƒŠ‚ðŒ»Ý‚ÌêŠ‚ÉˆÚ“®
 cd /d %~dp0
-chcp 65001
+chcp 932
 
-rem æ—¥ä»˜ã‚’YYYYMMDDHHMMSSã«ã™ã‚‹
+rem “ú•t‚ðYYYYMMDDHHMMSS‚É‚·‚é
 set ts=%time: =0%
 set ts=%date:~0,4%%date:~5,2%%date:~8,2%%ts:~0,2%%ts:~3,2%%ts:~6,2%
 
-:ãƒ•ã‚¡ã‚¤ãƒ«å
+rem ƒtƒ@ƒCƒ‹–¼
 set filename=%1
-if errorlevel 1 goto ERR1
+if %errorlevel%== 1 goto ERR1
 
-:ãƒ€ãƒ–ãƒ«ã‚¯ã‚©ãƒ¼ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å‰Šé™¤
+rem ƒ_ƒuƒ‹ƒNƒH[ƒe[ƒVƒ‡ƒ“‚ðíœ
 set filename=%filename:"=%
-if errorlevel 1 goto ERR2
+if %errorlevel%== 1 goto ERR2
 
-:è‡ªæ²»ä½“ID
+rem Ž©Ž¡‘ÌID
 set cityCode=%2
 set cityCode=%cityCode:"=%
-if errorlevel 1 goto ERR3
+if %errorlevel%== 1 goto ERR3
 
-:å…¬é–‹è¨­å®š
+rem ŒöŠJÝ’è
 set Release_Status=private
 
-set output_dir=v:\
-set zip_dir=w:\
+rem 2022 ‚±‚±‚ÌƒpƒX‚Í—v’²®
+set output_dir=C:\Apache24\htdocs\iUR_Data
+set zip_dir=C:\CityGML-validation-function\Data
 
-:æ¤œè¨¼å¯¾è±¡ZIPã®ãƒ•ãƒ«ãƒ‘ã‚¹
-set target_zip=%zip_dir%%cityCode%\OriginalData\3DBuildings\%filename%
-if errorlevel 1 goto ERR4
+rem ŒŸØ‘ÎÛZIP‚Ìƒtƒ‹ƒpƒX
+set target_zip=%zip_dir%\%cityCode%\OriginalData\3DBuildings\%filename%
+if %errorlevel%== 1 goto ERR4
 
-rem ãƒ­ãƒ¼ã‚«ãƒ«ã¸ã®ã‚³ãƒ”ãƒ¼å…ˆã®ãƒ‘ã‚¹
-set copyTempPath=F:\bat\copyTemp\%cityCode%\%filename%
+rem ƒ[ƒJƒ‹‚Ö‚ÌƒRƒs[æ‚ÌƒpƒX
+set copyTempPath=C:\bat\copyTemp\%cityCode%\%filename%
 
-rem ãƒ­ãƒ¼ã‚«ãƒ«ã«GMLãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚³ãƒ”ãƒ¼ã™ã‚‹
-rem copy /Y "%target_zip%" "%copyTempPath%" 2>>"\\DBServer\F$\bat\errorLog\%cityCode%_error.txt"
-robocopy %zip_dir%%cityCode%\OriginalData\3DBuildings\ F:\bat\copyTemp\%cityCode%\ "%filename%"  /R:18 /W:10  2>>"\\DBServer\F$\bat\errorLog\%cityCode%_error.txt"
-if errorlevel 8 goto ERR5
+rem ƒ[ƒJƒ‹‚ÉGMLƒtƒ@ƒCƒ‹‚ðƒRƒs[‚·‚é
+rem copy /Y "%target_zip%" "%copyTempPath%" 2>>"C:\bat\errorLog\%cityCode%_error.txt"
+robocopy %zip_dir%\%cityCode%\OriginalData\3DBuildings\ C:\bat\copyTemp\%cityCode%\ "%filename%"  /R:18 /W:10  2>>"C:\bat\errorLog\%cityCode%_error.txt"
+if %errorlevel%== 8 goto ERR5
 
-cd /d "C:\*****\virtualcityDATABASE-Importer-Exporter-ADE\lib" 2>>"\\DBServer\F$\bat\errorLog\%cityCode%_error.txt"
-if errorlevel 1 goto ERR6
+cd /d "C:\CityGML-validation-function\3DCityDB-Importer-Exporter\lib" 2>>"C:\bat\errorLog\%cityCode%_error.txt"
+if %errorlevel%== 1 goto ERR6
 
-SET vfilename="vcdb-impexp-client-4.2.0-b5.jar"
+SET vfilename="impexp-client-4.3.0-rc1.jar"
 IF EXIST %vfilename% (
- cd /d "C:\*****\virtualcityDATABASE-Importer-Exporter-ADE" 2>>"\\DBServer\F$\bat\errorLog\%cityCode%_error.txt"
- java  -Xmx4096m -jar lib/vcdb-impexp-client-4.2.0-b5.jar -shell  -validate "%copyTempPath%" -config F:\validateConfig\project.xml > "F:\tmp\%cityCode%\%filename%.txt" 2>&1
+ cd /d "C:\CityGML-validation-function\3DCityDB-Importer-Exporter" 2>>"C:\bat\errorLog\%cityCode%_error.txt"
+ java  -Xmx4096m -jar lib/%vfilename% --config=C:\validateConfig\project.xml validate "%copyTempPath%" > "C:\tmp\%cityCode%\%filename%.txt" 2>&1
 ) else (
  timeout /t 3
  goto ERR5
 )
-copy "F:\tmp\%cityCode%\%filename%.txt" "F:\bat\validatelog\%cityCode%_%filename%_%ts%.txt" /Y
-if errorlevel 1 goto ERR11
-robocopy F:\tmp\%cityCode%\ %output_dir%%cityCode%\ValidateLog\ "%filename%.txt" /MOV /R:18 /W:10 1>"\\DBServer\F$\bat\errorLog\%cityCode%_error.txt"
-if errorlevel 8 goto ERR7
+copy "C:\tmp\%cityCode%\%filename%.txt" "C:\bat\validatelog\%cityCode%_%filename%_%ts%.txt" /Y
+if %errorlevel%== 1 goto ERR11
+robocopy C:\tmp\%cityCode%\ %output_dir%\%cityCode%\ValidateLog\ "%filename%.txt" /MOV /R:18 /W:10 1>"C:\bat\errorLog\%cityCode%_error.txt"
+if %errorlevel%== 8 goto ERR7
 
-rem ãƒ­ãƒ¼ã‚«ãƒ«ã«ã‚³ãƒ”ãƒ¼ã—ãŸGMLãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ¶ˆã™
-del "%copyTempPath%" 2>>"\\DBServer\F$\bat\errorLog\%cityCode%_error.txt"
-if errorlevel 1 goto ERR8
+rem ƒ[ƒJƒ‹‚ÉƒRƒs[‚µ‚½GMLƒtƒ@ƒCƒ‹‚ðÁ‚·
+del "%copyTempPath%" 2>>"C:\bat\errorLog\%cityCode%_error.txt"
+if %errorlevel%== 1 goto ERR8
 
 exit /B
 
-if errorlevel 1 goto ERR9
+if %errorlevel%== 1 goto ERR9
 :ERR1
-:ç•°å¸¸çµ‚äº†
-echo ãƒ•ã‚¡ã‚¤ãƒ«åè¨­å®šã‚¨ãƒ©ãƒ¼ã€‚ç®¡ç†è€…ã¸é€£çµ¡ã—ã¦ä¸‹ã•ã„ã€‚ >"\\DBServer\F$\bat\errorLog\%cityCode%_test.txt"
-move /y "\\DBServer\F$\bat\errorLog\%cityCode%_test.txt" "%output_dir%%cityCode%\ValidateLog\%filename%.txt"
+:ˆÙíI—¹
+echo ƒtƒ@ƒCƒ‹–¼Ý’èƒGƒ‰[BŠÇ—ŽÒ‚Ö˜A—‚µ‚Ä‰º‚³‚¢B >"C:\bat\errorLog\%cityCode%_test.txt"
+move /y "C:\bat\errorLog\%cityCode%_test.txt" "%output_dir%%cityCode%\ValidateLog\%filename%.txt"
 exit /B
 
 :ERR2
-:ç•°å¸¸çµ‚äº†
-echo ãƒ•ã‚¡ã‚¤ãƒ«åå¤‰æ›´ã‚¨ãƒ©ãƒ¼ã€‚ç®¡ç†è€…ã¸é€£çµ¡ã—ã¦ä¸‹ã•ã„ã€‚ >"\\DBServer\F$\bat\errorLog\%cityCode%_test.txt"
-move /y "\\DBServer\F$\bat\errorLog\%cityCode%_test.txt" "%output_dir%%cityCode%\ValidateLog\%filename%.txt"
+:ˆÙíI—¹
+echo ƒtƒ@ƒCƒ‹–¼•ÏXƒGƒ‰[BŠÇ—ŽÒ‚Ö˜A—‚µ‚Ä‰º‚³‚¢B >"C:\bat\errorLog\%cityCode%_test.txt"
+move /y "C:\bat\errorLog\%cityCode%_test.txt" "%output_dir%%cityCode%\ValidateLog\%filename%.txt"
 exit /B
 
 :ERR3
-:ç•°å¸¸çµ‚äº†
-echo è‡ªæ²»ä½“IDè¨­å®šã‚¨ãƒ©ãƒ¼ã€‚ç®¡ç†è€…ã¸é€£çµ¡ã—ã¦ãã ã•ã„ã€‚ >"\\DBServer\F$\bat\errorLog\%cityCode%_test.txt"
-move /y "\\DBServer\F$\bat\errorLog\%cityCode%_test.txt" "%output_dir%%cityCode%\ValidateLog\%filename%.txt"
+:ˆÙíI—¹
+echo Ž©Ž¡‘ÌIDÝ’èƒGƒ‰[BŠÇ—ŽÒ‚Ö˜A—‚µ‚Ä‚­‚¾‚³‚¢B >"C:\bat\errorLog\%cityCode%_test.txt"
+move /y "C:\bat\errorLog\%cityCode%_test.txt" "%output_dir%%cityCode%\ValidateLog\%filename%.txt"
 exit /B
 
 :ERR4
-:ç•°å¸¸çµ‚äº†
-echo ZIPãƒ•ã‚¡ã‚¤ãƒ«åè¨­å®šã‚¨ãƒ©ãƒ¼ã€‚ç®¡ç†è€…ã¸é€£çµ¡ã—ã¦ãã ã•ã„ã€‚ >"\\DBServer\F$\bat\errorLog\%cityCode%_test.txt"
-move /y "\\DBServer\F$\bat\errorLog\%cityCode%_test.txt" "%output_dir%%cityCode%\ValidateLog\%filename%.txt"
+:ˆÙíI—¹
+echo ZIPƒtƒ@ƒCƒ‹–¼Ý’èƒGƒ‰[BŠÇ—ŽÒ‚Ö˜A—‚µ‚Ä‚­‚¾‚³‚¢B >"C:\bat\errorLog\%cityCode%_test.txt"
+move /y "C:\bat\errorLog\%cityCode%_test.txt" "%output_dir%%cityCode%\ValidateLog\%filename%.txt"
 exit /B
 
 :ERR5
-:ç•°å¸¸çµ‚äº†
-echo ãƒ•ã‚¡ã‚¤ãƒ«ãƒã‚§ãƒƒã‚¯ã«å¤±æ•—ã—ã¾ã—ãŸã€‚å†åº¦å®Ÿè¡Œã—ã¦ãã ã•ã„ã€‚ >"\\DBServer\F$\bat\errorLog\%cityCode%_test.txt"
-move /y "\\DBServer\F$\bat\errorLog\%cityCode%_test.txt" "%output_dir%%cityCode%\ValidateLog\%filename%.txt"
+:ˆÙíI—¹
+echo ƒtƒ@ƒCƒ‹ƒ`ƒFƒbƒN‚ÉŽ¸”s‚µ‚Ü‚µ‚½BÄ“xŽÀs‚µ‚Ä‚­‚¾‚³‚¢B >"C:\bat\errorLog\%cityCode%_test.txt"
+move /y "C:\bat\errorLog\%cityCode%_test.txt" "%output_dir%%cityCode%\ValidateLog\%filename%.txt"
 exit /B
 
 :ERR6
-:ç•°å¸¸çµ‚äº†
-echo ä½œæ¥­ãƒ•ã‚©ãƒ«ãƒ€ç§»å‹•ã‚¨ãƒ©ãƒ¼ã€‚ç®¡ç†è€…ã¸é€£çµ¡ã—ã¦ãã ã•ã„ã€‚ >"\\DBServer\F$\bat\errorLog\%cityCode%_test.txt"
-move /y "\\DBServer\F$\bat\errorLog\%cityCode%_test.txt" "%output_dir%%cityCode%\ValidateLog\%filename%.txt"
+:ˆÙíI—¹
+echo ì‹ÆƒtƒHƒ‹ƒ_ˆÚ“®ƒGƒ‰[BŠÇ—ŽÒ‚Ö˜A—‚µ‚Ä‚­‚¾‚³‚¢B >"C:\bat\errorLog\%cityCode%_test.txt"
+move /y "C:\bat\errorLog\%cityCode%_test.txt" "%output_dir%%cityCode%\ValidateLog\%filename%.txt"
 
 :ERR7
-:ç•°å¸¸çµ‚äº†
-echo Validateã‚¨ãƒ©ãƒ¼ã€‚ç®¡ç†è€…ã¸é€£çµ¡ã—ã¦ãã ã•ã„ã€‚ >"\\DBServer\F$\bat\errorLog\%cityCode%_test.txt"
-move /y "\\DBServer\F$\bat\errorLog\%cityCode%_test.txt" "%output_dir%%cityCode%\ValidateLog\%filename%.txt"
+:ˆÙíI—¹
+echo ValidateƒGƒ‰[BŠÇ—ŽÒ‚Ö˜A—‚µ‚Ä‚­‚¾‚³‚¢B >"C:\bat\errorLog\%cityCode%_test.txt"
+move /y "C:\bat\errorLog\%cityCode%_test.txt" "%output_dir%%cityCode%\ValidateLog\%filename%.txt"
 exit /B
 
 :ERR8
-:ç•°å¸¸çµ‚äº†
-echo ä¸€æ™‚ä½œæ¥­ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤ã‚¨ãƒ©ãƒ¼ã€‚ >"\\DBServer\F$\bat\errorLog\%cityCode%_test.txt"
+:ˆÙíI—¹
+echo ˆêŽžì‹Æƒtƒ@ƒCƒ‹íœƒGƒ‰[B >"C:\bat\errorLog\%cityCode%_test.txt"
 exit /B
 
 :ERR9
-:ç•°å¸¸çµ‚äº†
-echo ç‰¹æ®Šã‚±ãƒ¼ã‚¹ã€‚ >"\\DBServer\F$\bat\errorLog\%cityCode%_test.txt"
+:ˆÙíI—¹
+echo “ÁŽêƒP[ƒXB >"C:\bat\errorLog\%cityCode%_test.txt"
 exit /B
 
 :ERR10
 :JAVAerror
-echo javaerrorã€‚ >"\\DBServer\F$\bat\errorLog\%cityCode%_test.txt"
+echo javaerrorB >"C:\bat\errorLog\%cityCode%_test.txt"
 exit /B
 
 :ERR11
-:ç•°å¸¸çµ‚äº†
-echo æ¤œè¨¼ãƒ­ã‚°ã‚’ãƒ­ã‚°ä¿å­˜ãƒ•ã‚©ãƒ«ãƒ€ã«ã‚³ãƒ”ãƒ¼å¤±æ•—ã€‚ >"\\DBServer\F$\bat\errorLog\%cityCode%_test.txt"
+:ˆÙíI—¹
+echo ŒŸØƒƒO‚ðƒƒO•Û‘¶ƒtƒHƒ‹ƒ_‚ÉƒRƒs[Ž¸”sB >"C:\bat\errorLog\%cityCode%_test.txt"
 exit /B

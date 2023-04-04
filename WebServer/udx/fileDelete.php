@@ -4,6 +4,7 @@
     //$url = parse_url($host);
     //外部ホストからの場合処理を行わない
     //if(stristr($url['host'], "localhost")){
+
         try{
             if(isset($_POST["cityCode"]) == true && isset($_POST["deleteFileNameArray"]) == true){
                 $cityCode = $_POST["cityCode"];
@@ -54,7 +55,9 @@
             }
             
             //ここからzipファイルの削除
-            $allZipName = glob('F:\DATA/' . $cityCode . '/OriginalData/3DBuildings/{*.zip,*.gml}', GLOB_BRACE);
+			//2022
+            $allZipName = glob('*****:/*****/Data/' . $cityCode . '/OriginalData/3DBuildings/{*.zip,*.gml}', GLOB_BRACE);
+
             //ディレクトリとファイル名がPOSTされているか確認
             if($allZipName == false){
                 //ファイル一覧の取得に失敗した場合
@@ -70,7 +73,7 @@
                 foreach($deleteFileNameArray as $toDeleteFileName){
                     $delfilename = basename($toDeleteFileName);
                     $status = '10000'; //削除開始
-                                
+                                //2022
                                 db (" WITH upsert AS (
                                     UPDATE public.manage_regist_zip
                                     SET status = '". $status ."' ,registdate = NOW()
@@ -79,8 +82,8 @@
                                     "' RETURNING * 
                                    )
                                    INSERT INTO public.manage_regist_zip (userid, zipname, status,registdate )
-                                   SELECT '" . $cityCode . "','" . $delfilename ."',  '". $status ."' , NOW() From public.manage_regist_zip
-                                   WHERE not exists (SELECT userid, zipname, '" . $status . "', NOW()
+                                   SELECT '" . $cityCode . "','" . $delfilename ."',  '". $status ."' , NOW()
+                                   WHERE not exists (SELECT 1
                                    FROM public.manage_regist_zip WHERE userid = '". $cityCode . "' and zipname = '". $delfilename ."' ) LIMIT 1");//DBへの格納
                                    
                                    $log->info('['. $delfilename . ']の' .'ステータスを' . $status . 'に更新',$cityCode);
@@ -99,7 +102,7 @@
                                 array_push($failedFileNameArray,  basename($registedZipName));
                                 $log->error('ファイル削除に失敗しました ファイル名：' . basename($registedZipName), $cityCode);
                                 $status = '20000'; //削除エラー
-                                
+                                //2022
                                 db (" WITH upsert AS (
                                     UPDATE public.manage_regist_zip
                                     SET status = '". $status ."' ,registdate = NOW()
@@ -108,8 +111,8 @@
                                     "' RETURNING * 
                                    )
                                    INSERT INTO public.manage_regist_zip (userid, zipname,  status, registdate )
-                                   SELECT '" . $cityCode . "','" . $filename ."',  '". $status ."' ,  NOW() From public.manage_regist_zip
-                                   WHERE not exists (SELECT userid, zipname, '" . $status . "', NOW()
+                                   SELECT '" . $cityCode . "','" . $filename ."',  '". $status ."' ,  NOW()
+                                   WHERE not exists (SELECT 1
                                    FROM public.manage_regist_zip WHERE userid = '". $cityCode . "' and zipname = '". $filename ."' ) LIMIT 1");//DBへの格納
                                    
                                    $log->info('['. $filename . ']の' .'ステータスを' . $status . 'に更新',$cityCode);

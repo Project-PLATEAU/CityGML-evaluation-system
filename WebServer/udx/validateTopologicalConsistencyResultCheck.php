@@ -8,10 +8,12 @@ function validateTopologicalConsistencyResultCheck($logFileName, $cityCode, $log
     $log = Logger::getInstance();//ログ出力クラスのインスタンス生成
 
     $log->info('【validateTopologicalConsistencyResultCheck開始】',$cityCode);
+    $log->info('logFileName:' . $logFileName,$cityCode);
+    $log->info('logType:' . $logType,$cityCode);
 
     //最大三回検証結果ファイルの読み込みを試みる
     for($i = 0; $i < 3; $i++){
-        $validateResults = file('F:\\Apache24\\htdocs\\iUR_Data\\' . $cityCode . '/' . $logType . '/' . $logFileName  .'.txt', FILE_IGNORE_NEW_LINES);
+        $validateResults = file('*****:/*****/htdocs/iUR_Data/' . $cityCode . '/' . $logType . '/' . $logFileName  .'.txt', FILE_IGNORE_NEW_LINES);
         if($validateResults !== false){
             break;
         }
@@ -20,8 +22,8 @@ function validateTopologicalConsistencyResultCheck($logFileName, $cityCode, $log
 
     //ファイルが正常に読み込めていれば、内容を読み取って判定を行う
     if($validateResults !== false){
-        $log->info('F:\\Apache24\\htdocs\\iUR_Data\\' . $cityCode . '/' . $logType . '/' . $logFileName .'_errors.zip',$cityCode);
-        if(file_exists('F:\\Apache24\\htdocs\\iUR_Data\\' . $cityCode . '/' . $logType . '/' . $logFileName .'_errors.zip')){
+        $log->info('*****:/*****/htdocs/iUR_Data/' . $cityCode . '/' . $logType . '/' . $logFileName .'_errors.zip',$cityCode);
+        if(file_exists('*****:/*****/htdocs/iUR_Data/' . $cityCode . '/' . $logType . '/' . $logFileName .'_errors.zip')){
             return false;
         }else{
             return true;

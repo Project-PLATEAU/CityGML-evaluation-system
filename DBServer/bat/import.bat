@@ -1,92 +1,98 @@
-@echo off
-rem ã‚«ãƒ¬ãƒ³ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’ç¾åœ¨ã®å ´æ‰€ã«ç§»å‹•
+rem ƒJƒŒƒ“ƒgƒfƒBƒŒƒNƒgƒŠ‚ðŒ»Ý‚ÌêŠ‚ÉˆÚ“®
 cd /d %~dp0
-chcp 65001
+rem •¶ŽšƒR[ƒh‚ÌÝ’è
+chcp 932
 
-rem æ—¥ä»˜ã‚’YYYYMMDDHHMMSSã«ã™ã‚‹
+rem ƒf[ƒ^ƒtƒHƒ‹ƒ_
+set zip_dir=C:\CityGML-validation-function\Data
+set importCopyTemp_dir=C:\bat\importCopyTemp
+set importConfig_dir=C:\importConfig
+
+set errorlog_dir=%errorlog_dir%
+
+rem “ú•t‚ðYYYYMMDDHHMMSS‚É‚·‚é
 set ts=%time: =0%
 set ts=%date:~0,4%%date:~5,2%%date:~8,2%%ts:~0,2%%ts:~3,2%%ts:~6,2%
 
-:ãƒ•ã‚¡ã‚¤ãƒ«å
+rem ƒtƒ@ƒCƒ‹–¼
 set filename=%1
-if errorlevel 1 goto ERR1
+if %errorlevel%==1 goto err1
 
-:ãƒ€ãƒ–ãƒ«ã‚¯ã‚©ãƒ¼ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å‰Šé™¤
+rem ƒ_ƒuƒ‹ƒNƒH[ƒe[ƒVƒ‡ƒ“‚ðíœ
 set filename=%filename:"=%
-if errorlevel 1 goto ERR2
+if %errorlevel%==1 goto err2
 
-:è‡ªæ²»ä½“ID
+rem Ž©Ž¡‘ÌID
 set cityCode=%2
 set cityCode=%cityCode:"=%
-if errorlevel 1 goto ERR3
+if %errorlevel%==1 goto err3
 
-set zip_dir=w:\
 
-rem ãƒ­ãƒ¼ã‚«ãƒ«ã¸ã®ã‚³ãƒ”ãƒ¼å…ˆã®ãƒ‘ã‚¹
-set copyTempPath=F:\bat\importCopyTemp\%cityCode%\%filename%
 
-rem è‡ªæ²»ä½“ã”ã¨ã«èª­ã¿è¾¼ã‚€configãƒ•ã‚¡ã‚¤ãƒ«ã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹
-set configPath=F:\importConfig\project_%cityCode%.xml
 
-rem ãƒ­ãƒ¼ã‚«ãƒ«ã«GMLãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚³ãƒ”ãƒ¼ã™ã‚‹
-robocopy %zip_dir%%cityCode%\OriginalData\3DBuildings\ F:\bat\importCopyTemp\%cityCode%\ "%filename%"  /R:18 /W:10  2>>"\\DBServer\F$\bat\errorLog\imp_%cityCode%_error.txt"
-if errorlevel 8 goto ERR4
+rem ƒ[ƒJƒ‹‚Ö‚ÌƒRƒs[æ‚ÌƒpƒX
+set copyTempPath=%importCopyTemp_dir%\%cityCode%\%filename%
 
-REM PostgreSQLã®ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ãƒ‘ã‚¹ã®binãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
-set PGPATH=C:\*****\PostgreSQL\12\bin\
+rem Ž©Ž¡‘Ì‚²‚Æ‚É“Ç‚Ýž‚Þconfigƒtƒ@ƒCƒ‹‚ðØ‚è‘Ö‚¦‚é
+set configPath=%importConfig_dir%\project_%cityCode%.xml
 
-cd /d "C:\*****\virtualcityDATABASE-Importer-Exporter-ADE\lib" 2>>"\\DBServer\F$\bat\errorLog\imp_%cityCode%_error.txt"
-if errorlevel 1 goto ERR5
+rem ƒ[ƒJƒ‹‚ÉGMLƒtƒ@ƒCƒ‹‚ðƒRƒs[‚·‚é
+robocopy %zip_dir%\%cityCode%\OriginalData\3DBuildings\ %importCopyTemp_dir%\%cityCode%\ "%filename%"  /R:18 /W:10  2>>"%errorlog_dir%\imp_%cityCode%_error.txt"
+if %errorlevel%==8 goto err4
 
-SET vfilename="vcdb-impexp-client-4.2.0-b5.jar"
+set PGPATH=C:\Program Files\PostgreSQL\14\bin\
+
+cd /d "C:\CityGML-validation-function\3DCityDB-Importer-Exporter\lib" 2>>"%errorlog_dir%\imp_%cityCode%_error.txt"
+if %errorlevel%==1 goto err5
+
+SET vfilename="impexp-client-4.3.0-rc1.jar"
 IF EXIST %vfilename% (
- cd /d "C:\*****\virtualcityDATABASE-Importer-Exporter-ADE" 2>>"\\DBServer\F$\bat\errorLog\imp_%cityCode%_error.txt" 
- java  -Xmx4096m -jar lib/vcdb-impexp-client-4.2.0-b5.jar -shell  -import "%copyTempPath%" -config %configPath% > "F:\bat\importlog\%cityCode%_%filename%_%ts%.txt" 2>&1
+ cd /d "C:\CityGML-validation-function\3DCityDB-Importer-Exporter" 2>>"%errorlog_dir%\imp_%cityCode%_error.txt" 
+ java -Xmx4096m -jar lib/%vfilename% --config=%configPath% import "%copyTempPath%" > "C:\bat\importlog\%cityCode%_%filename%_%ts%.txt" 2>&1
 ) else (
  timeout /t 3
  goto ERR6
 )
 
-rem ãƒ­ãƒ¼ã‚«ãƒ«ã«ã‚³ãƒ”ãƒ¼ã—ãŸGMLãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ¶ˆã™
-del "%copyTempPath%" 2>>"\\DBServer\F$\bat\errorLog\%cityCode%_error.txt"
-if errorlevel 1 goto ERR7
+del "%copyTempPath%" 2>>"%errorlog_dir%\%cityCode%_error.txt"
+if %errorlevel%==1 goto err7
 
-exit /B
+exit /b
 
-if errorlevel 1 goto ERR8
-:ERR1
-echo ãƒ•ã‚¡ã‚¤ãƒ«åè¨­å®šã‚¨ãƒ©ãƒ¼ã€‚ç®¡ç†è€…ã¸é€£çµ¡ã—ã¦ä¸‹ã•ã„ã€‚ >"\\DBServer\F$\bat\errorLog\imp_%cityCode%.txt"
-exit /B
+if %errorlevel%==1 goto err8
+:err1
+echo ƒtƒ@ƒCƒ‹–¼Ý’èƒGƒ‰[BŠÇ—ŽÒ‚Ö˜A—‚µ‚Ä‰º‚³‚¢> %errorlog_dir%\imp_%cityCode%.txt
+exit /b
 
-:ERR2
-echo ãƒ•ã‚¡ã‚¤ãƒ«åå¤‰æ›´ã‚¨ãƒ©ãƒ¼ã€‚ç®¡ç†è€…ã¸é€£çµ¡ã—ã¦ä¸‹ã•ã„ã€‚ >"\\DBServer\F$\bat\errorLog\imp_%cityCode%.txt"
-exit /B
+:err2
+echo ƒtƒ@ƒCƒ‹–¼•ÏXƒGƒ‰[BŠÇ—ŽÒ‚Ö˜A—‚µ‚Ä‰º‚³‚¢B >"%errorlog_dir%\imp_%cityCode%.txt"
+exit /b
 
-:ERR3
-echo è‡ªæ²»ä½“IDè¨­å®šã‚¨ãƒ©ãƒ¼ã€‚ç®¡ç†è€…ã¸é€£çµ¡ã—ã¦ãã ã•ã„ã€‚ >"\\DBServer\F$\bat\errorLog\imp_%cityCode%.txt"
-exit /B
+:err3
+echo Ž©Ž¡‘ÌIDÝ’èƒGƒ‰[BŠÇ—ŽÒ‚Ö˜A—‚µ‚Ä‚­‚¾‚³‚¢  >%errorlog_dir%\imp_%cityCode%.txt
+exit /b
 
-:ERR4
-echo GMLãƒ•ã‚¡ã‚¤ãƒ«ã‚³ãƒ”ãƒ¼ã‚¨ãƒ©ãƒ¼ã€‚ç®¡ç†è€…ã¸é€£çµ¡ã—ã¦ãã ã•ã„ã€‚ >"\\DBServer\F$\bat\errorLog\imp_%cityCode%.txt"
-exit /B
+:err4
+echo GMLƒtƒ@ƒCƒ‹ƒRƒs[ƒGƒ‰[BŠÇ—ŽÒ‚Ö˜A—‚µ‚Ä‚­‚¾‚³‚¢B >"%errorlog_dir%\imp_%cityCode%.txt"
+exit /b
 
-:ERR5
-echo ä½œæ¥­ãƒ•ã‚©ãƒ«ãƒ€ç§»å‹•ã‚¨ãƒ©ãƒ¼ã€‚å†åº¦å®Ÿè¡Œã—ã¦ãã ã•ã„ã€‚ >"\\DBServer\F$\bat\errorLog\imp_%cityCode%.txt"
-exit /B
+:err5
+echo ì‹ÆƒtƒHƒ‹ƒ_ˆÚ“®ƒGƒ‰[BÄ“xŽÀs‚µ‚Ä‚­‚¾‚³‚¢B >"%errorlog_dir%\imp_%cityCode%.txt"
+exit /b
 
-:ERR6
-echo Importã‚¨ãƒ©ãƒ¼ã€‚ç®¡ç†è€…ã¸é€£çµ¡ã—ã¦ãã ã•ã„ã€‚ >"\\DBServer\F$\bat\errorLog\imp_%cityCode%.txt"
+:err6
+echo ImportƒGƒ‰[BŠÇ—ŽÒ‚Ö˜A—‚µ‚Ä‚­‚¾‚³‚¢B >"%errorlog_dir%\imp_%cityCode%.txt"
 
-:ERR7
-echo ä¸€æ™‚ä½œæ¥­ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤ã‚¨ãƒ©ãƒ¼ã€‚ >"\\DBServer\F$\bat\errorLog\imp_%cityCode%.txt"
-exit /B
+:err7
+echo ˆêŽžì‹Æƒtƒ@ƒCƒ‹íœƒGƒ‰[B >"%errorlog_dir%\imp_%cityCode%.txt"
+exit /b
 
+:err8
+echo “ÁŽêƒP[ƒXB >"%errorlog_dir%\imp_%cityCode%.txt"
+exit /b
 
-:ERR8
-echo ç‰¹æ®Šã‚±ãƒ¼ã‚¹ã€‚ >"\\DBServer\F$\bat\errorLog\imp_%cityCode%.txt"
-exit /B
-
-:ERR9
+:err9
 :JAVAerror
-echo javaerrorã€‚ >"\\DBServer\F$\bat\errorLog\imp_%cityCode%.txt"
-exit /B
+echo javaerrorB >"%errorlog_dir%\imp_%cityCode%.txt"
+exit /b
+

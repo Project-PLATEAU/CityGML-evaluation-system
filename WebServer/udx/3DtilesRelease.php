@@ -7,15 +7,16 @@
 
         if(isset($_POST["cityCode"]) === true){
             $cityCode = basename((string) $_POST["cityCode"]);
-            
-            //Zipファイルの出力先ディレクトリ
+
+			//2022修正
+            //Zipファイルの出力先ディレクトリ 
             $outputZipFilePath = "*****:/*****/htdocs/iUR_Data/" .$cityCode. "/3DTiles/3DBuildings/";
             //変換後の3DTilesが保存されているディレクトリ
             $datasourceDataPath = "*****:/*****/htdocs/map/" . $cityCode . "/private/datasource-data/";
             //変換後の3DTilesのコピー先ディレクトリ
             $toCopyPath = "*****:/*****/htdocs/map/" . $cityCode . "/public/datasource-data/";
             //出力されるZipファイル名のフルパス
-            $outputZipFileName = $outputZipFilePath . "3DTiles_" . date('Ymd_His', time() +32400) . ".zip";
+            $outputZipFileName = $outputZipFilePath . "3DTiles_" . date('Ymd_His', time()) . ".zip";
             //ロックファイル名のフルパス
             $lockFilePath = "*****:/*****/htdocs/iUR_Data/" .$cityCode. "/3DTiles/3DBuildings/lock.txt";
             //config.jsonのパス
@@ -169,6 +170,7 @@
 
     //エラーファイル生成関数
     function createErrorFile($cityCode){
+		//2022修正
         //エラーファイル名のフルパス
         $errorFilePath = "*****:/*****/htdocs/iUR_Data/" .$cityCode. "/3DTiles/3DBuildings/error.txt";
         //グローバルのログ出力インスタンス取得

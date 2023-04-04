@@ -131,7 +131,7 @@ try{
     //直リンクでアクセスした場合はワードプレスにリダイレクト
     if(!isset($_SERVER["HTTP_REFERER"])){
     echo $_SERVER["REQUEST_URI"];
-        //header('Location:https://*****.com/UDX/public_release/');
+        //header('Location:http://*****/udx/public_release/');
     }
     
     include_once("dbSelect.php"); //DB接続情報の読み込み
@@ -159,8 +159,8 @@ try{
     $log->info('初期表示時のアップロード開始中ステータスを全て' . $status . 'に更新',$cityCode);
     
     $selRet = sel_query("select zipname,status From public.manage_regist_zip where userid = '" .$cityCode . "'",'listStatus');//自治体IDに紐づくファイル名、ステータスをDBから取得
-    
-    $file_path = 'F:\DATA/' . $cityCode . '/OriginalData\3DBuildings';
+    //2022修正
+    $file_path = '*****:/*****/Data/' . $cityCode . '/OriginalData/3DBuildings';
     $result = glob($file_path .'/{*.zip,*.gml}', GLOB_BRACE);
     
     //1ページのリスト上に表示させる件数の設定
@@ -173,7 +173,7 @@ try{
     foreach($result as $filepath){
         $filename = basename($filepath);
         $stat = stat($filepath);
-        $datetime = date('Y/m/d H:i:s',$stat['mtime'] +32400);//9時間の時差があるため9時間分の秒数を足す
+        $datetime = date('Y/m/d H:i:s',$stat['mtime']);
         $filebyte = $stat['size'];
         $count = strlen(intval($filebyte / 1024));
         $keyIndex = array_search($filename , array_column($selRet, 'name'));//対象フォルダにあるZIP名とDBから取得したファイル名で比較
@@ -392,11 +392,12 @@ try{
     echo '</TABLE></form>';    
     
     echo '全件数　'. $filelists_num. '件　';
-    
-    echo '<a href=\'https://*****.com/UDX/CityGMLRelease.php?sort_id=' .$sorttype. '&page_id=1\'><<</a>　';
+    //2022修正
+    echo '<a href=\'http://*****/udx/CityGMLRelease.php?sort_id=' .$sorttype. '&page_id=1\'><<</a>　';
     
     if($now > 1){
-        echo '<a href=\'https://*****.com/UDX/CityGMLRelease.php?sort_id=' .$sorttype. '&page_id=' .($now - 1).'\'>前へ</a>　';
+	//2022修正
+        echo '<a href=\'http://*****/udx/CityGMLRelease.php?sort_id=' .$sorttype. '&page_id=' .($now - 1).'\'>前へ</a>　';
     }else{
         echo '前へ'.'　';
     }
@@ -409,18 +410,20 @@ try{
             echo $now.'　';
         }else{
             if($i >= $disppage_be && $i <= $disppage_af){
-                echo '<a href=\'https://*****.com/UDX/CityGMLRelease.php?sort_id=' .$sorttype. '&page_id=' . $i. '\'>'. $i. '</a>　';
+				//2022修正
+                echo '<a href=\'http://*****/udx/CityGMLRelease.php?sort_id=' .$sorttype. '&page_id=' . $i. '\'>'. $i. '</a>　';
             }
         }
     }
     
     if($now < $max_page){
-        echo '<a href=\'https://*****.com/UDX/CityGMLRelease.php?sort_id=' .$sorttype. '&page_id=' .($now + 1).'\'>次へ</a>　';
+		//2022修正
+        echo '<a href=\'http://*****/udx/CityGMLRelease.php?sort_id=' .$sorttype. '&page_id=' .($now + 1).'\'>次へ</a>　';
     }else{
         echo '次へ'.'　';
     }
-    
-    echo '<a href=\'https://*****.com/UDX/CityGMLRelease.php?sort_id=' .$sorttype. '&page_id=' . $max_page .'\'>>></a>　';
+    //2022修正
+    echo '<a href=\'http://*****/udx/CityGMLRelease.php?sort_id=' .$sorttype. '&page_id=' . $max_page .'\'>>></a>　';
     
     
     $log->info('データ配信画面の表示に成功しました。',$cityCode);
@@ -434,12 +437,12 @@ try{
     //ソートボタンが押下された際の処理
     function onClickSort(sort_id) {
         var url_param = location.search;
-        
+	    //2022修正
         if(url_param == ''){
-            window.location.href = 'https://*****.com/UDX/CityGMLRelease.php?sort_id=' + sort_id + '&page_id=' + 1;
+            window.location.href = 'http://*****/udx/CityGMLRelease.php?sort_id=' + sort_id + '&page_id=' + 1;
         }else{
             url_param = url_param.slice(-1);
-            window.location.href = 'https://*****.com/UDX/CityGMLRelease.php?sort_id=' + sort_id + '&page_id=' + url_param;
+            window.location.href = 'http://*****/udx/CityGMLRelease.php?sort_id=' + sort_id + '&page_id=' + url_param;
         }
     }
         
@@ -553,10 +556,12 @@ try{
     
     //配信ボタンを押下した際の処理
     function onClickRelease(){
+        var governmment_id = window.parent.document.getElementById('governmment_citycode').value;
         var releaseFileNameList = sessionStorage.getItem("checkedFileNameList");
+
         //セッションストレージの中身がなければチェックを促す
         if(releaseFileNameList == null || JSON.parse(releaseFileNameList).length == 0){
-            postLog(window.parent.governmment_id, 'warn', '配信対象件数が0件');
+            postLog(governmment_id, 'warn', '配信対象件数が0件');
             alert("配信対象を選択して下さい。");
             return;
         }
@@ -564,7 +569,7 @@ try{
         //早めに画面をロック
         screenLock();
         //画面表示更新のため0.5秒遅らせて配信確認ダイアログ表示処理を呼ぶ
-        setTimeout(releaseConfirm, 500, JSON.parse(releaseFileNameList), window.parent.governmment_id);
+        setTimeout(releaseConfirm, 500, JSON.parse(releaseFileNameList), governmment_id);
     }
     
     //配信確認ダイアログ表示処理
@@ -607,7 +612,7 @@ try{
                 case 4:
                     if (this.status == 200) {
                         var resultArray = JSON.parse(xhrRelease.responseText);
-                        
+						console.log(resultArray);
                         switch(resultArray["result"]){
                             case "success":
                                 alert("配信設定に成功しました。\r\n配信されたファイルはCityGML配信管理画面で確認できます。");
@@ -693,7 +698,8 @@ try{
         objBody.appendChild(element);
 
         var display = window.parent.document.getElementById("wpadminbar");
-        display.style.display = "none";
+		if(display!=null)
+        	display.style.display = "none";
         
     }
     
@@ -705,7 +711,8 @@ try{
         var dom_obj_parent = dom_obj.parentNode;
         dom_obj_parent.removeChild(dom_obj);
         var display = window.parent.document.getElementById("wpadminbar");
-        display.style.display = "block";
+		if(display!=null)
+        	display.style.display = "block";
     }
 
     //プログレスバーを生成してスクリーンロックに追加

@@ -11,11 +11,16 @@
         include_once("cleanupSchema.php"); //DB接続情報の読み込み
         //ログ書き込み処理
         $log = Logger::getInstance();
-        
+		
+		//パス設定
+        $mapRoot = '*****:/*****/htdocs/map/';
+
         if(isset($_POST["cityCode"]) == true && isset($_POST["convertFileNames"]) == true){
             //自治体IDを確認
             $cityCode = (string) $_POST["cityCode"];
-            
+            //コンバートリスト
+            $convertFileNames = json_decode($_POST["convertFileNames"]);
+
             //処理開始
             $log->info('データ変換開始',$cityCode);
             
@@ -30,10 +35,10 @@
             , fileCount as(
             SELECT count(userid)as activeUserCount from (SELECT DISTINCT userid FROM public.manage_regist_zip where status in ('1099','1299','1999'))as b)
             select * from jobCount cross join fileCount",'Convert');
-            
+
             $jobCount = $selRet['0']['activeJobCount'];          //自治体ID単位での処理数取得(値が0以外はすでに実行中)
             $userCount = $selRet['0']['activeUserCount'];        //全体でのジョブ数5ジョブ以上は待たせる
-            
+
             //自身のジョブが既に実行されているかを確認する
             if($jobCount <> 0){
                $log->warn('すでにJOBが実行されているため実行できません。',$cityCode);
@@ -45,13 +50,13 @@
                $log->warn('実行中のJOB数が規定値に達しているためJOBの実行はできません。',$cityCode);
                return;
             }
-            
-            $convertFileNames = json_decode($_POST["convertFileNames"]);
-            
+
             //非公開用地図に使用している3DTilesを削除する
             $log->info('変換開始前の公開用地図3DTilesの削除開始',$cityCode);
             $errorFlag = false;
-            $delTilesPath = 'F:\Apache24/htdocs/map/' . $cityCode . '/private/datasource-data';
+			//2022
+            $delTilesPath = $mapRoot . $cityCode . '/private/datasource-data';
+
             $items = new RecursiveIteratorIterator(
                 new RecursiveDirectoryIterator($delTilesPath, RecursiveDirectoryIterator::CURRENT_AS_SELF),
                 RecursiveIteratorIterator::CHILD_FIRST
@@ -59,7 +64,7 @@
             //各ファイルやフォルダに処理を行う
             foreach($items as $item){
                 //パスに'Terrain'が含まれていない場合のみ処理を行う
-                if(strpos($item->getPathname(), 'private/datasource-data\\Terrain\\') === false && $item->getPathname() !== $delTilesPath . '\\Terrain' ){
+                if(strpos($item->getPathname(), 'private/datasource-data/Terrain/') === false && $item->getPathname() !== $delTilesPath . '/Terrain' ){
                     //ファイルかディレクトリかを判定して削除する
                     if($item->isFile() || $item->isLink()){
                         if(unlink($item->getPathname()) === false){
@@ -72,13 +77,12 @@
                     }
                 }
             }
-            
+
             if($errorFlag === false){
                 $log->info('変換開始前の公開用地図3DTilesの削除成功',$cityCode);
             }else{
                 //エラー処理
                 $log->error('変換開始前の公開用地図3DTilesの削除失敗',$cityCode);
-                
             }
 
             //変換処理対象の情報を持った配列を作成する
@@ -86,8 +90,8 @@
             $pathArrayArray = array();
             //$varietyOfFiletype = array('3D_LOD1', '3D_LOD2', '3D_LOD2_Surface', '3D_LOD3', '3D_LOD4', '3D_ALL'); 
             //$extensionOfLod = array('_LOD1.txt', '_LOD2.txt', '_LOD2_Surface.txt', '_LOD3.txt', '_LOD4.txt', '_LODALL.txt');
-            $varietyOfFiletype = array('3D_LOD1', '3D_LOD2', '3D_LOD2_Surface'); 
-            $extensionOfLod = array('_LOD1.txt', '_LOD2.txt', '_LOD2_Surface.txt');
+            $varietyOfFiletype = array('3D_LOD1', '3D_LOD2', '3D_LOD2_Surface', '3D_LOD3'); 
+            $extensionOfLod = array('_LOD1.txt', '_LOD2.txt', '_LOD2_Surface.txt', '_LOD3.txt');
 
             foreach($convertFileNames as $fileName){
                 //ファイル種別識別用文字列
@@ -101,6 +105,7 @@
                     //2Dの場合
                     array_push($pathArrayArray, convertFunc($cityCode, '2D', $fileName, '.txt'));
                 }else{
+                   //3Dの場合
                    for($i = 0 ; $i<count($varietyOfFiletype) ; $i++){
                         array_push($pathArrayArray, convertFunc($cityCode, $varietyOfFiletype[$i], $fileName, $extensionOfLod[$i]));
                         //$log->info('debug用'. $varietyOfFiletype[$i]. '-'. $extensionOfLod[$i], $cityCode); 
@@ -108,7 +113,7 @@
                 }
             }
             unset($fileName);
-            
+
             //先に検索用データベースを初期化する
             $log->info('スキーマの初期化開始',$cityCode);
             if(cleanupSchema($cityCode) === false){
@@ -125,13 +130,16 @@
                 $log->info($pathArray['fileName'] . '(' . $pathArray['fileType'] . ')の変換開始',$cityCode);
 
                 //ジョブストップ用定義ファイルの格納場所
+				//2022
                 $stopFilePath = '*****:/*****/htdocs/udx/jobstop/';
                 $stopAll = 'jobStopConvert_all.txt';
                 $stopCityCode = 'jobStopConvert_' . $cityCode . '.txt';
 
                 //処理停止用ファイルが存在するなら変換処理をスキップ
                 if (file_exists($stopFilePath . $stopAll) || file_exists($stopFilePath . $stopCityCode)) {
+
                     $log->error('処理中断ファイルが存在するため後続処理をスキップ',$cityCode);
+					//2022 SQL修正
                     db (" WITH getStatus AS(
                         select case when status = '1099' then '2099' 
                                 when status = '1999' then '2999' 
@@ -146,17 +154,16 @@
                                 WHERE userid = '". $cityCode ."' AND zipname = '". $fileName ."' RETURNING * 
                         )
                                 INSERT INTO public.manage_regist_zip (userid, zipname, status, registdate )
-                                SELECT '". $cityCode ."','". $fileName ."',  (select * from getStatus) ,  NOW() From public.manage_regist_zip
-                                WHERE not exists (SELECT userid, zipname, (select * from getStatus) ,NOW()
+                                SELECT '". $cityCode ."','". $fileName ."',  (select * from getStatus) ,  NOW()
+                                WHERE not exists (SELECT 1
                                 FROM public.manage_regist_zip WHERE userid = '". $cityCode ."' and zipname = '". $fileName ."' ) LIMIT 1");//DBへの格納
                         
                     $log->error('変換スキップ['. $fileName . ']の' .'ステータスを変換エラーに更新',$cityCode);
                     continue;
                 }
-
                 if($convertErrorFlag === true){
-                    //別ファイルの変換に失敗している場合変換をスキップする
-                    db (" WITH getStatus AS(
+				//2022 SQL修正
+				$sql =" WITH getStatus AS(
                         select case when status = '1099' then '2099' 
                                 when status = '1999' then '2999' 
                                 when status = '1299' then '2299' 
@@ -170,9 +177,12 @@
                                 WHERE userid = '". $cityCode ."' AND zipname = '". $fileName ."' RETURNING * 
                         )
                                 INSERT INTO public.manage_regist_zip (userid, zipname, status, registdate )
-                                SELECT '". $cityCode ."','". $fileName ."',  (select * from getStatus) ,  NOW() From public.manage_regist_zip
-                                WHERE not exists (SELECT userid, zipname, (select * from getStatus) ,NOW()
-                                FROM public.manage_regist_zip WHERE userid = '". $cityCode ."' and zipname = '". $fileName ."' ) LIMIT 1");//DBへの格納
+                                SELECT '". $cityCode ."','". $fileName ."',  (select * from getStatus) ,  NOW()
+                                WHERE not exists (SELECT 1
+                                FROM public.manage_regist_zip WHERE userid = '". $cityCode ."' and zipname = '". $fileName ."' ) LIMIT 1";
+
+                    //別ファイルの変換に失敗している場合変換をスキップする
+                    db ($sql);//DBへの格納
                         
                     $log->error('変換スキップ['. $fileName . ']の' .'ステータスを変換エラーに更新',$cityCode);
                     continue;
@@ -206,19 +216,21 @@
                 }
 
                 //3DはLOD1の場合のみデータベースへのインポートを実行する
-                if($pathArray['fileType'] === '3D_LOD1' || 
-                        $pathArray['fileType'] === '2D'){
+                if($pathArray['fileType'] === '3D_LOD1' || $pathArray['fileType'] === '2D'){
                     $log->info('データベースへの登録バッチ実行',$cityCode);
                     //DBへデータ登録処理の呼出し。とりあえず同期化せずに対応する
                     exec("cmd.exe /c exec_import.bat $editFileName $cityCode");
+					echo "実行開始 : cmd.exe /c exec_import.bat $editFileName $cityCode<br>";
                 }
                 
                 //変換処理を実行する
-                $log->info('変換バッチ実行',$cityCode);
-                exec("cmd.exe /c exec_convert.bat $editFileName $cityCode $fileType");
-                
+                $log->info("変換バッチ実行:cmd.exe /c exec_convert.bat $editFileName $cityCode $fileType ",$cityCode);
+                exec("cmd.exe /c exec_convert.bat $editFileName $cityCode $fileType ");
+				//echo "変換バッチ実行 : cmd.exe /c exec_convert.bat $editFileName $cityCode $fileType<br>";
+
                 //バッチ実行ログファイルが出力されるまで処理を待つ
                 $log->info('バッチ実行ログファイル出力待ち開始',$cityCode);
+
                 while(true){
                     //バッチ実行ログファイルが存在したらループを抜ける
                     if (file_exists($batResultFilePath) === true) {
@@ -263,7 +275,8 @@
                 if($batResultStatus === "notReaded"){
                     //バッチ実行ログの取得に失敗した場合
                     //3Dの場合はLOD2_Surfaceの処理が完了するまでDBを更新しない
-                    if($pathArray['fileType'] === '3D_LOD2_Surface' || 
+                    //if($pathArray['fileType'] === '3D_LOD2_Surface' || 
+                    if($pathArray['fileType'] === '3D_LOD3' || 
                         $pathArray['fileType'] === 'DEM' ||
                         $pathArray['fileType'] === '2D'){
                         db (" WITH getStatus AS(
@@ -281,7 +294,7 @@
                             )
                                     INSERT INTO public.manage_regist_zip (userid, zipname,  status, registdate )
                                     SELECT '". $cityCode ."','". $fileName ."',  (select * from getStatus) ,  NOW() From public.manage_regist_zip
-                                    WHERE not exists (SELECT userid, zipname, (select * from getStatus), NOW()
+                                    WHERE not exists (SELECT 1
                                     FROM public.manage_regist_zip WHERE userid = '". $cityCode ."' and zipname = '". $fileName ."' ) LIMIT 1");//DBへの格納
                         
                         $log->error('バッチ実行ログの取得に失敗したため変換失敗['. $fileName . ']の' .'ステータスを変換エラーに更新',$cityCode);
@@ -294,7 +307,8 @@
                 } else if($batResultStatus === 'error'){
                     //エラーが記載されていた場合は変換失敗とする
                     //3Dの場合はLOD2_Surfaceの処理が完了するまでDBを更新しない
-                    if($pathArray['fileType'] === '3D_LOD2_Surface' || 
+                    //if($pathArray['fileType'] === '3D_LOD2_Surface' || 
+                    if($pathArray['fileType'] === '3D_LOD3' || 
                         $pathArray['fileType'] === 'DEM' ||
                         $pathArray['fileType'] === '2D'){
                         //変換処理に失敗した場合
@@ -313,7 +327,7 @@
                             )
                                     INSERT INTO public.manage_regist_zip (userid, zipname,  status, registdate )
                                     SELECT '". $cityCode ."','". $fileName ."',  (select * from getStatus) ,  NOW() From public.manage_regist_zip
-                                    WHERE not exists (SELECT userid, zipname, (select * from getStatus) ,NOW()
+                                    WHERE not exists (SELECT 1
                                     FROM public.manage_regist_zip WHERE userid = '". $cityCode ."' and zipname = '". $fileName ."' ) LIMIT 1");//DBへの格納
                         
                         $log->error('バッチ実行ログにエラーが書かれていたため変換失敗['. $fileName . ']の' .'ステータスを変換エラーに更新',$cityCode);
@@ -364,10 +378,12 @@
                                         //変換に成功した場合
                                         $convertLogIsSuccess = true;
                                         //3Dの場合はLOD2_Surfaceの処理が完了するまでDBを更新しない
-                                        if($pathArray['fileType'] === '3D_LOD2_Surface' || 
+                                        //if($pathArray['fileType'] === '3D_LOD2_Surface' || 
+                                         if($pathArray['fileType'] === '3D_LOD3' || 
                                             $pathArray['fileType'] === 'DEM' ||
                                             $pathArray['fileType'] === '2D'){
-                                            db (" WITH getStatus AS(
+											//2022 SQL修正
+											$sql = " WITH getStatus AS(
                                                 select case when status = '1099' then '9099' 
                                                         when status = '1999' then '9999' 
                                                         when status = '1299' then '9299' 
@@ -382,8 +398,10 @@
                                                 )
                                                         INSERT INTO public.manage_regist_zip (userid, zipname,  status, registdate )
                                                         SELECT '". $cityCode ."','". $fileName ."',  (select * from getStatus) ,  NOW() From public.manage_regist_zip
-                                                        WHERE not exists (SELECT userid, zipname, (select * from getStatus), NOW()
-                                                        FROM public.manage_regist_zip WHERE userid = '". $cityCode ."' and zipname = '". $fileName ."' ) LIMIT 1");//DBへの格納
+                                                        WHERE not exists (SELECT 1
+                                                        FROM public.manage_regist_zip WHERE userid = '". $cityCode ."' and zipname = '". $fileName ."' ) LIMIT 1";
+											$log->info($sql,$cityCode);
+                                            db ($sql);//DBへの格納
 
                                             $log->info('変換成功['. $fileName . ']の' .'ステータスを変換完了に更新',$cityCode);
                                         } else {
@@ -400,7 +418,8 @@
                         //変換ログファイルを最後まで解析しても成功が確認できなかった場合
                         if($convertLogIsSuccess === false){
                             //3Dの場合はLOD2_Surfaceの処理が完了するまでDBを更新しない
-                            if($pathArray['fileType'] === '3D_LOD2_Surface' || 
+                            //if($pathArray['fileType'] === '3D_LOD2_Surface' || 
+                            if($pathArray['fileType'] === '3D_LOD3' || 
                                 $pathArray['fileType'] === 'DEM' ||
                                 $pathArray['fileType'] === '2D'){
                                 db (" WITH getStatus AS(
@@ -418,7 +437,7 @@
                                     )
                                             INSERT INTO public.manage_regist_zip (userid, zipname,  status, registdate )
                                             SELECT '". $cityCode ."','". $fileName ."',  (select * from getStatus) ,  NOW() From public.manage_regist_zip
-                                            WHERE not exists (SELECT userid, zipname, (select * from getStatus), NOW()
+                                            WHERE not exists (SELECT 1
                                             FROM public.manage_regist_zip WHERE userid = '". $cityCode ."' and zipname = '". $fileName ."' ) LIMIT 1");//DBへの格納
                                 
                                 $log->error('変換成功フラグが立っていないため変換失敗['. $fileName . ']の' .'ステータス変換エラーに更新',$cityCode);
@@ -430,7 +449,8 @@
                     } else {
                         //変換ログが存在しなかった場合
                         //3Dの場合はLOD2_Surfaceの処理が完了するまでDBを更新しない
-                        if($pathArray['fileType'] === '3D_LOD2_Surface' || 
+                        //if($pathArray['fileType'] === '3D_LOD2_Surface' || 
+                        if($pathArray['fileType'] === '3D_LOD3' || 
                             $pathArray['fileType'] === 'DEM' ||
                             $pathArray['fileType'] === '2D'){
                             db (" WITH getStatus AS(
@@ -448,7 +468,7 @@
                                 )
                                         INSERT INTO public.manage_regist_zip (userid, zipname,  status, registdate )
                                         SELECT '". $cityCode ."','". $fileName ."',  (select * from getStatus) ,  NOW() From public.manage_regist_zip
-                                        WHERE not exists (SELECT userid, zipname, (select * from getStatus), NOW()
+                                        WHERE not exists (SELECT 1
                                         FROM public.manage_regist_zip WHERE userid = '". $cityCode ."' and zipname = '". $fileName ."' ) LIMIT 1");//DBへの格納
                             
                             $log->error('変換ログが存在しなかったため変換失敗['. $fileName . ']の' .'ステータスを変換エラーに更新',$cityCode);
@@ -472,8 +492,8 @@
 
     function convertFunc($cityCode, $varietyOfFiletype, $fileNameOfLod, $extensionOfLod){
         $convertInfo = array(
-            'batResultFilePath' => 'F:\\DATA\\convertLog\\batResult\\' . $cityCode . '_' . $fileNameOfLod . $extensionOfLod , 
-            'convertResultFilePath' => 'F:\\DATA\\convertLog\\convertResult\\' . $cityCode . '_' . $fileNameOfLod . $extensionOfLod ,
+            'batResultFilePath' => 'C:/bat/ConvertLog/batResult/' . $cityCode . '_' . $fileNameOfLod . $extensionOfLod , 
+            'convertResultFilePath' => 'C:/bat/ConvertLog/convertResult/' . $cityCode . '_' . $fileNameOfLod . $extensionOfLod ,
             'fileType' => $varietyOfFiletype,
             'fileName' => $fileNameOfLod,
         );

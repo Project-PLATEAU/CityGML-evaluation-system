@@ -15,7 +15,7 @@
     width:200px;
 }
 .URL{
-    width:1000px;
+    width:300px;
 }
 
 .btnLeft{
@@ -79,21 +79,24 @@
             return;
         }
     }
-    
+//2022修正
+	$SitePath = "http://*****";
+	$FileRoot = "*****:/*****/htdocs";
+
     include_once("logger.php"); //ログ出力処理の読み込み
     include_once("config.php"); //ログ出力用のコンフィグ読み込み
     //ログ書き込み処理
     $log = Logger::getInstance();
     
-    if(preg_match('#/UDX/datadisplay/\z#' , $_SERVER["HTTP_REFERER"]) === 1){
+    if(preg_match('#/udx/datadisplay/\z#' , $_SERVER["HTTP_REFERER"]) === 1){
         $log->info('3D Tiles閲覧・配信画面表示',$cityCode);
     }else{
         $log->info('位置正確度検証画面表示',$cityCode);
     }
     
-	$link = 'https://*****.com/map/' . htmlspecialchars($cityCode, ENT_QUOTES, 'UTF-8') . '/private';
+	$link = "$SitePath/map/" . htmlspecialchars($cityCode, ENT_QUOTES, 'UTF-8') . '/private';
 
-    $replace = '<iframe id="inlineFrameMap" title="Map" allow="fullscreen" width="100%" height="950" min-height="1000" margin-left="0" margin-right="0" src="' .  $link .'"></iframe>';
+    $replace = '<iframe id="inlineFrameMap" title="Map" allow="fullscreen" width="100%" height="400" min-height="300" margin-left="0" margin-right="0" src="' .  $link .'"></iframe>';
     
     echo '<div class="btnLeft">';
     echo '<input type="button" id="fullScreenButton" value="全画面表示" onclick="onClickFullScreen()" >';
@@ -102,12 +105,12 @@
     echo '</div>';
 
     //ロックファイル名のフルパス
-    $lockFilePath = "*****:/*****/htdocs/iUR_Data/" .$cityCode. "/3DTiles/3DBuildings/lock.txt";
+    $lockFilePath = "$FileRoot/iUR_Data/" .$cityCode. "/3DTiles/3DBuildings/lock.txt";
 
     //エラーファイル名のフルパス
-    $errorFilePath = "*****:/*****/htdocs/iUR_Data/" .$cityCode. "/3DTiles/3DBuildings/error.txt";
+    $errorFilePath = "$FileRoot/iUR_Data/" .$cityCode. "/3DTiles/3DBuildings/error.txt";
 
-    $outputedZipFile = glob("*****:/*****/htdocs/iUR_Data/" .$cityCode. "/3DTiles/3DBuildings/*.zip");
+    $outputedZipFile = glob("$FileRoot/iUR_Data/" .$cityCode. "/3DTiles/3DBuildings/*.zip");
 
     echo '<TABLE class="table"><TR><TD class="description">公開用WebGISのURL</TD><TD class="URL">';
 
@@ -122,10 +125,10 @@
         $downloadURL = '配信処理中';
     } elseif(count($outputedZipFile) === 1){
         //配信済のZIPが存在した場合
-        $tempWebGISURL ="https://*****.com/map/" . $cityCode . "/public";
+        $tempWebGISURL ="$SitePath/map/" . $cityCode . "/public";
         $webGISURL = "<a href='$tempWebGISURL' target='_blank' rel='noopener noreferrer'>" . $tempWebGISURL . "</a>";
         
-        $tempDownloadURL = "https://*****.com/iUR_DATA/" . $cityCode . "/3DTiles/3DBuildings/" . basename($outputedZipFile["0"]);
+        $tempDownloadURL = "$SitePath/iUR_DATA/" . $cityCode . "/3DTiles/3DBuildings/" . basename($outputedZipFile["0"]);
         $downloadURL = "<a href='$tempDownloadURL'>" . $tempDownloadURL . "</a>";
     } else {
         //その他の場合
@@ -152,23 +155,24 @@
 ?>
 
 <script type="text/javascript">
-    var cityCode = window.parent.governmment_id;
+    var governmment_id = window.parent.document.getElementById('governmment_citycode').value;
 
     function onClick3DTilesRelease(){
-        postLog(cityCode,'info','3DTiles配信ボタン押下');
+        postLog(governmment_id,'info','3DTiles配信ボタン押下');
         if(confirm("3D Tiles配信を開始します。\r\nよろしいですか？") === true){
-            postLog(cityCode,'info','3DTiles配信確認ダイアログでOK押下');
+            postLog(governmment_id,'info','3DTiles配信確認ダイアログでOK押下');
         } else {
-            postLog(cityCode,'info','3DTiles配信確認ダイアログでキャンセル押下');
+            postLog(governmment_id,'info','3DTiles配信確認ダイアログでキャンセル押下');
             return;
         }
 
         var lockCheckXhr = new XMLHttpRequest();        
         var lockCheckData = new FormData();
-        lockCheckData.append("cityCode", cityCode);
+        lockCheckData.append("cityCode", governmment_id);
         var cancelFlag = false;
 
         lockCheckXhr.onreadystatechange = function () {
+
             //正常にレスポンスが返ってきたらレスポンステキストを表示
             switch (this.readyState) {
                 case 0:
@@ -219,7 +223,7 @@
         }
 
         var release3DTilesData = new FormData();
-        release3DTilesData.append("cityCode", cityCode);
+        release3DTilesData.append("cityCode", governmment_id);
         var release3DTilesXhr = new XMLHttpRequest();
         
         release3DTilesXhr.open("POST", "3DtilesRelease.php", true);
@@ -230,13 +234,13 @@
 
     //配信停止ボタン押下時処理
     function onClick3DTilesReleaseStop(){
-        postLog(cityCode,'info','3DTiles配信停止ボタン押下');
+        postLog(governmment_id,'info','3DTiles配信停止ボタン押下');
         //確認ダイアログ表示
         if(confirm("3D Tiles配信を停止します。\r\nよろしいですか？") === false){
-            postLog(cityCode,'info','3DTiles配信停止確認ダイアログでキャンセル押下');
+            postLog(governmment_id,'info','3DTiles配信停止確認ダイアログでキャンセル押下');
             return;
         }
-        postLog(cityCode,'info','3DTiles配信停止確認ダイアログでOK押下');
+        postLog(governmment_id,'info','3DTiles配信停止確認ダイアログでOK押下');
         //画面をロック
         screenLock();
         //配信停止処理を呼び出す
@@ -246,7 +250,7 @@
     //配信停止処理
     function tilesReleaseStop(){
         var preReleaseStopData = new FormData();
-        preReleaseStopData.append("cityCode", cityCode);
+        preReleaseStopData.append("cityCode", governmment_id);
         var preReleaseStopXhr = new XMLHttpRequest();
         var cancelFlag = false;
         
@@ -286,7 +290,7 @@
                                 cancelFlag = true;
                                 break;
                             default:
-                                postLog(cityCode,'error','3DTiles配信停止前確認処理でXHRのレスポンスが正常ではありませんでした');
+                                postLog(governmment_id,'error','3DTiles配信停止前確認処理でXHRのレスポンスが正常ではありませんでした');
                                 alert("システムエラーが発生しました。\r\n管理者にお問い合わせください。");
                                 cancelFlag = true;
                                 break;
@@ -310,7 +314,7 @@
         
         
         var releaseStopData = new FormData();
-        releaseStopData.append("cityCode", cityCode);
+        releaseStopData.append("cityCode", governmment_id);
         var releaseStopXhr = new XMLHttpRequest();
 
         //ステータス変更時の動作を規定
@@ -365,12 +369,12 @@
         element.style.backgroundColor = "rgba(128,128,128, 0.5)";
         element.style.width = '100%';
         element.style.zIndex = '9998';
-     
         var objBody = window.parent.document.getElementsByTagName("body").item(0); 
         objBody.appendChild(element);
 
         var display = window.parent.document.getElementById("wpadminbar");
-        display.style.display = "none";
+        if(display!=null)
+        	display.style.display = "none";
         
     }
 
@@ -379,10 +383,14 @@
     */
     function delete_dom_obj(id_name){
         var dom_obj = window.parent.document.getElementById(id_name);
-        var dom_obj_parent = dom_obj.parentNode;
-        dom_obj_parent.removeChild(dom_obj);
-        var display = window.parent.document.getElementById("wpadminbar");
-        display.style.display = "block";
+		if(dom_obj!=null)
+		{
+	        var dom_obj_parent = dom_obj.parentNode;
+	        dom_obj_parent.removeChild(dom_obj);
+	        var display = window.parent.document.getElementById("wpadminbar");
+	        if(display!=null)
+	        	display.style.display = "block";
+		}
     }
     
     /*ログ出力関数

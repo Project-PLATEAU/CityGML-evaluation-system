@@ -170,7 +170,7 @@ try{
     //直リンクでアクセスした場合はワードプレスにリダイレクト
     if(!isset($_SERVER["HTTP_REFERER"])){
     echo $_SERVER["REQUEST_URI"];
-        //header('Location:https://*****.com/UDX/topologicalConsistency/');
+        //header('Location:http://*****/udx/topologicalConsistency/');
     }
     session_start(); //セッションを開始
 
@@ -196,7 +196,6 @@ try{
         }
     }
     
-    
     include_once("dbSelect.php"); //DB接続情報の読み込み
     include_once("logger.php"); //ログ出力処理の読み込み
     include_once("config.php"); //ログ出力用のコンフィグ読み込み
@@ -205,12 +204,7 @@ try{
     //ログ書き込み処理
     $log = Logger::getInstance();
     
-
-
-    
-
     $log->info('位相一貫性検証画面表示',$cityCode);
-
     
     $log->info('自治体コード:' . $cityCode ,$cityCode);
     $status ='2';  //アップロードエラー
@@ -218,8 +212,8 @@ try{
     $log->info('初期表示時のアップロード開始中ステータスを全て' . $status . 'に更新',$cityCode);
     
     $selRet = sel_query("select zipname,status From public.manage_regist_zip where userid = '" .$cityCode . "'",'listStatus');//自治体IDに紐づくファイル名、ステータスをDBから取得
-    
-    $file_path = 'F:\DATA/' . $cityCode . '/OriginalData\3DBuildings';
+    //2022修正
+    $file_path = '*****:/*****/Data/' . $cityCode . '/OriginalData\3DBuildings';
     $result = glob($file_path .'/{*.zip,*.gml}', GLOB_BRACE); 
     
     //1ページのリスト上に表示させる件数の設定
@@ -232,7 +226,7 @@ try{
     foreach($result as $filepath){
          $filename = basename($filepath);
          $stat = stat($filepath);
-         $datetime = date('Y/m/d H:i:s',$stat['mtime'] +32400);//9時間の時差があるため9時間分の秒数を足す
+         $datetime = date('Y/m/d H:i:s',$stat['mtime']);
          $filebyte = $stat['size'];
          $count = strlen(intval($filebyte / 1024));
          $keyIndex = array_search($filename , array_column($selRet, 'name'));//対象フォルダにあるZIP名とDBから取得したファイル名で比較
@@ -350,7 +344,8 @@ try{
     
     
     //ここからアップロード済ファイルサイズの取得
-    $getTotalSizePath = 'F:\DATA/' . $cityCode . '/OriginalData/';
+    //2022修正
+    $getTotalSizePath = '*****:/*****/Data/' . $cityCode . '/OriginalData/';
     //COMオブジェクト生成
     $obj = new COM ( 'scripting.filesystemobject' );
     if(is_object($obj)){
@@ -416,7 +411,7 @@ try{
         //パラメータが存在する場合はパラメータ内のソートIDを取得する
         $sorttype = mb_substr($param,8,1);
     }
-    
+
     switch($sorttype){
             case 1 : //ソート対象：ファイル名
             case 2 : 
@@ -499,10 +494,12 @@ try{
             $download = 'ダウンロード';
         }else{
             if (false !== strpos($val['status'], '位相検証エラー・')) {
-                $outlog = 'https://*****.com/iUR_Data/'.$cityCode . '\\ValidateTopologicalConsistencyLog\\' . $val['file_name'] . '_errors.zip';
+//2022
+                $outlog = 'http://*****/iUR_Data/'.$cityCode . '/ValidateTopologicalConsistencyLog/' . $val['file_name'] . '_errors.zip';
                 $download = '<a href="' .$outlog. '" download>ダウンロード</a>';
             }else{
-                $outlog = 'https://*****.com/iUR_Data/'.$cityCode . '\\ValidateTopologicalConsistencyLog\\' . $val['file_name'] . '.txt';
+//2022
+                $outlog = 'http://*****/iUR_Data/'.$cityCode . '/ValidateTopologicalConsistencyLog/' . $val['file_name'] . '.txt';
                 $download = '<a href="' .$outlog. '" download>ダウンロード</a>';
             }
         }
@@ -512,11 +509,12 @@ try{
     echo '</TABLE></form>';    
     
     echo '全件数　'. $filelists_num. '件　';
-    
-    echo '<a href=\'https://*****.com/UDX/topologicalConsistency.php?sort_id=' .$sorttype. '&page_id=1\'><<</a>　';
+//2022
+    echo '<a href=\'http://*****/udx/topologicalConsistency.php?sort_id=' .$sorttype. '&page_id=1\'><<</a>　';
     
     if($now > 1){
-        echo '<a href=\'https://*****.com/UDX/topologicalConsistency.php?sort_id=' .$sorttype. '&page_id=' .($now - 1). '\'>前へ</a>　';
+//2022
+        echo '<a href=\'http://*****/udx/topologicalConsistency.php?sort_id=' .$sorttype. '&page_id=' .($now - 1). '\'>前へ</a>　';
     }else{
         echo '前へ'.'　';
     }
@@ -529,20 +527,22 @@ try{
             echo $now.'　';
         }else{
             if($i >= $disppage_be && $i <= $disppage_af){
-                echo '<a href=\'https://*****.com/UDX/topologicalConsistency.php?sort_id=' .$sorttype. '&page_id=' . $i. '\'>'. $i. '</a>　';
+//2022
+                echo '<a href=\'http://*****/udx/topologicalConsistency.php?sort_id=' .$sorttype. '&page_id=' . $i. '\'>'. $i. '</a>　';
             }
         }
     }
     
     if($now < $max_page){
-        echo '<a href=\'https://*****.com/UDX/topologicalConsistency.php?sort_id=' .$sorttype. '&page_id=' .($now + 1). '\'>次へ</a>　';
+//2022
+        echo '<a href=\'http://*****/udx/topologicalConsistency.php?sort_id=' .$sorttype. '&page_id=' .($now + 1). '\'>次へ</a>　';
     }else{
         echo '次へ'.'　';
     }
+//2022
+    echo '<a href=\'http://*****/udx/topologicalConsistency.php?sort_id=' .$sorttype. '&page_id=' . $max_page . '\'>>></a>　';
     
-    echo '<a href=\'https://*****.com/UDX/topologicalConsistency.php?sort_id=' .$sorttype. '&page_id=' . $max_page . '\'>>></a>　';
-    
-    if(preg_match('#/UDX/filelist/\z#' , $_SERVER["HTTP_REFERER"]) === 1){
+    if(preg_match('#/udx/filelist/\z#' , $_SERVER["HTTP_REFERER"]) === 1){
         $log->info('データ変換・削除画面の表示終了',$cityCode);
     }else{
         $log->info('位相一貫性検証画面の表示終了',$cityCode);
@@ -635,14 +635,19 @@ try{
 
     //ソートボタンを押下した際の処理
     function onClickSort(sort_id) {
+		//var governmment_id = window.parent.governmment_id;
+        var governmment_id = window.parent.document.getElementById('governmment_citycode').value;
+
         var url_param = location.search;
-        postLog(window.parent.governmment_id, 'info', 'ソートボタン押下');
+        postLog(governmment_id, 'info', 'ソートボタン押下');
         
         if(url_param == ''){
-            window.location.href = 'https://*****.com/UDX/topologicalConsistency.php?sort_id=' + sort_id  + '&page=' + '&page_id=' + 1;
+//2022
+            window.location.href = 'http://*****/udx/topologicalConsistency.php?sort_id=' + sort_id  + '&page=' + '&page_id=' + 1;
         }else{
             url_param = url_param.slice(-1);
-            window.location.href = 'https://*****.com/UDX/topologicalConsistency.php?sort_id=' + sort_id + '&page=' + '&page_id=' + url_param;
+//2022
+            window.location.href = 'http://*****/udx/topologicalConsistency.php?sort_id=' + sort_id + '&page=' + '&page_id=' + url_param;
         }
     }
 
@@ -684,8 +689,12 @@ try{
             alert("検証対象を選択して下さい。");
             return;
         }
+
+		//var governmment_id = window.parent.governmment_id;
+        var governmment_id = window.parent.document.getElementById('governmment_citycode').value;
+
         //検証処理を呼ぶ
-        fileValidate(JSON.parse(validateFileNameList), window.parent.governmment_id);
+        fileValidate(JSON.parse(validateFileNameList), governmment_id);
     }
     
     //ファイル検証処理
@@ -697,7 +706,8 @@ try{
         screenLock();
         //上部のツールバーを非表示
         var display = window.parent.document.getElementById("wpadminbar");
-        display.style.display = "none";
+		if(display!=null)
+        	display.style.display = "none";
         
         var cancelFlg = false;
 
@@ -756,7 +766,8 @@ try{
         //ロック用divを削除
         delete_dom_obj("screenLock");
         var display = window.parent.document.getElementById("wpadminbar");
-        display.style.display = "block";
+		if(display!=null)
+        	display.style.display = "block";
         
         if(cancelFlg === true){
             return;
@@ -856,6 +867,7 @@ try{
         var dom_obj_parent = dom_obj.parentNode;
         dom_obj_parent.removeChild(dom_obj);
         var display = window.parent.document.getElementById("wpadminbar");
-        display.style.display = "block";
+		if(display!=null)
+	        display.style.display = "block";
     }
 </script>

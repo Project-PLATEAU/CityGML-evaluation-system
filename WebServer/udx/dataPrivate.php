@@ -15,11 +15,11 @@ function dataPrivate($cityCode){
         $log->info('データ非公開化開始',$cityCode);
         
         //ファイル元パス
-        $delRelease = 'F:\\Apache24\\htdocs\\iUR_Data\\' .$cityCode. '\\OriginalData\\3DBuildings';
-        $delTiles = 'F:\\Apache24\\htdocs\\map\\' .$cityCode. '\\public\\datasource-data';
-        $delPath = 'F:\\Apache24\\htdocs\\iUR_Data\\' .$cityCode. '\\3DTiles\\3DBuildings';
-        $configPath = 'F:\\Apache24\\htdocs\\map\\' .$cityCode. '\\private\\ConfigJsonTemplate\\';
-        $outConfigPath = 'F:\\Apache24\\htdocs\\map\\' .$cityCode. '\\public\\';
+        $delRelease = '*****:\\*****\\htdocs\\iUR_Data\\' .$cityCode. '\\OriginalData\\3DBuildings';
+        $delTiles = '*****:\\*****\\htdocs\\map\\' .$cityCode. '\\public\\datasource-data';
+        $delPath = '*****:\\*****\\htdocs\\iUR_Data\\' .$cityCode. '\\3DTiles\\3DBuildings';
+        $configPath = '*****:\\*****\\htdocs\\map\\' .$cityCode. '\\private\\ConfigJsonTemplate\\';
+        $outConfigPath = '*****:\\*****\\htdocs\\map\\' .$cityCode. '\\public\\';
 
         //コンフィグファイルのコピー
         if (copy($configPath, $outConfigPath)) {
@@ -41,7 +41,7 @@ function dataPrivate($cityCode){
         //各ファイルやフォルダに処理を行う
         foreach($items as $item){
             //パスに'Terrain'が含まれていない場合のみ処理を行う
-            if(strpos($item->getPathname(), 'public/datasource-data\\Terrain\\') === false && $item->getPathname() !== 'F:\Apache24/htdocs/map/' . $cityCode . '/public/datasource-data\\Terrain' ){
+            if(strpos($item->getPathname(), 'public/datasource-data\\Terrain\\') === false && $item->getPathname() !== '*****:\*****/htdocs/map/' . $cityCode . '/public/datasource-data\\Terrain' ){
                 //ファイルかディレクトリかを判定して削除する
                 if($item->isFile() || $item->isLink()){
                     if(unlink($item->getPathname()) === false){
