@@ -1,9 +1,11 @@
 <?php
+
     if(isset($_POST['cityCode']) && isset($_POST['toUploadTotalSize'])){
-        $path = 'F:\DATA/' . $_POST['cityCode'] . '/OriginalData/3DBuildings/*.*';//アップロード済ファイルの取得先フォルダパスと条件
+    	//2022修正
+        $path = '*****:\*****\Data/' . $_POST['cityCode'] . '/OriginalData/3DBuildings/*.*';//アップロード済ファイルの取得先フォルダパスと条件
         $toUploadTotalSize = intval($_POST['toUploadTotalSize']);
         $uploadFileNameList = json_decode($_POST['uploadFileNameList']);
-        
+
         //アップロード済ファイルの情報をもつ連想配列
         $uploadedFileInfo = array(
             'fileName' => array(),
@@ -32,7 +34,7 @@
              $uploadedTotalSize = $uploadedTotalSize + $stat['size'];
              array_push($uploadedFileInfo['fileName'], $uploadFileName);
         }
-        
+ 
         //アップロード済ファイルの合計サイズが限界値を超えている場合、処理を終了して画面に情報を返す
         if(($uploadedTotalSize + $toUploadTotalSize) > $maxTotalSize){
             $returnArray = array(
@@ -43,8 +45,8 @@
             echo json_encode($returnArray, JSON_UNESCAPED_UNICODE);
             return;
         }
-        //Fドライブの空き容量が5%未満(データ使用率が95%を超える)の場合
-        if(disk_free_space("F:") / disk_total_space("F:") < 0.05){
+        //ドライブの空き容量が5%未満(データ使用率が95%を超える)の場合
+        if(disk_free_space("*****:") / disk_total_space("*****:") < 0.05){
             $returnArray = array(
                 'result' => 'dataDriveCapacityOver'
             );
@@ -75,11 +77,11 @@
         $in_query ='zipname in (' . $in_query . ')';  //～ zipname in (filename1,filename2)の形式にする
         
         $selRet = sel_query ("with jobCount as(
-        SELECT count(userid)as activeJobCount from (SELECT DISTINCT userid FROM public.manage_regist_zip where status = '1' and userid = '" . $cityCode . "')as a)
+        SELECT count(userid)as activeJobCount from (SELECT DISTINCT userid FROM manage_regist_zip where status = '1' and userid = '" . $cityCode . "')as a)
         , fileCount as(
-                SELECT count(userid)as activeUserCount from (SELECT DISTINCT userid FROM public.manage_regist_zip where status = '1')as b)
+                SELECT count(userid)as activeUserCount from (SELECT DISTINCT userid FROM manage_regist_zip where status = '1')as b)
         ,uploadCount as(
-                SELECT count(userid)as uploadJobCount from (SELECT DISTINCT userid FROM public.manage_regist_zip where status IN('1','19','199','1999','1099','1299','2199','9199','10000') and userid = '" . $cityCode ."' and " . $in_query . ")as c)
+                SELECT count(userid)as uploadJobCount from (SELECT DISTINCT userid FROM manage_regist_zip where status IN('1','19','199','1999','1099','1299','2199','9199','10000') and userid = '" . $cityCode ."' and " . $in_query . ")as c)
         ,jobCountJoin as(select * from jobCount cross join fileCount) 		
         select * from jobCountJoin cross join uploadCount",'Upload');
         
@@ -89,7 +91,7 @@
         $activeUploadJobCount = $selRet[0]['activeUserCount'];
         
         $uploadCount = $selRet[0]['uploadJobCount'];
-            
+  
         //自身のジョブが既に実行されている場合、処理を終了して画面に情報を返す
         if($myUploadJobCount != 0){
             $returnArray = array(
@@ -129,6 +131,8 @@
         echo json_encode($returnArray, JSON_UNESCAPED_UNICODE);
         $log->info('アップロードを開始します。',$cityCode);
         $log->info(json_encode($returnArray, JSON_UNESCAPED_UNICODE),$cityCode);
+        
+        
     } else {
     
     }

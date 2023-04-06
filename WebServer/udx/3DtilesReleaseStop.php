@@ -14,7 +14,7 @@
             //config.jsonのコピー先パス
             $copyConfigJsonPath = "*****:/*****/htdocs/map/" . $cityCode . "/public/config.json";
             //publicのdatasource-dataフォルダのパス
-            $publicDataSourcePath = 'F:\\Apache24\\htdocs\\map\\' .$cityCode. '\\public\\datasource-data';
+            $publicDataSourcePath = '*****:/*****/htdocs/map/' .$cityCode. '/public/datasource-data';
 
             //配信済みの圧縮された3DTilesを取得
             $outputedZipFile = glob($outputedZipFilePath . "*.zip");
@@ -50,7 +50,7 @@
             //datasource-dataフォルダ配下の各フォルダ・ファイルに対し削除処理実行
             foreach($items as $item){
                 //パスに'Terrain'が含まれていない場合のみ処理を行う
-                if(strpos($item->getPathname(), 'public\\datasource-data\\Terrain\\') === false && $item->getPathname() !== 'F:\\Apache24\\htdocs\\map\\' . $cityCode . '\\public\\datasource-data\\Terrain' ){
+                if(strpos($item->getPathname(), 'public/datasource-data/Terrain/') === false && $item->getPathname() !== '*****:/*****/htdocs/map/' . $cityCode . '/public/datasource-data/Terrain' ){
                     //ファイルかディレクトリかを判定して削除する
                     if($item->isFile() || $item->isLink()){
                         if(unlink($item->getPathname()) === false){

@@ -5,12 +5,15 @@ try{
     $log = Logger::getInstance();//ログ出力クラスインスタンス生成
     include_once("3DtilesLockFileExistCheck.php"); //ロックファイル確認関数読み込み
     include_once("dbConnection.php"); //DB接続情報の読み込み
-    include_once("dbSelect.php"); //DB接続情報の読み込み    
-    
+    include_once("dbSelect.php"); //DB接続情報の読み込み 
+
+    //パス設定 //2022修正
+    $MapRoot = '*****:/*****/htdocs/map/';
+
     //自治体IDを取得してフォルダパス生成
     if(isset($_POST["cityCode"]) == true && isset($_POST["convertFileNames"]) == true){
         $cityCode = $_POST["cityCode"];
-        $my3DMapPath = 'F:\Apache24/htdocs/map/' . $_POST["cityCode"] . '/private/';
+        $my3DMapPath = $MapRoot . $_POST["cityCode"] . '/private/';
         $convertFileNames = json_decode($_POST["convertFileNames"]);
     } else {
         //エラー
@@ -33,7 +36,8 @@ try{
     }
     
     //Fドライブの空き容量が5%未満の場合、処理を行わない
-    if(disk_free_space("F:") / disk_total_space("F:") < 0.05){
+	//2022
+    if(disk_free_space("C:") / disk_total_space("C:") < 0.05){
         $returnArray = array(
             'result' => 'dataDriveCapacityOver'
         );
@@ -46,9 +50,9 @@ try{
     
     //自治体IDごとの処理数と全体でのJOB数を取得
     $selRet = sel_query ("with jobCount as(
-    SELECT count(userid)as activeJobCount from (SELECT DISTINCT userid FROM public.manage_regist_zip where status in ('1099','1299','1999') and userid = '" . $cityCode . "')as a)
+    SELECT count(userid)as activeJobCount from (SELECT DISTINCT userid FROM manage_regist_zip where status in ('1099','1299','1999') and userid = '" . $cityCode . "')as a)
     , fileCount as(
-    SELECT count(userid)as activeUserCount from (SELECT DISTINCT userid FROM public.manage_regist_zip where status in ('1099','1999'))as b)
+    SELECT count(userid)as activeUserCount from (SELECT DISTINCT userid FROM manage_regist_zip where status in ('1099','1999'))as b)
     select * from jobCount cross join fileCount",'ConvertJob');
     
     $myConvertJobCount = $selRet['0']['activeJobCount'];          //自治体ID単位での処理数取得(値が0以外はすでに実行中)
@@ -79,7 +83,6 @@ try{
     
     //クエリ条件用にファイル名のin句生成
     $in_query = '';
-    
     foreach($convertFileNames as $convertFileName){
         $convertFile = trim(basename($convertFileName));
         
@@ -91,7 +94,6 @@ try{
     }
     $in_query = rtrim($in_query,',');             //末尾のカンマを削除
     $in_query ='zipname in (' . $in_query . ')';  //～ zipname in (filename1,filename2)の形式にする
-    
     $selRet = sel_query ("select count(status) from public.manage_regist_zip where  userid = '" .$cityCode . "' and status in ('1','9', '2', '19', '29', '199','9199','1099','1999','1299','2199','10000') and " . $in_query ,'Convert');
     
     //選択されたデータに変換できないステータスのものが含まれていないか確認
@@ -125,11 +127,12 @@ try{
             //2Dの場合
             array_push($fileNameArray, $tempFileName);
         } else {
+//2022修正
             //3Dの場合LOD1～LOD2,LOD2_Surfaceを追加する
             array_push($fileNameArray, $tempFileName . "_LOD1");
             array_push($fileNameArray, $tempFileName . "_LOD2");
             array_push($fileNameArray, $tempFileName . "_LOD2_Surface");
-            //array_push($fileNameArray, $tempFileName . "_LOD3");
+            array_push($fileNameArray, $tempFileName . "_LOD3");
             //array_push($fileNameArray, $tempFileName . "_LOD4");
             //array_push($fileNameArray, $tempFileName . "_LODALL");
         }
@@ -284,8 +287,8 @@ try{
         
         //変換処理開始ステータスをDBに書き込む
         foreach($convertFileNames as $fileNameStatus){
-            
-            db (" WITH getStatus AS(
+            //2022修正
+			$sql = " WITH getStatus AS(
                 select case when status = '99' then '1099' 
                        when status = '999' then '1999' 
                        when status = '299' then '1299' 
@@ -305,10 +308,14 @@ try{
                 )
                        INSERT INTO public.manage_regist_zip (userid, zipname,  status, registdate )
                        SELECT '". $cityCode ."','". $fileNameStatus ."',  (select * from getStatus) ,  NOW() From public.manage_regist_zip
-                       WHERE not exists (SELECT userid, zipname, (select * from getStatus), NOW()
-                       FROM public.manage_regist_zip WHERE userid = '". $cityCode ."' and zipname = '". $fileNameStatus ."' ) LIMIT 1");//DBへの格納
+                       WHERE not exists (SELECT 1
+                       FROM public.manage_regist_zip WHERE userid = '". $cityCode ."' and zipname = '". $fileNameStatus ."' ) LIMIT 1";
+
+		    $log->info($sql,$cityCode);
+
+            db ($sql);//DBへの格納
                        
-                $log->info('['. $fileNameStatus . ']の' .'ステータスを変換中に更新',$cityCode);
+            $log->info('['. $fileNameStatus . ']の' .'ステータスを変換中に更新',$cityCode);
         }
         
     } else {

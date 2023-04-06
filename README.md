@@ -4,106 +4,15 @@
 
 3D都市モデルの品質管理支援のための品質評価システム（Webポータル）です。
 
-本ソフトウェアは、国土交通省の[Project PLATEAU](https://www.mlit.go.jp/plateau/)で開発され、3D都市モデルの品質管理支援に用いたWebポータルシステムです。対応データ形式は、内閣府地方創生推進事務局が定めた[i-都市再生技術仕様案 v1.4 (iｰUR 1.4)](https://www.chisou.go.jp/tiiki/toshisaisei/itoshisaisei/iur/)に従い拡張された[OGC CityGML 2.0](https://www.ogc.org/standards/citygml)形式です。
-
-
-**ただし、i-UR1.4は2021年9月にi-UR1.5に改定されました。これに伴い、URLが変更されました。**
-
-そのため、本ソフトウェアの利用にあたり、3D都市モデル（CityGML形式）及びソフトウェアに記述された旧URLを、新しいURLに更新する必要があります。
-
-具体的には以下の手順に従い、更新してください。
-
-## 1．3D都市モデル（CityGML形式）に記述されたURLの更新
-
-3D都市モデルのファイル内の名前空間とschemaLocationに記載されている旧URLを新しいURLに更新（テキスト置換）してください。
-
-対象となる記述を下表に示します。
-
-- 名前空間
-
-|旧URL（i-UR1.4のURL）|新しいURL（i-UR1.5のURL）|
-| - | - |
-|`http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/uro/1.4`|https://www.chisou.go.jp/tiiki/toshisaisei/itoshisaisei/iur/uro/1.5|
-|`http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urf/1.4`|https://www.chisou.go.jp/tiiki/toshisaisei/itoshisaisei/iur/urf/1.5|
-|`http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urg/1.4`|https://www.chisou.go.jp/tiiki/toshisaisei/itoshisaisei/iur/urg/1.5|
-|`http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urt/1.4`|https://www.chisou.go.jp/tiiki/toshisaisei/itoshisaisei/iur/urt/1.5|
-
-- schemaLocation
-
-|旧URL（i-UR1.4のURL）|新しいURL（i-UR1.5のURL）|
-| - | - |
-|`http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/schemas/uro/1.4/urbanObject.xsd`|https://www.chisou.go.jp/tiiki/toshisaisei/itoshisaisei/iur/schemas/uro/1.5/urbanObject.xsd|
-|`http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/schemas/urf/1.4/urbanFunction.xsd`|https://www.chisou.go.jp/tiiki/toshisaisei/itoshisaisei/iur/schemas/urf/1.5/urbanFunction.xsd|
-|`http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/schemas/urg/1.4/statisticalGrid.xsd`|https://www.chisou.go.jp/tiiki/toshisaisei/itoshisaisei/iur/schemas/urg/1.5/statisticalGrid.xsd|
-|`http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/schemas/urt/1.4/publicTransit.xsd`|https://www.chisou.go.jp/tiiki/toshisaisei/itoshisaisei/iur/schemas/urt/1.5/publicTransit.xsd|
-
-----
-置換には、Visual Studio CodeやXMLEDITOR.NETなどのツールをご利用ください。  
-名前空間及びschemaLocationは、3D都市モデル（CityGML形式）の、`<core:CityModel>`の開始タグに記載されています。  
-置換前後の3D都市モデル（CityGML形式）の例を以下に示します。太字部分が置換対象となる箇所です。  
-#### 置換前
-<core:CityModel xmlns:uro="**`http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/uro/1.4`**" xmlns:core="http://www.opengis.net/citygml/2.0"
-xmlns:luse="http://www.opengis.net/citygml/landuse/2.0" xmlns:bldg="http://www.opengis.net/citygml/building/2.0"
-xmlns:tran="http://www.opengis.net/citygml/transportation/2.0" xmlns:grp="http://www.opengis.net/citygml/cityobjectgroup/2.0"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml" xmlns:xlink="http://www.w3.org/1999/xlink"
-xsi:schemaLocation="**`http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/uro/1.4
-http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/schemas/uro/1.4/urbanObject.xsd`** http://www.opengis.net/citygml/2.0
-http://schemas.opengis.net/citygml/2.0/cityGMLBase.xsd http://www.opengis.net/citygml/landuse/2.0 http://schemas.opengis.net/citygml/landuse/2.0/landUse.xsd
-http://www.opengis.net/citygml/building/2.0 http://schemas.opengis.net/citygml/building/2.0/building.xsd http://www.opengis.net/citygml/transportation/2.0
-http://schemas.opengis.net/citygml/transportation/2.0/transportation.xsd http://www.opengis.net/citygml/cityobjectgroup/2.0
-http://schemas.opengis.net/citygml/cityobjectgroup/2.0/cityObjectGroup.xsd http://www.opengis.net/gml http://schemas.opengis.net/gml/3.1.1/base/gml.xsd">
-#### 置換後
-<core:CityModel xmlns:uro="**`https://www.chisou.go.jp/tiiki/toshisaisei/itoshisaisei/iur/uro/1.5`**" 
-xmlns:core="http://www.opengis.net/citygml/2.0"
-xmlns:luse="http://www.opengis.net/citygml/landuse/2.0" xmlns:bldg="http://www.opengis.net/citygml/building/2.0"
-xmlns:tran="http://www.opengis.net/citygml/transportation/2.0" xmlns:grp="http://www.opengis.net/citygml/cityobjectgroup/2.0"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml" xmlns:xlink="http://www.w3.org/1999/xlink"
-xsi:schemaLocation="**`https://www.chisou.go.jp/tiiki/toshisaisei/itoshisaisei/iur/uro/1.5 https://www.chisou.go.jp/tiiki/toshisaisei/itoshisaisei/iur/schemas/uro/1.5/urbanObject.xsd`**  
-http://www.opengis.net/citygml/2.0 http://schemas.opengis.net/citygml/2.0/cityGMLBase.xsd http://www.opengis.net/citygml/landuse/2.0
-http://schemas.opengis.net/citygml/landuse/2.0/landUse.xsd http://www.opengis.net/citygml/building/2.0 http://schemas.opengis.net/citygml/building/2.0/building.xsd
-http://www.opengis.net/citygml/transportation/2.0 http://schemas.opengis.net/citygml/transportation/2.0/transportation.xsd http://www.opengis.net/citygml/cityobjectgroup/2.0
-http://schemas.opengis.net/citygml/cityobjectgroup/2.0/cityObjectGroup.xsd http://www.opengis.net/gml http://schemas.opengis.net/gml/3.1.1/base/gml.xsd">
-
-## 2．ソフトウェアに記述されたURL及びバージョンの更新
-
-ソフトウェアに含まれる、以下の2つのファイルに記載された名前空間を新しいURLに更新（テキスト置換）してください。
-
-- 対象ファイル（8ファイル）
-
-|ファイルが格納されているフォルダ|ファイル名|
-| - | - |
-|[DBServer/validateConfig/](https://github.com/Project-PLATEAU/CityGML-evaluation-system/tree/main/DBServer/validateConfig)|project.xml|
-|[APServer/bat/template/](https://github.com/Project-PLATEAU/CityGML-evaluation-system/tree/main/APServer/bat/template)|<p>template\_2d.xml</p><p>template\_3d\_LOD1.xml</p><p>template\_3d\_LOD2.xml</p><p>template\_3d\_LOD2\_Surface.xml</p><p>template\_3d\_LOD3.xml</p><p>template\_3d\_LOD4.xml</p><p>template\_3d\_LODALL.xml</p>|
-
-
-対象となる記述（名前空間及びschemaLocation）
-
-- 名前空間
-
-|旧URL（i-UR1.4のURL）|新しいURL（i-UR1.5のURL）|
-| - | - |
-|`http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/uro/1.4`|https://www.chisou.go.jp/tiiki/toshisaisei/itoshisaisei/iur/uro/1.5|
-|`http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urf/1.4`|https://www.chisou.go.jp/tiiki/toshisaisei/itoshisaisei/iur/urf/1.5|
-|`http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urg/1.4`|https://www.chisou.go.jp/tiiki/toshisaisei/itoshisaisei/iur/urg/1.5|
-|`http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/urt/1.4`|https://www.chisou.go.jp/tiiki/toshisaisei/itoshisaisei/iur/urt/1.5|
-
-- schemaLocation
-
-|旧URL（i-UR1.4のURL）|新しいURL（i-UR1.5のURL）|
-| - | - |
-|`http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/schemas/uro/1.4/urbanObject.xsd`|https://www.chisou.go.jp/tiiki/toshisaisei/itoshisaisei/iur/schemas/uro/1.5/urbanObject.xsd|
-|`http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/schemas/urf/1.4/urbanFunction.xsd`|https://www.chisou.go.jp/tiiki/toshisaisei/itoshisaisei/iur/schemas/urf/1.5/urbanFunction.xsd|
-|`http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/schemas/urg/1.4/statisticalGrid.xsd`|https://www.chisou.go.jp/tiiki/toshisaisei/itoshisaisei/iur/schemas/urg/1.5/statisticalGrid.xsd|
-|`http://www.kantei.go.jp/jp/singi/tiiki/toshisaisei/itoshisaisei/iur/schemas/urt/1.4/publicTransit.xsd`|https://www.chisou.go.jp/tiiki/toshisaisei/itoshisaisei/iur/schemas/urt/1.5/publicTransit.xsd|
+本ソフトウェアは、国土交通省の[Project PLATEAU](https://www.mlit.go.jp/plateau/)で開発され、3D都市モデルの品質管理支援に用いたWebポータルシステムです。対応データ形式は、内閣府地方創生推進事務局が定めた[i-都市再生技術仕様案 v2.0 (i-UR 2.0)](https://www.chisou.go.jp/tiiki/toshisaisei/itoshisaisei/iur/)に従い拡張された[OGC CityGML 2.0](https://www.ogc.org/standards/citygml)形式です。
 
 なお、本ソフトウェアの動作には前提ソフトウェア（商用ソフトウェア）が必要で、単独では利用できません。Webポータルシステム構築の実装例として参考にして下さい。
 
 ポータルから呼び出すCityGMLデータ検証機能の一部については、別リポジトリで提供します。
 
 機能一覧
-
 * データ登録、管理
-* 書式・概念一貫性検証機能: https://github.com/Project-PLATEAU/CityGML-validation-function
+* 書式・概念一貫性検証機能: https://github.com/Project-LATEAU/CityGML-validation-function
 * 位相一貫性検証機能: https://github.com/Project-PLATEAU/CityGML-geometry-validator
 * 位置正確度検証
 * ファイル配信
@@ -117,24 +26,36 @@ http://schemas.opengis.net/citygml/cityobjectgroup/2.0/cityObjectGroup.xsd http:
 
 前提ソフトウェア
 
-* Project PLATEAU関連ソフトウェア：[位相一貫性検証機能](https://github.com/Project-PLATEAU/CityGML-geometry-validator)
-* 商用ソフトウェア：[VC Publisher](https://vc.systems/en/products/vc-publisher/)、[VC Map](https://vc.systems/en/products/vc-map/)、[VC Database](https://vc.systems/en/products/vc-database/)、[FME Desktop](https://www.safe.com/fme/fme-desktop/)
+* Project PLATEAU関連ソフトウェア：位相一貫性検証機能
+* 商用ソフトウェア：VC Publisher、VC Map、VC Database、FME Desktop
 * OSS：Word Press 5.5、bbPress、PostgreSQL、PostGIS、MySQL Server、PHP、HTTPサーバ（Apache HTTP Serverなど）
 
-## 利用方法
+## システム全体図
 
-1. 上記の前提ソフトウェアをインストールします。
-1. 本レポジトリの一式をダウンロードしたものをWebサーバ、APサーバ、DBサーバに配置します。WebサーバではWordPress 5.5のディレクトリを上書きします。
-1. [位相一貫性検証機能](https://github.com/Project-PLATEAU/CityGML-geometry-validator)からダウンロードしたFME Workspace (*.fmw) をAPServer/batフォルダに配置します。
-1. ソース中の`*****`文字列を環境に合わせて置換します。
-1. DBServerフォルダ下のPG_CREATE_STATUS_TABLE.sqlをPostgreSQLのデータベースにSQLとして実行します。
-1. Webサーバの wp-login.php を開きます。
+![001](./doc/001.png)
+    
+## 利用方法
+1.	上記の前提ソフトウェアをインストールします。
+1.	本レポジトリの一式をダウンロードしたものをWebサーバ、APサーバ、DBサーバに配置します。WebサーバではWordPress 5.5のディレクトリを上書きします。
+1.	位相一貫性検証機能からダウンロードしたFME Workspace (*.fmw) をAPServer/batフォルダに配置します。
+1.	ソース中の*****文字列を環境に合わせて置換します。
+1.	DBServerフォルダ下のPG_CREATE_STATUS_TABLE.sqlをPostgreSQLのデータベースにSQLとして実行します。
+1.	Webサーバの wp-login.php を開きます。
+
+<p>※ WordPressを利用する一部機能(メニュー、掲示板、ログイン制御、テーマ・スタイル等)は、構築・設定が必要となります。</p>
+<p>※ ユーザーを追加した際は以下のフォルダを複製し、[citycode]の部分を作業対象のCityCodeに合わせて変更する必要があります。<br>
+    ・github\WebServer\iUR_Data\[citycode]<br>
+    ・github\WebServer\map\[citycode]</p>
+   ユーザー名は総務省指定の「都道府県コード及び市区町村コード」の前5桁（例：札幌　01100）にて指定し、ユーザー用の作業フォルダを作成してください。作成用コマンドはtoolフォルダ内のファイル「■品質評価フォルダ作成.xlsx」のExcel関数で作成可能です。
+
+## 操作説明書
+[品質評価システム操作説明書.pdf](/doc/品質評価システム操作説明書.pdf)
 
 ## ライセンス
 
 Copyright (C) 2021 Hitachi, Ltd.
 
-本ソフトウェアではWordPressを利用させて頂いております。WordPress本体のライセンスに従い、本ソフトウェアも[GNU General Public License v2.0](LICENSE)を適用します。
+本ソフトウェアではWordPressを利用させて頂いております。WordPress本体のライセンスに従い、本ソフトウェアもGNU General Public License v2.0を適用します。
 
     WordPress - Web publishing software
 
@@ -165,3 +86,4 @@ Copyright (C) 2021 Hitachi, Ltd.
 * モデル自動生成システム: https://github.com/Project-PLATEAU/CityGML-production-system
 * 位相一貫性検証機能: https://github.com/Project-PLATEAU/CityGML-geometry-validator
 * 書式・概念一貫性検証機能: https://github.com/Project-PLATEAU/CityGML-validation-function
+

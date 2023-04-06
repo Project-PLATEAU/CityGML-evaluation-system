@@ -6,17 +6,15 @@
         include_once("logger.php"); //ログ出力クラスを取得
         include_once("config.php"); //ログ出力用コンフィグクラスを取得
         $log = Logger::getInstance();//ログ出力クラスのインスタンス生成
-        
-        
+
         if(isset($_FILES['toUploadFile']) && isset($_POST['cityCode'])){
             $cityCode = $_POST['cityCode'];
-            $uploaddir = 'F:\DATA/' . $_POST['cityCode'] . '/OriginalData/3DBuildings/';
+            //2022
+            $uploaddir = '*****:/*****/Data/' . $_POST['cityCode'] . '/OriginalData/3DBuildings/';
             $returnValue = array();
             $dataArray = array();
             $size = '';
             $log->info('アップロード処理開始', $cityCode);
-            
-            $log->debug('count($_FILES[\'toUploadFile\'][\'name\'])：' . count($_FILES['toUploadFile']['name']), $cityCode);
             //アップロードされたファイル数だけループで処理を行う
             for($i =0; $i < count($_FILES['toUploadFile']['name']); $i++){          
                 
@@ -28,19 +26,19 @@
                     $log->error('ファイルサイズが0です　ファイル名：' . $_FILES['toUploadFile']['name'][$i], $cityCode);
                     
                     array_push($dataArray , [$_FILES['toUploadFile']['name'][$i] , 'アップロード失敗']);
-                    
+                    //2022
                     $sqlResult = db (" WITH upsert AS (
-                        UPDATE public.manage_regist_zip
+                        UPDATE manage_regist_zip
                         SET status = '". $status ."' ,registdate = NOW()
                         WHERE userid = '". $_POST['cityCode'] .
                         "' AND zipname = '". $_FILES['toUploadFile']['name'][$i] .
                         "' RETURNING * 
                         )
-                    INSERT INTO public.manage_regist_zip (userid, zipname, status, registdate )
-                    SELECT '" . $_POST['cityCode'] . "','" . $_FILES['toUploadFile']['name'][$i] ."', '". $status ."' ,  NOW() From public.manage_regist_zip
-                    WHERE not exists (SELECT userid, zipname, '" . $status . "', NOW()
-                    FROM public.manage_regist_zip WHERE userid = '". $_POST['cityCode'] . "' and zipname = '". $_FILES['toUploadFile']['name'][$i] ."' ) LIMIT 1");//DBへの格納
-                    $log->info('アップロード失敗['. $_FILES['toUploadFile']['name'][$i] . ']の' .'ステータスを' . $status . 'に更新',$cityCode);
+                    INSERT INTO manage_regist_zip (userid, zipname, status, registdate )
+                    SELECT '" . $_POST['cityCode'] . "','" . $_FILES['toUploadFile']['name'][$i] ."', '". $status ."' ,  NOW()
+                    WHERE not exists (SELECT 1
+                    FROM manage_regist_zip WHERE userid = '". $_POST['cityCode'] . "' and zipname = '". $_FILES['toUploadFile']['name'][$i] ."' ) LIMIT 1");//DBへの格納
+                    $log->info('アップロード失敗['. $_FILES['toUploadFile']['name'][$i] . ']の' .'ステータスを' . $status . 'に更新' . $sql,$cityCode);
 
                     //DBクエリが成功したか判定
                     switch($sqlResult){
@@ -48,7 +46,7 @@
                         case "connectionCloseError":
                             //正常終了した場合あるいはクエリは成功したがコネクションクローズに失敗した場合
                             $log->debug('$sqlResult === true,$status:' . $status,$cityCode);
-                            $log->info('DBステータス更新成功['. $_FILES['toUploadFile']['name'][$i] . ']の' .'ステータスを' . $status . 'に更新',$cityCode);
+                            $log->info('DBステータス更新成功['. $_FILES['toUploadFile']['name'][$i] . ']の' .'ステータスを' . $status . 'に更新'. $sql,$cityCode);
                             break;
                         case "queryError":
                         case "DBConnectionError":
@@ -78,32 +76,32 @@
                     $status = '9'; //upload成功
                     $log->info('アップロード一時ファイル移動成功　ファイル名：' . $_FILES['toUploadFile']['name'][$i], $cityCode);
                     array_push($dataArray , [$_FILES['toUploadFile']['name'][$i] , 'アップロード成功']);
-                    
+		    //2022
                     $sqlResult = db (" WITH upsert AS (
-                        UPDATE public.manage_regist_zip
+                        UPDATE manage_regist_zip
                         SET status = '". $status ."' ,registdate = NOW()
                         WHERE userid = '". $_POST['cityCode'] .
                         "' AND zipname = '". $_FILES['toUploadFile']['name'][$i] .
                         "' RETURNING * 
                         )
-                    INSERT INTO public.manage_regist_zip (userid, zipname,  status, registdate )
-                    SELECT '" . $_POST['cityCode'] . "','" . $_FILES['toUploadFile']['name'][$i] ."', '". $status ."' ,  NOW() From public.manage_regist_zip
-                    WHERE not exists (SELECT userid, zipname,'" . $status . "',NOW()
-                    FROM public.manage_regist_zip WHERE userid = '". $_POST['cityCode'] . "' and zipname = '". $_FILES['toUploadFile']['name'][$i] ."' ) LIMIT 1");//DBへの格納
-                    
+                    INSERT INTO manage_regist_zip (userid, zipname,  status, registdate )
+                    SELECT '" . $_POST['cityCode'] . "','" . $_FILES['toUploadFile']['name'][$i] ."', '". $status ."' ,  NOW()
+                    WHERE not exists (SELECT 1
+                    FROM manage_regist_zip WHERE userid = '". $_POST['cityCode'] . "' and zipname = '". $_FILES['toUploadFile']['name'][$i] ."' ) LIMIT 1");//DBへの格納
+                    $log->info($sql, $cityCode);
                     //DBクエリが成功したか判定
                     switch($sqlResult){
                         case "success": 
                         case "connectionCloseError":
                             //正常終了した場合あるいはクエリは成功したがコネクションクローズに失敗した場合
                             $log->debug('$sqlResult === true,$status:' . $status,$cityCode);
-                            $log->info('DBステータス更新成功['. $_FILES['toUploadFile']['name'][$i] . ']の' .'ステータスを' . $status . 'に更新',$cityCode);
+                            $log->info('DBステータス更新成功['. $_FILES['toUploadFile']['name'][$i] . ']の' .'ステータスを' . $status . 'に更新 $sql',$cityCode);
                             break;
                         case "queryError":
                         case "DBConnectionError":
                             //クエリ実行に失敗した場合あるいはDBコネクションに失敗した場合
                             $log->debug('$sqlResult === false,$status:' . $status,$cityCode);
-                            $log->error('DBステータス更新失敗['. $_FILES['toUploadFile']['name'][$i] . ']の' .'ステータスを' . $status . 'に更新',$cityCode);
+                            $log->error('DBステータス更新失敗['. $_FILES['toUploadFile']['name'][$i] . ']の' .'ステータスを' . $status . 'に更新 $sql',$cityCode);
                             break;
                         default:
                             break;
@@ -116,18 +114,18 @@
                     $log->error('アップロード一時ファイル移動失敗　ファイル名：' . $_FILES['toUploadFile']['name'][$i], $cityCode);
                     
                     array_push($dataArray , [$_FILES['toUploadFile']['name'][$i] , 'アップロード失敗']);
-                    
+                    //2022
                     $sqlResult = db (" WITH upsert AS (
-                        UPDATE public.manage_regist_zip
+                        UPDATE manage_regist_zip
                         SET status = '". $status ."' ,registdate = NOW()
                         WHERE userid = '". $_POST['cityCode'] .
                         "' AND zipname = '". $_FILES['toUploadFile']['name'][$i] .
                         "' RETURNING * 
                         )
-                    INSERT INTO public.manage_regist_zip (userid, zipname,  status, registdate )
-                    SELECT '" . $_POST['cityCode'] . "','" . $_FILES['toUploadFile']['name'][$i] ."', '". $status ."' ,  NOW() From public.manage_regist_zip
-                    WHERE not exists (SELECT userid, zipname, '" . $status . "',NOW()
-                    FROM public.manage_regist_zip WHERE userid = '". $_POST['cityCode'] . "' and zipname = '". $_FILES['toUploadFile']['name'][$i] ."' ) LIMIT 1");//DBへの格納
+                    INSERT INTO manage_regist_zip (userid, zipname,  status, registdate )
+                    SELECT '" . $_POST['cityCode'] . "','" . $_FILES['toUploadFile']['name'][$i] ."', '". $status ."' ,  NOW()
+                    WHERE not exists (SELECT 1
+                    FROM manage_regist_zip WHERE userid = '". $_POST['cityCode'] . "' and zipname = '". $_FILES['toUploadFile']['name'][$i] ."' ) LIMIT 1");//DBへの格納
                     
                     //DBクエリが成功したか判定
                     switch($sqlResult){
@@ -151,7 +149,8 @@
             
 
             //アップロード後のファイル合計容量取得開始
-            $getTotalSizePath = 'F:\DATA/' . $cityCode . '/OriginalData/'; //容量取得対象パス
+            //2022
+            $getTotalSizePath = '*****:/*****\Data/' . $cityCode . '/OriginalData/'; //容量取得対象パス
             //COMオブジェクト生成
             $obj = new COM ( 'scripting.filesystemobject' );
             if(is_object($obj)){

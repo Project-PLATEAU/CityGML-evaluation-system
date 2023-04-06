@@ -69,7 +69,7 @@ div.btnLeft{
 }
 div.btnRight{
     	text-align: right;
-    	width:1315px;
+    	/*width:1315px;*/
     	padding-top:30px;
 }
 .cb{
@@ -82,118 +82,18 @@ div.btnRight{
 }
 p.filename {
   word-break: break-all;
-  width: 800px;
+  /*width: 800px;*/
   margin:0;
 }
 </style>
 
-
-<?php
-    ini_set('display_errors', 0);
-    //直リンクでアクセスした場合はワードプレスにリダイレクト
-    if(!isset($_SERVER["HTTP_REFERER"])){
-        header('Location:https://*****.com/UDX/register');
-    }
-    
-    session_start(); //セッションを開始
-
-    if(!isset($_SESSION["cityCode"])){ //issetでセッションを確認
-        $cityCode = $_POST["cityCode"];
-        $_SESSION["cityCode"]=$cityCode; //セッションにkeyとvalueをセット
-    }else{
-        if(isset($_POST["cityCode"])){
-            $cityCode =$_POST["cityCode"]; //再アクセス時
-        }else{
-            $cityCode = $_SESSION["cityCode"]; //再アクセス時
-            echo '読み込み中です。 しばらくお待ちください';
-            return;
-        }
-        
-    }
-    
-    include_once("logger.php"); //ログ出力クラスを取得
-    include_once("config.php"); //ログ出力用コンフィグクラスを取得
-    $log = Logger::getInstance();//ログ出力クラスのインスタンス生成
-    include_once("dbConnection.php"); //DB接続情報の読み込み
-    
-    //
-    if(isset($_POST["cityCode"])){
-        $log->info('登録画面表示開始',$cityCode);
-    }
-    
-    $status ='2';  //アップロードエラー
-    db ("UPDATE public.manage_regist_zip SET status = '" . $status  ."' where userid = '" .$cityCode . "' and status = '1'");//DBへの格納
-    $log->info('初期表示時のアップロード開始中ステータスを全て' . $status . 'に更新',$cityCode);
-    $log->info('自治体コード:' . $cityCode ,$cityCode);
-    //登録系のHTML要素を出力
-    echo '<div class="btnLeft">';
-    echo '<div class="flex">';
-    echo '<form method="post" id="uploadForm"  action="upload.php" enctype="multipart/form-data">';
-    echo '<input type="hidden" name="MAX_FILE_SIZE" value="2147483648">';
-    echo '<label for="fileSelect" id="selectLabel">ファイル選択</label>';
-    echo '<p><input type="file" id="fileSelect" name="toUploadFile[]" value="ファイル選択" onclick="onClickFileSelect(this)"  onchange="selectFiles(this);" accept="application/x-zip-compressed,.gml"  multiple/></p>';
-    echo '</form>';     
-    echo '<input type="button" id="uploadButton" value="登録" onclick="onClickUpload()">';
-    echo '</div></div>';
-    
-    //ここからアップロード済ファイルサイズの取得
-    $getTotalSizePath = 'F:\DATA/' . $cityCode . '/OriginalData/';
-    //COMオブジェクト生成
-    $obj = new COM ( 'scripting.filesystemobject' );
-    if(is_object($obj)){
-        //フォルダ情報取得
-        $ref = $obj->getfolder ( $getTotalSizePath );
-        echo '<div class="btnRight">';
-        //フォルダ合計サイズ取得
-        $totalSize = $ref->size;
-        
-        //バイトで取得されるので単位を付与
-        if(empty($totalSize) === false){
-            switch($totalSize){
-                case ($totalSize >= (1024 * 1024 * 1024)):
-                    echo '<p id="sizeDisplay">現在の使用容量：' . number_format($totalSize / (1024 * 1024 * 1024), 1) . 'GB / 5GB';
-                    break;
-                case ($totalSize >= 1024 * 1024):
-                    echo '<p id="sizeDisplay">現在の使用容量：' . number_format($totalSize / (1024 * 1024), 1) . 'MB / 5GB';
-                    break;
-                case ($totalSize >= 1024):
-                    echo '<p id="sizeDisplay">現在の使用容量：' . number_format($totalSize / 1024, 1) . 'KB / 5GB';
-                    break;
-                case ($totalSize >= 1):
-                    echo '<p id="sizeDisplay">現在の使用容量：' . $totalSize . 'Byte / 5GB';
-                    break;
-                default:
-                    echo '<p id="sizeDisplay">現在の使用容量：0Byte / 5GB';
-                    break;
-            }
-        } else {
-            echo '<p id="sizeDisplay">現在の使用容量：0Byte / 5GB';
-        }
-        echo '</p>';
-        $obj = null;
-    } else {
-        echo 'ファイル容量取得エラー';
-    }
-    echo '</div>';
-    echo '<div class="cb"></div>';
-    //ここまでアップロード済ファイルサイズの取得
-    
-    //テーブル生成
-    echo '<TABLE id="selectFileTable" class="table"><TH class="file">ファイル名</TH><TH  class="size">データ容量</TH><TH  class="date">更新日時</TH><TH  class="upResult">アップロード結果</TH>';
-    echo '<TR><TD>ファイルを選択してください</TD><TD>　</TD><TD>　</TD><TD>　</TD></TR>';
-    echo '</TABLE>';    
-
-
-    echo '<br/><br/>';
-    
-    if(isset($_POST["cityCode"])){
-        $log->info('登録画面表示終了',$cityCode);
-    }
-?>
-
 <!--ここからスクリプト-->
 
 <script type="text/javascript">
+
+    //親の要素からCityCodeを取得する
+    var governmment_id = window.parent.document.getElementById('governmment_citycode').value;
+
     //アップロードを試行したかを持つグローバル変数
     var glovalUploaded = false,
         maxFileCount = 100,//最大ファイル選択数
@@ -203,7 +103,7 @@ p.filename {
         totalMaxFileSizeString = "2GB"; //合計最大ファイルサイズの表示用文字列
     
     function onClickFileSelect(evt){
-        postLog(window.parent.governmment_id, "info", "ファイル選択ボタン押下");
+        postLog(governmment_id, "info", "ファイル選択ボタン押下");
     }
     
     //ファイル選択ダイアログで選択した後の処理を行う関数
@@ -224,7 +124,7 @@ p.filename {
         if (fileCount > maxFileCount) {
             formReset("uploadForm");
             alert("選択できるファイルは" + maxFileCount + "個までです。 再度選択してください");
-            postLog(window.parent.governmment_id, "warn", "ファイル最大選択数超過");
+            postLog(governmment_id, "warn", "ファイル最大選択数超過");
             return;
         }
                 
@@ -252,27 +152,27 @@ p.filename {
                 formReset("uploadForm");
                 selectFileTableReset();
                 alert("cityGMLファイル以外のファイルが選択されています。 再度選択してください。");
-                postLog(window.parent.governmment_id, "warn", "非対応の拡張子を選択");
+                postLog(governmment_id, "warn", "非対応の拡張子を選択");
                 return;
             }
 
             //拡張子用のピリオドが1つまでであることの確認
             var tempName = name.split(".");
             if(tempName.length !== 2){
-                postLog(window.parent.governmment_id,'warn',　'ファイル名にピリオドは1つまでです：ファイル名:' + name);
+                postLog(governmment_id,'warn',　'ファイル名にピリオドは1つまでです：ファイル名:' + name);
                 formReset("uploadForm");
                 selectFileTableReset();
-                alert("命名規則に従っていないファイルが選択されました。 再度選択してください。");
+                alert("命名規則に従っていないファイルが選択されました。 再度選択してください。[1]");
                 return;
             }
 
             //"_"により3つか4つに分かれていることの確認
             tempName = tempName[0].split("_");         
             if(tempName.length !== 3 && tempName.length !== 4){
-                postLog(window.parent.governmment_id,'warn',　'ファイル名を"_"で分割した結果、要素数が3でも4でもありませんでした。ファイル名:' + name);
+                postLog(governmment_id,'warn',　'ファイル名を"_"で分割した結果、要素数が3でも4でもありませんでした。ファイル名:' + name);
                 formReset("uploadForm");
                 selectFileTableReset();
-                alert("命名規則に従っていないファイルが選択されました。 再度選択してください。");
+                alert("命名規則に従っていないファイルが選択されました。 再度選択してください。[2]");
                 return;
             }
 
@@ -280,19 +180,19 @@ p.filename {
             var regexp = new RegExp(/^[0-9]*$/);
             if(regexp.test(tempName[0]) === false || tempName[0].length > 11 || tempName[0].length === 0){
                 //半角数字以外が含まれているか、長さが11バイトを超えているまたは0の場合
-                postLog(window.parent.governmment_id,'warn',　'標準メッシュコードの形式が正しくありませんでした。ファイル名:' + name);
+                postLog(governmment_id,'warn',　'標準メッシュコードの形式が正しくありませんでした。ファイル名:' + name);
                 formReset("uploadForm");
                 selectFileTableReset();
-                alert("命名規則に従っていないファイルが選択されました。 再度選択してください。");
+                alert("命名規則に従っていないファイルが選択されました。 再度選択してください。[3]");
                 return;
             }
 
             //空間参照系の確認
             if(tempName[2] !== "6668" && tempName[2] !== "6697"){
-                postLog(window.parent.governmment_id,'warn',　'空間参照系が"6668"でも"6697"でもありませんでした。ファイル名:' + name);
+                postLog(governmment_id,'warn',　'空間参照系が"6668"でも"6697"でもありませんでした。ファイル名:' + name);
                 formReset("uploadForm");
                 selectFileTableReset();
-                alert("命名規則に従っていないファイルが選択されました。 再度選択してください。");
+                alert("命名規則に従っていないファイルが選択されました。 再度選択してください。[4]");
                 return;
             }     
 
@@ -301,33 +201,32 @@ p.filename {
                 regexp = new RegExp(/^[0-9a-zA-Z-]*$/);
                 if(regexp.test(tempName[3]) === false || tempName[3].length === 0){
                     //「半角英数字と半角ハイフン」以外の文字が含まれているか、長さが0の場合
-                    postLog(window.parent.governmment_id,'warn',　'追加の識別子に半角英数字と半角ハイフン以外の文字が入力されたか、何も入力されていません。ファイル名:' + name);
+                    postLog(governmment_id,'warn',　'追加の識別子に半角英数字と半角ハイフン以外の文字が入力されたか、何も入力されていません。ファイル名:' + name);
                     formReset("uploadForm");
                     selectFileTableReset();
-                    alert("命名規則に従っていないファイルが選択されました。 再度選択してください。");
+                    alert("命名規則に従っていないファイルが選択されました。 再度選択してください。[5]");
                     return;
                 }
             }
 
             //ファイル名に空白が含まれていないことを確認する
             if(name.indexOf(" ") !== -1){
-                postLog(window.parent.governmment_id,'warn',　'ファイル名に空白が含まれています。ファイル名:' + name);
+                postLog(governmment_id,'warn',　'ファイル名に空白が含まれています。ファイル名:' + name);
                 formReset("uploadForm");
                 selectFileTableReset();
-                alert("命名規則に従っていないファイルが選択されました。 再度選択してください。");
+                alert("命名規則に従っていないファイルが選択されました。 再度選択してください。[6]");
                 return;
             }
 
             //ファイル名に括弧が含まれていないことを確認する
             if(name.indexOf("(") !== -1 || name.indexOf(")") !== -1){
-                postLog(window.parent.governmment_id,'warn',　'ファイル名に括弧が含まれています。ファイル名:' + name);
+                postLog(governmment_id,'warn',　'ファイル名に括弧が含まれています。ファイル名:' + name);
                 formReset("uploadForm");
                 selectFileTableReset();
-                alert("命名規則に従っていないファイルが選択されました。 再度選択してください。");
+                alert("命名規則に従っていないファイルが選択されました。 再度選択してください。[7]");
                 return;
             }
 
-            
             //地物タイプの確認
             switch(tempName[1]){
                 case "bldg" :
@@ -350,10 +249,10 @@ p.filename {
                 case "urg" :
                     break;
                 default :
-                    postLog(window.parent.governmment_id,'warn',　'地物を示す接頭辞が正しくありません。ファイル名:' + name);
+                    postLog(governmment_id,'warn',　'地物を示す接頭辞が正しくありません。ファイル名:' + name);
                     formReset("uploadForm");
                     selectFileTableReset();
-                    alert("命名規則に従っていないファイルが選択されました。 再度選択してください。");
+                    alert("命名規則に従っていないファイルが選択されました。 再度選択してください。[8]");
                     return;
             }
             
@@ -397,7 +296,7 @@ p.filename {
             formReset("uploadForm");
             selectFileTableReset();
             alert(maxFileSizeString + "を超えたファイルが" + sizeOverCount + "個選択されました。 再度選択してください");
-            postLog(window.parent.governmment_id, "warn", "単一ファイルサイズ制限超過");
+            postLog(governmment_id, "warn", "単一ファイルサイズ制限超過");
             return;
         }
         
@@ -406,7 +305,7 @@ p.filename {
             formReset("uploadForm");
             selectFileTableReset();
             alert("ファイルの合計サイズが" + totalMaxFileSizeString + "を超えています。 再度選択してください");
-            postLog(window.parent.governmment_id, "warn", "ファイルの合計サイズ超過");
+            postLog(governmment_id, "warn", "ファイルの合計サイズ超過");
             return;
         }
         glovalUploaded = false;
@@ -455,7 +354,8 @@ p.filename {
         setTimeout(upload, 500);
         
         var display = window.parent.document.getElementById("wpadminbar");
-        display.style.display = "none";
+        if(display!=null)//2022修正
+        	display.style.display = "none";
     }
      
 
@@ -471,20 +371,18 @@ p.filename {
         var cancelFlg = false;
         var cityCode;
         
-
-        
         if (window.self == window.parent) {
             //iframeで読み込まれていない場合は固定値
             cityCode = "001";
         } else {
             //iframeで読み込まれている場合はID取得
-            cityCode = window.parent.governmment_id;
+            cityCode = governmment_id;
         }
         if (glovalUploaded == true) {
             alert("連続してアップロードできません。ファイルを再選択してください");
             //ロック用divを削除
             delete_dom_obj("screenLock");
-            postLog(window.parent.governmment_id, "warn", "連続アップロード試行");
+            postLog(governmment_id, "warn", "連続アップロード試行");
             return;
         }
 
@@ -493,7 +391,7 @@ p.filename {
             alert("ファイルが選択されていません");
             //ロック用divを削除
             delete_dom_obj("screenLock");
-            postLog(window.parent.governmment_id, "warn", "ファイル未選択");
+            postLog(governmment_id, "warn", "ファイル未選択");
             return;
         }
         
@@ -501,7 +399,7 @@ p.filename {
         if (window.confirm(fileInput.files.length + "個のファイルを登録します。よろしいですか？") == false) {
             //ロック用divを削除
             delete_dom_obj("screenLock");
-            postLog(window.parent.governmment_id, "info", "登録確認ダイアログでキャンセルを押下");
+            postLog(governmment_id, "info", "登録確認ダイアログでキャンセルを押下");
             return;
         }
         
@@ -515,7 +413,7 @@ p.filename {
             toUploadTotalSize += fileInput.files[i]["size"];
         }
         data.append("uploadFileNameList",JSON.stringify(uploadFileNameList));
-        
+        console.log(JSON.stringify(uploadFileNameList));
 
         //ステータス変更時の動作を規定
         //まずはファイルが上書きされないか確認する
@@ -530,7 +428,7 @@ p.filename {
                 case 4:
                     if (this.status == 200) {
                         var resultArray = JSON.parse(xhrData.responseText);
-                        
+                        console.log(xhrData.responseText);
                         switch(resultArray["result"]){
                             case "OK" :
                                 // 上書きされるファイルがないか確認
@@ -547,7 +445,7 @@ p.filename {
                                 
                                 if(toOverWriteFileNameList.length > 0){
                                     if (window.confirm("同名ファイルが既に存在します。すべて上書きしてもよろしいですか？") == false) {
-                                        postLog(window.parent.governmment_id, "info", "上書き確認ダイアログでキャンセルを押下");
+                                        postLog(governmment_id, "info", "上書き確認ダイアログでキャンセルを押下");
                                         cancelFlg = true;
                                     }
                                 }
@@ -556,31 +454,31 @@ p.filename {
                             case "folderCapacityOver" :
                                 alert("アップロード先の容量が足りません");
                                 cancelFlg = true;
-                                postLog(window.parent.governmment_id, "warn", "アップロード先容量不足");
+                                postLog(governmment_id, "warn", "アップロード先容量不足");
                                 break;
                             case "dataDriveCapacityOver" :
                                 alert("データ領域の使用率が95%を超えています。 データ削除を実行してください。");
                                 cancelFlg = true;
-                                postLog(window.parent.governmment_id, "warn", "データドライブの使用率が95%を超えています");
+                                postLog(governmment_id, "warn", "データドライブの使用率が95%を超えています");
                                 break;
                             case "myJobIsActive" :
                                 alert("既にアップロード処理を行っています。アップロード処理が終わるまでお待ちください。");
                                 cancelFlg = true;
-                                postLog(window.parent.governmment_id, "warn", "アップロード処理実行中");
+                                postLog(governmment_id, "warn", "アップロード処理実行中");
                                 break;
                             case "activeJobCountOver" :
                                 alert("他に" + resultArray["activeValidateJobCount"] + "人のユーザがアップロード処理を行っています。　他のユーザのアップロード処理が終了するまでお待ちください");
                                 cancelFlg = true;
-                                postLog(window.parent.governmment_id, "warn", "アップロード実行ユーザ数上限超過");
+                                postLog(governmment_id, "warn", "アップロード実行ユーザ数上限超過");
                                 break;
                             case "fileIsUsed" :
                                 alert("他に検証・変換中のファイルと同名のファイルはアップロードできません");
                                 cancelFlg = true;
-                                postLog(window.parent.governmment_id, "warn", "処理中のファイルと同名ファイルアップロード試行");
+                                postLog(governmment_id, "warn", "処理中のファイルと同名ファイルアップロード試行");
                                 break;
                             default:
                                 cancelFlg = true;
-                                postLog(window.parent.governmment_id, "error", "getfilelist.phpのレスポンステキストが正しくない");
+                                postLog(governmment_id, "error", "getfilelist.phpのレスポンステキストが正しくない");
                                 break;
                         }
                     } else {
@@ -590,7 +488,7 @@ p.filename {
                     break;
             }
         }
-
+        console.log(cityCode);
         data.append("cityCode", cityCode);
         data.append("toUploadTotalSize", toUploadTotalSize.toString(10));
 
@@ -602,8 +500,6 @@ p.filename {
             delete_dom_obj("screenLock");
             return;
         }
-
-
 
         //アップロード前にDBのステータスをアップロード開始に変更する
         var uploadStartFormData = new FormData();
@@ -622,6 +518,7 @@ p.filename {
                 case 3:
                     break;
                 case 4:
+                                    	console.log(uploadStartXhr.responseText);
                     if (this.status == 200) {
                     } else {
                         //エラー時の処理
@@ -630,23 +527,23 @@ p.filename {
                     break;
             }
         }
-
         uploadStartXhr.open("POST", "uploadStart.php", false);
         try{
             uploadStartXhr.send(uploadStartFormData);
         } catch(error){
-            postLog(window.parent.governmment_id, "error", "アップロード対象のファイルが見つからないなどの理由でエラーが発生しました");
+            postLog(governmment_id, "error", "アップロード対象のファイルが見つからないなどの理由でエラーが発生しました");
             alert("アップロード対象のファイルが見つからないなどの理由でエラーが発生しました");
             delete_dom_obj("screenLock");
             return;
         } 
         
-
+	console.log(document.getElementById("uploadForm"));
         //ここから実際のアップロード
         var uploadFormData = new FormData(document.getElementById("uploadForm"));
         uploadFormData.append("cityCode", cityCode);
 
         var xhr = new XMLHttpRequest();
+        xhr.open("POST", "upload.php", true);
 
         //ステータス変更時の動作を規定
         xhr.onreadystatechange = function () {
@@ -660,6 +557,9 @@ p.filename {
                     break;
                 case 4:
                     if (this.status == 200) {
+                    
+                    	console.log(xhr.responseText);
+                    
                         //レスポンスはJson文字列で返ってくる
                         responseJson = JSON.parse(xhr.responseText);
                         
@@ -685,8 +585,6 @@ p.filename {
         tableChange("selectFileTable", "アップロード待機中", 3, true);
         //プログレスパーを作成
         createProgress();
-        
-        xhr.open("POST", "upload.php", true);
 
         xhr.upload.addEventListener("progress", function(event){
             //POSTの進行度を取得して％に変換する
@@ -712,7 +610,7 @@ p.filename {
         var fileNameColumn = 0; //ファイル名列番号(1列目)
         var resultColumn = 3; //アップロード結果列番号(4列目)
         var fileTableRowCount = selectFileTable.rows.length - 1; //ヘッダ行を除いた表の行数
-
+	console.log(nameAndResult);
         //ファイル名が合致する行のアップロード結果列にアップロード結果を入れる
         for (var i = 0; i < fileTableRowCount; i++) {
             if (selectFileTable.rows[i + 1].cells[fileNameColumn].innerText == nameAndResult[i][0]) {
@@ -822,7 +720,8 @@ p.filename {
         var dom_obj_parent = dom_obj.parentNode;
         dom_obj_parent.removeChild(dom_obj);
         var display = window.parent.document.getElementById("wpadminbar");
-        display.style.display = "block";
+	if(display!=null)
+          display.style.display = "block";
     }
     
     /*ログ出力関数
@@ -840,3 +739,111 @@ p.filename {
         xhrPostLog.send(logData);
     }
 </script>
+
+
+
+
+
+<?php
+    ini_set('display_errors', 0);
+    //直リンクでアクセスした場合はワードプレスにリダイレクト
+    if(!isset($_SERVER["HTTP_REFERER"])){
+        header('Location:http://*****/udx/register.php');
+    }
+    
+    session_start(); //セッションを開始
+
+    if(!isset($_SESSION["cityCode"])){ //issetでセッションを確認
+        $cityCode = $_POST["cityCode"];
+        $_SESSION["cityCode"]=$cityCode; //セッションにkeyとvalueをセット
+    }else{
+        if(isset($_POST["cityCode"])){
+            $cityCode =$_POST["cityCode"]; //再アクセス時
+        }else{
+            $cityCode = $_SESSION["cityCode"]; //再アクセス時
+            echo '読み込み中です。 しばらくお待ちください';
+            return;
+        }
+        
+    }
+
+    include_once("logger.php"); //ログ出力クラスを取得
+    include_once("config.php"); //ログ出力用コンフィグクラスを取得
+    $log = Logger::getInstance();//ログ出力クラスのインスタンス生成
+    include_once("dbConnection.php"); //DB接続情報の読み込み
+    
+    //
+    if(isset($_POST["cityCode"])){
+        $log->info('登録画面表示開始',$cityCode);
+    }
+    
+    $status ='2';  //アップロードエラー
+    //2022修正
+    db ("UPDATE manage_regist_zip SET status = '" . $status  ."' where userid = '" .$cityCode . "' and status = '1'");//DBへの格納
+    $log->info('初期表示時のアップロード開始中ステータスを全て' . $status . 'に更新',$cityCode);
+    $log->info('自治体コード:' . $cityCode ,$cityCode);
+    //登録系のHTML要素を出力
+    echo '<div class="btnLeft">';
+    echo '<div class="flex">';
+    echo '<form method="post" id="uploadForm"  action="upload.php" enctype="multipart/form-data">';
+    echo '<input type="hidden" name="MAX_FILE_SIZE" value="2147483648">';
+    echo '<label for="fileSelect" id="selectLabel">ファイル選択</label>';
+    echo '<p><input type="file" id="fileSelect" name="toUploadFile[]" value="ファイル選択" onclick="onClickFileSelect(this)"  onchange="selectFiles(this);" accept="application/x-zip-compressed,.gml"  multiple/></p>';
+    echo '</form>';     
+    echo '<input type="button" id="uploadButton" value="登録" onclick="onClickUpload()">';
+    echo '</div></div>';
+
+    //ここからアップロード済ファイルサイズの取得
+    $getTotalSizePath = '*****:/*****/Data/' . $cityCode . '/OriginalData/';
+    //COMオブジェクト生成
+    $obj = new COM ( 'scripting.filesystemobject' );
+    if(is_object($obj)){
+        //フォルダ情報取得
+        $ref = $obj->getfolder ( $getTotalSizePath );
+        echo '<div class="btnRight">';
+        //フォルダ合計サイズ取得
+        $totalSize = $ref->size;
+        
+        //バイトで取得されるので単位を付与
+        if(empty($totalSize) === false){
+            switch($totalSize){
+                case ($totalSize >= (1024 * 1024 * 1024)):
+                    echo '<p id="sizeDisplay">現在の使用容量：' . number_format($totalSize / (1024 * 1024 * 1024), 1) . 'GB / 5GB';
+                    break;
+                case ($totalSize >= 1024 * 1024):
+                    echo '<p id="sizeDisplay">現在の使用容量：' . number_format($totalSize / (1024 * 1024), 1) . 'MB / 5GB';
+                    break;
+                case ($totalSize >= 1024):
+                    echo '<p id="sizeDisplay">現在の使用容量：' . number_format($totalSize / 1024, 1) . 'KB / 5GB';
+                    break;
+                case ($totalSize >= 1):
+                    echo '<p id="sizeDisplay">現在の使用容量：' . $totalSize . 'Byte / 5GB';
+                    break;
+                default:
+                    echo '<p id="sizeDisplay">現在の使用容量：0Byte / 5GB';
+                    break;
+            }
+        } else {
+            echo '<p id="sizeDisplay">現在の使用容量：0Byte / 5GB';
+        }
+        echo '</p>';
+        $obj = null;
+    } else {
+        echo 'ファイル容量取得エラー';
+    }
+    echo '</div>';
+    echo '<div class="cb"></div>';
+    //テーブル生成
+    echo '<TABLE id="selectFileTable" class="table"><TH class="file">ファイル名</TH><TH  class="size">データ容量</TH><TH  class="date">更新日時</TH><TH  class="upResult">アップロード結果</TH>';
+    echo '<TR><TD>ファイルを選択してください</TD><TD>　</TD><TD>　</TD><TD>　</TD></TR>';
+    echo '</TABLE>';    
+
+
+    echo '<br/><br/>';
+    
+    if(isset($_POST["cityCode"])){
+        $log->info('登録画面表示終了',$cityCode);
+    }
+?>
+
+

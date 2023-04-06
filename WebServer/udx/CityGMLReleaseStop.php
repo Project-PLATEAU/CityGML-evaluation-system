@@ -25,8 +25,8 @@
             //削除対象ファイル名配列を生成
             $releaseStopFileNames = json_decode($releaseStopFileNames);
             
-            //ここからCityGMLファイルの削除
-            $allCityGMLName = glob('F:\Apache24/htdocs/iUR_Data/' . $cityCode . '/OriginalData/3DBuildings/{*.zip,*.gml}', GLOB_BRACE);
+            //ここからCityGMLファイルの削除 //2022修正
+            $allCityGMLName = glob('*****:/*****/htdocs/iUR_Data/' . $cityCode . '/OriginalData/3DBuildings/{*.zip,*.gml}', GLOB_BRACE);
             if($allCityGMLName == false){
                 //ファイル一覧の取得に失敗した場合
                 $resultArray["result"] = "globFailed";

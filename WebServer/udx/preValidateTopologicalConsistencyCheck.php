@@ -7,12 +7,12 @@
         include_once("config.php"); //ログ出力用コンフィグクラスを取得
         $log = Logger::getInstance();//ログ出力クラスのインスタンス生成
         $status = '199'; //検証開始ステータス
-        
+
         //自治体IDを確認
             if(isset($_POST["cityCode"]) == true && isset($_POST["fileNameList"]) == true){
                 $cityCode = (string) $_POST["cityCode"];
                 $filelist = json_decode($_POST["fileNameList"]);
-                
+
                 //JOB数チェック
                 $log->info('実行中のJOB数を確認',$cityCode);
                 
@@ -65,7 +65,7 @@
                 }
                 $in_query = rtrim($in_query,',');             //末尾のカンマを削除
                 $in_query ='zipname in (' . $in_query . ')';  //～ zipname in (filename1,filename2)の形式にする
-                 
+
                 $selRet = sel_query ("select count(status) from public.manage_regist_zip where  userid = '" .$cityCode . "' and status in ('1','9', '2', '19', '29', '199','1099','1299','1999','9199','2199','10000') and " . $in_query ,'runningFileCheck');
                  
                 $checkCount = $selRet['0']['RunningFileCount'];          //(値が0以外は削除を行わない)
@@ -79,6 +79,9 @@
                 $log->info('位相一貫性検証開始ステータス書き込み開始', $cityCode);
                 //DBに検証開始ステータス書き込み
                 foreach($filelist as $putFileName){
+
+                    $sql=
+
                     db (" WITH getStatus AS(
                             select case when status = '9099' then '9199' 
                                     when status = '9999' then '9199' 
@@ -101,8 +104,8 @@
                             "' RETURNING * 
                            )
                         INSERT INTO public.manage_regist_zip (userid, zipname,  status, registdate )
-                        SELECT '" . $cityCode . "','" . $putFileName ."',  (select * from getStatus) , NOW() From public.manage_regist_zip
-                        WHERE not exists (SELECT userid, zipname, (select * from getStatus) ,NOW()
+                        SELECT '" . $cityCode . "','" . $putFileName ."',  199 , NOW()
+                        WHERE not exists (SELECT 1
                         FROM public.manage_regist_zip WHERE userid = '". $cityCode . "' and zipname = '". $putFileName ."' ) LIMIT 1");//DBへの格納
                         
                         $log->info('['. $putFileName . ']の' .'ステータスを位相一貫性検証開始に更新',$cityCode);

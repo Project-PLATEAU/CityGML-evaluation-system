@@ -1,12 +1,14 @@
 <?php
 function cleanupSchema($cityCode){
 	// postgreSQL開始
+	//2022
 	$hostname = '*****';
 	$dbname = '*****';
 	$user = '*****';
 	$password = '*****';
 	
-	$sql = 'SELECT citydb_' .$cityCode. '.cleanup_schema()';
+	//$sql = 'SELECT citydb_' .$cityCode. '.cleanup_schema()';
+	$sql = 'SELECT *****.cleanup_schema()';
 	
 	$postgresql_con = pg_connect("host=$hostname  dbname=$dbname user=$user password=$password");
 

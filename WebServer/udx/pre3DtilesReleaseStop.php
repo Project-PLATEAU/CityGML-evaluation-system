@@ -8,9 +8,9 @@
         if(isset($_POST["cityCode"]) === true){
             $cityCode = (string) $_POST["cityCode"];
             
-            //3DTilesZipファイルの保存ディレクトリ
+            //3DTilesZipファイルの保存ディレクトリ //2022修正
             $outputedZipFilePath = "*****:/*****/htdocs/iUR_Data/" .$cityCode. "/3DTiles/3DBuildings/";
-            //エラーファイルのフルパス
+            //エラーファイルのフルパス //2022修正
             $errorFilePath = "*****:/*****/htdocs/iUR_Data/" .$cityCode. "/3DTiles/3DBuildings/error.txt";
             
             $log->info('3DTiles配信前確認処理を開始',$cityCode);

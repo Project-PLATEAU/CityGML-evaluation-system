@@ -216,7 +216,7 @@ switch ( $action ) {
 <div class="wrap" id="profile-page">
 <h1 class="wp-heading-inline">
 <!--2021 Project "PLATEAU" START-->
-<a href ='https://*****.com/UDX/'>トップページへ</a>
+<a href ='https://*****/udx/'>トップページへ</a>
 </h1>
 <br>
 <h1 class="wp-heading-inline">

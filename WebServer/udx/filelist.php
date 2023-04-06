@@ -167,10 +167,12 @@ TABLE{
 </style>
 <?php
 try{
+
+    $cityCode= "0";
+
     //直リンクでアクセスした場合はワードプレスにリダイレクト
     if(!isset($_SERVER["HTTP_REFERER"])){
-    echo $_SERVER["REQUEST_URI"];
-        //header('Location:https://*****.com/UDX/filelist/');
+    	echo $_SERVER["REQUEST_URI"];
     }
     session_start(); //セッションを開始
 
@@ -195,8 +197,7 @@ try{
             $parent = $_SESSION["parent"]; //再アクセス時
         }
     }
-    
-    
+
     include_once("dbSelect.php"); //DB接続情報の読み込み
     include_once("logger.php"); //ログ出力処理の読み込み
     include_once("config.php"); //ログ出力用のコンフィグ読み込み
@@ -226,12 +227,15 @@ try{
     
     $log->info('自治体コード:' . $cityCode ,$cityCode);
     $status ='2';  //アップロードエラー
+    //2022修正
     db ("UPDATE public.manage_regist_zip SET status = '" . $status  ."' where userid = '" .$cityCode . "' and status = '1'");//DBへの格納
     $log->info('初期表示時のアップロード開始中ステータスを全て' . $status . 'に更新',$cityCode);
-    
-    $selRet = sel_query("select zipname,status From public.manage_regist_zip where userid = '" .$cityCode . "'",'listStatus');//自治体IDに紐づくファイル名、ステータスをDBから取得
-    
-    $file_path = 'F:\DATA/' . $cityCode . '/OriginalData\3DBuildings';
+    //2022修正
+    $selRet = sel_query("select zipname,status From manage_regist_zip where userid = '" .$cityCode . "'",'listStatus');//自治体IDに紐づくファイル名、ステータスをDBから取得
+
+    //2022修正
+    $file_path = '*****:/*****/Data/' . $cityCode . '/OriginalData\3DBuildings';
+ 
     $result = glob($file_path .'/{*.zip,*.gml}', GLOB_BRACE); 
     
     //1ページのリスト上に表示させる件数の設定
@@ -244,7 +248,9 @@ try{
     foreach($result as $filepath){
          $filename = basename($filepath);
          $stat = stat($filepath);
-         $datetime = date('Y/m/d H:i:s',$stat['mtime'] +32400);//9時間の時差があるため9時間分の秒数を足す
+         //2022修正 サーバー側(PHP)の設定により修正
+         //$datetime = date('Y/m/d H:i:s',$stat['mtime'] +32400);//9時間の時差があるため9時間分の秒数を足す
+         $datetime = date('Y/m/d H:i:s',$stat['mtime']);
          $filebyte = $stat['size'];
          $count = strlen(intval($filebyte / 1024));
          $keyIndex = array_search($filename , array_column($selRet, 'name'));//対象フォルダにあるZIP名とDBから取得したファイル名で比較
@@ -380,7 +386,8 @@ try{
     
     
     //ここからアップロード済ファイルサイズの取得
-    $getTotalSizePath = 'F:\DATA/' . $cityCode . '/OriginalData/';
+    //2022修正
+    $getTotalSizePath = '*****:/*****/Data/' . $cityCode . '/OriginalData/';
     //COMオブジェクト生成
     $obj = new COM ( 'scripting.filesystemobject' );
     if(is_object($obj)){
@@ -437,7 +444,6 @@ try{
     //初期表示時は更新日の降順（日付の新しい）でソートする
     
     $param = $_SERVER["QUERY_STRING"];
-    
     if($param == null){
         $sorttype = 5;
         //初期表示時はセッションストレージの内容をリセットする
@@ -529,7 +535,9 @@ try{
         || $val['status'] == '未検証' || $val['status'] == '書式検証中'){
             $download = 'ダウンロード';
         }else{
-            $outlog = 'https://*****.com/iUR_Data/'.$cityCode . '\\ValidateLog\\' . $val['file_name'] . '.txt';
+        	//2022修正
+            //$outlog = 'https://*****.com/iUR_Data/'.$cityCode . '\\ValidateLog\\' . $val['file_name'] . '.txt';
+            $outlog = 'http://*****/iUR_Data/'.$cityCode . '/ValidateLog/' . $val['file_name'] . '.txt';         
             $download = '<a href="' .$outlog. '" download>ダウンロード</a>';
         }
         echo '<TR><TD><input type="checkbox" name="files" value="' .$val['file_name'].'"></TD><TD><p class="filename">'.$val['file_name']. '</p></TD><TD align="right">' .$val['file_size'].  '</TD><TD align="center">'.$val['file_date'].  '</TD><TD align="center">'.$val['status'].  '</TD><TD align="center">' .$download. '</TD></TR>';
@@ -538,11 +546,12 @@ try{
     echo '</TABLE></form>';    
     
     echo '全件数　'. $filelists_num. '件　';
-    
-    echo '<a href=\'https://*****.com/UDX/filelist.php?sort_id=' .$sorttype. '&page=' .$pageName. '&page_id=1\'><<</a>　';
+    //2022修正
+    echo '<a href=\'http://*****/udx/filelist.php?sort_id=' .$sorttype. '&page=' .$pageName. '&page_id=1\'><<</a>　';
     
     if($now > 1){
-        echo '<a href=\'https://*****.com/UDX/filelist.php?sort_id=' .$sorttype. '&page=' .$pageName. '&page_id=' .($now - 1). '\'>前へ</a>　';
+    	//2022修正
+        echo '<a href=\'http://*****/udx/filelist.php?sort_id=' .$sorttype. '&page=' .$pageName. '&page_id=' .($now - 1). '\'>前へ</a>　';
     }else{
         echo '前へ'.'　';
     }
@@ -555,18 +564,20 @@ try{
             echo $now.'　';
         }else{
             if($i >= $disppage_be && $i <= $disppage_af){
-                echo '<a href=\'https://*****.com/UDX/filelist.php?sort_id=' .$sorttype. '&page=' .$pageName. '&page_id=' . $i. '\'>'. $i. '</a>　';
+            	//2022修正
+                echo '<a href=\'http://*****/udx/filelist.php?sort_id=' .$sorttype. '&page=' .$pageName. '&page_id=' . $i. '\'>'. $i. '</a>　';
             }
         }
     }
     
     if($now < $max_page){
-        echo '<a href=\'https://*****.com/UDX/filelist.php?sort_id=' .$sorttype. '&page=' .$pageName. '&page_id=' .($now + 1). '\'>次へ</a>　';
+    	//2022修正
+        echo '<a href=\'http://*****/udx/filelist.php?sort_id=' .$sorttype. '&page=' .$pageName. '&page_id=' .($now + 1). '\'>次へ</a>　';
     }else{
         echo '次へ'.'　';
     }
-    
-    echo '<a href=\'https://*****.com/UDX/filelist.php?sort_id=' .$sorttype. '&page=' .$pageName. '&page_id=' . $max_page . '\'>>></a>　';
+    //2022修正
+    echo '<a href=\'http://*****/udx/filelist.php?sort_id=' .$sorttype. '&page=' .$pageName. '&page_id=' . $max_page . '\'>>></a>　';
     
     if($pageName === '1'){
         $log->info('データ変換・削除画面の表示終了',$cityCode);
@@ -676,37 +687,50 @@ try{
                 }
             }
         }
+
+		//2022
+		//var governmment_id = window.parent.governmment_id;
+        var governmment_id = window.parent.document.getElementById('governmment_citycode').value;
+
         if(deleteFileNameArray.length == 0){
             alert("削除対象を選択して下さい。");
-            postLog(window.parent.governmment_id, 'warn', '削除対象件数が0件');
+            postLog(governmment_id, 'warn', '削除対象件数が0件');
             return;
         } else {
             if(confirm("削除しますがよろしいですか？") === true){ 
-                postLog(window.parent.governmment_id, 'info', '削除確認ダイアログでOK押下');
+                postLog(governmment_id, 'info', '削除確認ダイアログでOK押下');
                 screenLock();
                 var display = window.parent.document.getElementById("wpadminbar");
-                display.style.display = "none";
 
-                setTimeout(fileDelete, 500, deleteFileNameArray, window.parent.governmment_id);
+				if(display!=null)
+         	       display.style.display = "none";
+
+                setTimeout(fileDelete, 500, deleteFileNameArray, governmment_id);
+
             } else {
-                postLog(window.parent.governmment_id, 'info', '削除確認ダイアログでキャンセル押下');
+                postLog(governmment_id, 'info', '削除確認ダイアログでキャンセル押下');
             }
         }
     }
     
     //ソートボタンを押下した際の処理
     function onClickSort(sort_id,pageName) {
+
+		//2022
+		//var governmment_id = window.parent.governmment_id;
+        var governmment_id = window.parent.document.getElementById('governmment_citycode').value;
         var url_param = location.search;
-        postLog(window.parent.governmment_id, 'info', 'ソートボタン押下');
-        
+        postLog(governmment_id, 'info', 'ソートボタン押下');
+
         if(url_param == ''){
-            window.location.href = 'https://*****.com/UDX/filelist.php?sort_id=' + sort_id  +'&page=' + pageName + '&page_id=' + 1;
+            //2022修正
+            window.location.href = 'http://*****/udx/filelist.php?sort_id=' + sort_id  +'&page=' + pageName + '&page_id=' + 1;
         }else{
             url_param = url_param.slice(-1);
-            window.location.href = 'https://*****.com/UDX/filelist.php?sort_id=' + sort_id + '&page=' + pageName + '&page_id=' + url_param;
+            //2022修正
+            window.location.href = 'http://*****/udx/filelist.php?sort_id=' + sort_id + '&page=' + pageName + '&page_id=' + url_param;
         }
     }
-    
     
     /* zipやgmlファイルを削除する関数
     deleteFileNameArray     ：削除したいファイル名文字列を持つ配列 nullなら削除しない
@@ -770,7 +794,8 @@ try{
         //ロック用divを削除
         delete_dom_obj("screenLock");
         var display = window.parent.document.getElementById("wpadminbar");
-        display.style.display = "block";
+		if(display!=null)
+        	display.style.display = "block";
     }
     
     //チェックボックスがクリックされた際の処理
@@ -804,27 +829,40 @@ try{
     
     //変換ボタンを押下した際の処理
     function onClickConvert(){
+
+		//2022
+		//var governmment_id =window.parent.governmment_id;
+        var governmment_id = window.parent.document.getElementById('governmment_citycode').value;
+
         var convertFileNameList = sessionStorage.getItem("checkedFileNameList");
         //セッションストレージの中身がなければチェックを促す
         if(convertFileNameList == null || JSON.parse(convertFileNameList).length == 0){
-            postLog(window.parent.governmment_id, 'warn', '変換対象件数が0件');
+            postLog(governmment_id, 'warn', '変換対象件数が0件');
             alert("変換対象を選択して下さい。");
             return;
         }
+
+
         //変換処理を呼ぶ
-        fileConvert(JSON.parse(convertFileNameList), window.parent.governmment_id);
+        fileConvert(JSON.parse(convertFileNameList), governmment_id);
     }
     
     //ファイル変換処理
-    function fileConvert(convertFileNameArray, cityCode){            
+    function fileConvert(convertFileNameArray, cityCode){
+
+		//2022
+		//var governmment_id =window.parent.governmment_id;
+		var governmment_id = window.parent.document.getElementById('governmment_citycode').value;
+
         if (window.confirm(convertFileNameArray.length + "個のファイルを変換します。よろしいですか？\r\nまた3DTile変換時には既存の3DTileファイルは削除されます") == false) {
-            postLog(window.parent.governmment_id, 'info', '変換確認でキャンセル押下');
+            postLog(governmment_id, 'info', '変換確認でキャンセル押下');
             return;
         } else {
-            postLog(window.parent.governmment_id, 'info', '変換確認でOK押下');
+            postLog(governmment_id, 'info', '変換確認でOK押下');
             screenLock();
             var display = window.parent.document.getElementById("wpadminbar");
-            display.style.display = "none";
+            if(display!=null)
+              display.style.display = "none";
         }
         var cancelFlg = false;
         var responseJson = null;
@@ -833,13 +871,11 @@ try{
             convertFileData.append("convertFileNames", JSON.stringify(convertFileNameArray));
             convertFileData.append("cityCode", cityCode);
         }
-
         var xhr = new XMLHttpRequest();
 
         //ステータス変更時の動作を規定
         xhr.onreadystatechange = function () {
             //正常にレスポンスが返ってきたらレスポンステキストを表示
-
             switch (this.readyState) {
                 case 0:
                 case 1:
@@ -849,7 +885,6 @@ try{
                 case 4:
                     if (this.status == 200) {
                         var resultArray = JSON.parse(xhr.responseText);
-                        
                         switch(resultArray["result"]){
                             //ログはjsonEdit.phpで出力しているのでここでは出力させない
                             case "OK" :
@@ -889,7 +924,7 @@ try{
                     } else {
                         console.log("受信失敗　ステータス：" + xhr.statusText);
                         cancelFlg = true;
-                        postLog(window.parent.governmment_id, 'error', '変換処理でエラー');
+                        postLog(governmment_id, 'error', '変換処理でエラー');
                     }
                     break;
             }
@@ -897,24 +932,22 @@ try{
 
         xhr.open("POST", "jsonEdit.php", false);
         xhr.send(convertFileData);
-        
-        
+
         if(cancelFlg === true){
-            postLog(window.parent.governmment_id, 'warn', '変換処理中断');
+            postLog(governmment_id, 'warn', '変換処理中断');
             //ロック用divを削除
             delete_dom_obj("screenLock");
             var display = window.parent.document.getElementById("wpadminbar");
-            display.style.display = "block";
+			if(display!=null)
+            	display.style.display = "block";
             return;
         }
         
         
         var xhrConvert = new XMLHttpRequest();
-        
         //ステータス変更時の動作を規定
         xhrConvert.onreadystatechange = function () {
             //正常にレスポンスが返ってきたらレスポンステキストを表示
-
             switch (this.readyState) {
                 case 0:
                 case 1:
@@ -922,6 +955,7 @@ try{
                 case 3:
                     break;
                 case 4:
+			        alert("fileConvert:" + xhrConvert.statusText);
                     if (this.status == 200) {
                     } else {
                         console.log("受信失敗(変換処理)　ステータス：" + xhrConvert.statusText);
@@ -929,7 +963,6 @@ try{
                     break;
             }
         }
-
         xhrConvert.open("POST", "fileConvert.php", true);
         xhrConvert.send(convertFileData);
         sessionStorage.removeItem("checkedFileNameList");
@@ -938,7 +971,8 @@ try{
         delete_dom_obj("screenLock");
         
         var display = window.parent.document.getElementById("wpadminbar");
-        display.style.display = "block";
+		if(display!=null)
+           	display.style.display = "block";
         
         alert("変換処理を開始しました");
         location.reload();
@@ -952,8 +986,13 @@ try{
             alert("検証対象を選択して下さい。");
             return;
         }
+
+		//2022
+		//var governmment_id =window.parent.governmment_id;
+        var governmment_id = window.parent.document.getElementById('governmment_citycode').value;
+
         //検証処理を呼ぶ
-        fileValidate(JSON.parse(validateFileNameList), window.parent.governmment_id);
+        fileValidate(JSON.parse(validateFileNameList), governmment_id);
     }
     
     //ファイル検証処理
@@ -965,10 +1004,11 @@ try{
         screenLock();
         //上部のツールバーを非表示
         var display = window.parent.document.getElementById("wpadminbar");
-        display.style.display = "none";
+		if(display!=null)
+           	display.style.display = "block";
         
         var cancelFlg = false;
-
+ 
         var preValidateFileData = new FormData();
         if (validateFileNameArray !== null) {
             preValidateFileData.append("fileNameList", JSON.stringify(validateFileNameArray));
@@ -1016,7 +1056,7 @@ try{
             }
         }
 
-
+        console.log(preValidateFileData);
         xhrPreValidate.open("POST", "preValidateCheck.php", false);
         xhrPreValidate.send(preValidateFileData);
 
@@ -1024,7 +1064,8 @@ try{
         //ロック用divを削除
         delete_dom_obj("screenLock");
         var display = window.parent.document.getElementById("wpadminbar");
-        display.style.display = "block";
+		if(display!=null)
+           	display.style.display = "block";
         
         if(cancelFlg === true){
             return;
@@ -1048,6 +1089,7 @@ try{
                     break;
                 case 4:
                     if (this.status == 200) {
+						alert("処理が完了しました");
                     } else {
                         console.log("受信失敗(検証処理)　ステータス：" + xhrValidate.statusText);
                     }
@@ -1055,7 +1097,7 @@ try{
             }
         }
         
-        
+        console.log(validateFileData);
         xhrValidate.open("POST", "validate.php");
         xhrValidate.send(validateFileData);
         sessionStorage.removeItem("checkedFileNameList");
@@ -1124,6 +1166,7 @@ try{
         var dom_obj_parent = dom_obj.parentNode;
         dom_obj_parent.removeChild(dom_obj);
         var display = window.parent.document.getElementById("wpadminbar");
-        display.style.display = "block";
+		if(display!=null)
+        	display.style.display = "block";
     }
 </script>

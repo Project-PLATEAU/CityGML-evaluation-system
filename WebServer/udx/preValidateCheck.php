@@ -7,12 +7,12 @@
         include_once("config.php"); //ログ出力用コンフィグクラスを取得
         $log = Logger::getInstance();//ログ出力クラスのインスタンス生成
         $status = '19'; //検証開始ステータス
-        
+
         //自治体IDを確認
             if(isset($_POST["cityCode"]) == true && isset($_POST["fileNameList"]) == true){
                 $cityCode = (string) $_POST["cityCode"];
                 $filelist = json_decode($_POST["fileNameList"]);
-                
+
                 //JOB数チェック
                 $log->info('実行中のJOB数を確認',$cityCode);
                 
@@ -89,8 +89,8 @@
                             "' RETURNING * 
                            )
                         INSERT INTO public.manage_regist_zip (userid, zipname,  status, registdate )
-                        SELECT '" . $cityCode . "','" . $putFileName ."',  '". $status ."' , NOW() From public.manage_regist_zip
-                        WHERE not exists (SELECT userid, zipname, '" . $status . "',NOW()
+                        SELECT '" . $cityCode . "','" . $putFileName ."',  '". $status ."' , NOW()
+                        WHERE not exists (SELECT 1
                         FROM public.manage_regist_zip WHERE userid = '". $cityCode . "' and zipname = '". $putFileName ."' ) LIMIT 1");//DBへの格納
                         
                         $log->info('['. $putFileName . ']の' .'ステータスを' . $status . 'に更新',$cityCode);

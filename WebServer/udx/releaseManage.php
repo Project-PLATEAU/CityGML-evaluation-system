@@ -3,6 +3,7 @@
 
 .table{
     border-collapse:collapse;
+	width: 100%;
 }
 .table th, .table td{
     border:1px solid #0094ff;
@@ -18,10 +19,10 @@
     height:25px;
 }
 .file{
-    width:850px;
+    width:200px;
 }
 .url{
-    width:400px;
+    width:300px;
 }
 .size{
     width:150px;
@@ -126,11 +127,11 @@ div.btnRight{
 p.filename {
   word-break: break-all;
   margin:0;
-  width:850px;
+  width:200px;
 }
 p.downloadURL{
     word-break: break-all;
-    width:400px;
+    width:300px;
 }
 </style>
 <?php
@@ -138,7 +139,7 @@ try{
     //直リンクでアクセスした場合はワードプレスにリダイレクト
     if(!isset($_SERVER["HTTP_REFERER"])){
     echo $_SERVER["REQUEST_URI"];
-        //header('Location:https://*****.com/UDX/release_manage/');
+        //header('Location:http://*****/udx/release_manage/');
     }
     
     include_once("dbSelect.php"); //DB接続情報の読み込み
@@ -165,7 +166,7 @@ try{
     db ("UPDATE public.manage_regist_zip SET status = '" . $status  ."' where userid = '" .$cityCode . "' and status = '1'");//DBへの格納
     $log->info('初期表示時のアップロード開始中ステータスを全て' . $status . 'に更新',$cityCode);
     
-    $file_path = 'F:\Apache24/htdocs/iUR_Data/' . $cityCode . '/OriginalData\3DBuildings';
+    $file_path = '*****:/*****/htdocs/iUR_Data/' . $cityCode . '/OriginalData/3DBuildings';
     $result = glob($file_path .'/{*.zip,*.gml}', GLOB_BRACE);
     
     //1ページのリスト上に表示させる件数の設定
@@ -178,11 +179,12 @@ try{
     foreach($result as $filepath){
         $filename = basename($filepath);
         $stat = stat($filepath);
-        $datetime = date('Y/m/d H:i:s',$stat['mtime'] +32400);//9時間の時差があるため9時間分の秒数を足す
+        $datetime = date('Y/m/d H:i:s',$stat['mtime']);//9時間の時差があるため9時間分の秒数を足す
         $filebyte = $stat['size'];
 
         $filesize = number_format(round($filebyte / 1024,0)) .'KB';
-        $URL = "https://*****.com/iUR_Data/" . $cityCode . "/OriginalData/3DBuildings/" . $filename;
+//2022修正
+        $URL = "http://*****/iUR_Data/" . $cityCode . "/OriginalData/3DBuildings/" . $filename;
 
         $filearray = array('file_name' => $filename, 'downloadURL' => $URL ,'file_size' => $filesize,'file_date' => $datetime,'file_path' => $filepath,'file_byte' => $filebyte);
         array_push($filelists,$filearray);
@@ -297,11 +299,12 @@ try{
     echo '</TABLE></form>';    
     
     echo '全件数　'. $filelists_num. '件　';
-    
-    echo '<a href=\'https://*****.com/UDX/releaseManage.php?sort_id=' .$sorttype. '&page_id=1\'><<</a>　';
+//2022修正
+    echo '<a href=\'http://*****/udx/releaseManage.php?sort_id=' .$sorttype. '&page_id=1\'><<</a>　';
     
     if($now > 1){
-        echo '<a href=\'https://*****.com/UDX/releaseManage.php?sort_id=' .$sorttype. '&page_id=' .($now - 1).'\'>前へ</a>　';
+//2022修正
+        echo '<a href=\'http://*****/udx/releaseManage.php?sort_id=' .$sorttype. '&page_id=' .($now - 1).'\'>前へ</a>　';
     }else{
         echo '前へ'.'　';
     }
@@ -314,18 +317,20 @@ try{
             echo $now.'　';
         }else{
             if($i >= $disppage_be && $i <= $disppage_af){
-                echo '<a href=\'https://*****.com/UDX/releaseManage.php?sort_id=' .$sorttype. '&page_id=' . $i. '\'>'. $i. '</a>　';
+//2022修正
+                echo '<a href=\'http://*****/udx/releaseManage.php?sort_id=' .$sorttype. '&page_id=' . $i. '\'>'. $i. '</a>　';
             }
         }
     }
     
     if($now < $max_page){
-        echo '<a href=\'https://*****.com/UDX/releaseManage.php?sort_id=' .$sorttype. '&page_id=' .($now + 1).'\'>次へ</a>　';
+//2022修正
+        echo '<a href=\'http://*****/udx/releaseManage.php?sort_id=' .$sorttype. '&page_id=' .($now + 1).'\'>次へ</a>　';
     }else{
         echo '次へ'.'　';
     }
-    
-    echo '<a href=\'https://*****.com/UDX/releaseManage.php?sort_id=' .$sorttype. '&page_id=' . $max_page .'\'>>></a>　';
+//2022修正
+    echo '<a href=\'http://*****/udx/releaseManage.php?sort_id=' .$sorttype. '&page_id=' . $max_page .'\'>>></a>　';
     
     
     $log->info('CityGML配信管理画面の表示に成功しました。',$cityCode);
@@ -340,10 +345,12 @@ try{
             var url_param = location.search;
             
             if(url_param == ''){
-                window.location.href = 'https://*****.com/UDX/releaseManage.php?sort_id=' + sort_id + '&page_id=' + 1;
+//2022修正
+                window.location.href = 'http://*****/udx/releaseManage.php?sort_id=' + sort_id + '&page_id=' + 1;
             }else{
+//2022修正
                 url_param = url_param.slice(-1);
-                window.location.href = 'https://*****.com/UDX/releaseManage.php?sort_id=' + sort_id + '&page_id=' + url_param;
+                window.location.href = 'http://*****/udx/releaseManage.php?sort_id=' + sort_id + '&page_id=' + url_param;
             }
         }
         
@@ -455,6 +462,7 @@ try{
     
     //配信停止ボタンを押下した際の処理
     function onClickReleaseStop(){
+        var governmment_id = window.parent.document.getElementById('governmment_citycode').value;
         var releaseFileNameList = sessionStorage.getItem("checkedFileNameList");
         //セッションストレージの中身がなければチェックを促す
         if(releaseFileNameList == null || JSON.parse(releaseFileNameList).length == 0){
@@ -464,9 +472,10 @@ try{
         }
         //早めに画面をロック
         screenLock();
-        setTimeout(releaseStop, 500, JSON.parse(releaseFileNameList), window.parent.governmment_id);
+        setTimeout(releaseStop, 500, JSON.parse(releaseFileNameList), governmment_id);
         
         var display = window.parent.document.getElementById("wpadminbar");
+		if(display!=null)
         display.style.display = "none";
     
     }
@@ -476,11 +485,11 @@ try{
     */
     function releaseStop(releaseStopFileNames, cityCode) {
         if (window.confirm(releaseStopFileNames.length + "個のファイルを配信停止します。よろしいですか？") == false) {
-            postLog(window.parent.governmment_id, 'info', '配信停止確認でキャンセル押下');
+            postLog(cityCode, 'info', '配信停止確認でキャンセル押下');
             delete_dom_obj("screenLock");
             return;
         } else {
-            postLog(window.parent.governmment_id, 'info', '配信停止確認でOK押下');
+            postLog(cityCode, 'info', '配信停止確認でOK押下');
         }
         var releaseStopFileData = new FormData();
         if (releaseStopFileNames !== null) {
@@ -592,6 +601,7 @@ try{
         var dom_obj_parent = dom_obj.parentNode;
         dom_obj_parent.removeChild(dom_obj);
         var display = window.parent.document.getElementById("wpadminbar");
-        display.style.display = "block";
+		if(display!=null)
+        	display.style.display = "block";
     }
 </script>
