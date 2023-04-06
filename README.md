@@ -12,7 +12,7 @@
 
 機能一覧
 * データ登録、管理
-* 書式・概念一貫性検証機能: https://github.com/Project-LATEAU/CityGML-validation-function
+* 書式・概念一貫性検証機能: https://github.com/Project-PLATEAU/CityGML-validation-function
 * 位相一貫性検証機能: https://github.com/Project-PLATEAU/CityGML-geometry-validator
 * 位置正確度検証
 * ファイル配信
